@@ -104,18 +104,19 @@ package-name: kuflow-rest
 
 package-version: '0.0.1'
 
+# security: AADToken
+
 ################
 # .NET Flags
 ################
 
 library-name: Kuflow.Rest
 
-# Whether to have your client public. Defaults to false.
-# public-clients: true
-
 # Enabled the generation of models
 generation1-convenience-client: true
 
+# Whether to have your client public. Defaults to false.
+public-clients: true
 
 ```
 

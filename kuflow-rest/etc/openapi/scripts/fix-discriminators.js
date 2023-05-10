@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const fs = require('fs')
+const path = require('path')
 
 function removeUnnecessaryUnionOptions() {
 
@@ -50,6 +51,29 @@ function removeUnnecessaryUnionOptions() {
     fileAsStr = fileAsStr.replace(/return new Authentication\("Authentication"/, 'return new Authentication(AuditedObjectType.Authentication')
 
     fs.writeFileSync(file, fileAsStr, 'utf8')
+  }
+
+  // TODO The generator create code in .net 7.0, but for now we required 6.0
+  {
+    const dirPath = `${process.cwd()}/../../generated/Models`
+    fs.readdir(dirPath, (err, files) => {
+      if (err) {
+        console.error('Error reading directory:', err);
+        return;
+      }
+
+      files.forEach(file => {
+        const filePath = path.join(dirPath, file);
+
+        const fileData = fs.readFileSync(filePath)
+        let fileAsStr = fileData.toString('utf8')
+
+
+        fileAsStr = fileAsStr.replace(new RegExp('"u8', 'g'), '"')
+        console.log(filePath)
+        fs.writeFileSync(filePath, fileAsStr, 'utf8')
+      });
+    });
   }
 
 
