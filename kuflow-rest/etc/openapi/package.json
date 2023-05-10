@@ -7,7 +7,7 @@
     },
     "scripts": {
       "autorest": "autorest",
-      "generate": "npm run generate:autorest",
+      "generate": "npm run generate:autorest && npm run generate:workaround",
       "generate:autorest": "autorest --version=3.9.4 readme.md",
       "generate:workaround": "scripts/fix-discriminators.js"
     }
