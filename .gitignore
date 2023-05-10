@@ -1,0 +1,26 @@
+# Ignore all dot files except
+.*
+!.editorconfig
+!.gitattributes
+!.gitignore
+!.tool-versions
+
+######################
+# Node
+######################
+node_modules/
+
+######################
+# Intellij Idea
+######################
+*.iml
+.idea/
+
+######################
+# Visual Studio Code
+######################
+.vscode/
+
+######################
+# Other
+######################
