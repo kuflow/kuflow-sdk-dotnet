@@ -118,6 +118,8 @@ generation1-convenience-client: true
 # Whether to have your client public. Defaults to false.
 public-clients: true
 
+# Use the customised one
+skip-csproj: true  
 ```
 
 ### Group operations using tag
