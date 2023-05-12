@@ -3,10 +3,10 @@ using Azure.Core.Pipeline;
 
 namespace Kuflow.Rest
 {
-  /// <summary> The Task service client. </summary>
-  public partial class TaskClient
+  /// <summary> The Authentication service client. </summary>
+  public partial class AuthenticationClient
   {
-    public TaskClient(string clientId, string clientSecret, Uri endpoint = null, KuflowRestClientOptions options = null)
+    public AuthenticationClient(string clientId, string clientSecret, Uri endpoint = null, KuflowRestClientOptions options = null)
     {
       if (clientId == null)
       {
@@ -23,8 +23,8 @@ namespace Kuflow.Rest
 
       _clientDiagnostics = new ClientDiagnostics(options);
       _pipeline = HttpPipelineBuilder.Build(options, new BasicAuthenticationPolicy(clientId, clientSecret));
-      RestClient = new TaskRestClient(_clientDiagnostics, _pipeline, endpoint);
+      RestClient = new AuthenticationRestClient(_clientDiagnostics, _pipeline, endpoint);
     }
-
   }
+
 }

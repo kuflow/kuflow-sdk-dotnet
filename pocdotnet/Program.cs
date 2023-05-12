@@ -3,12 +3,41 @@
 namespace MyProject;
 class Program
 {
-    static void Main(string[] args)
+  static void Main(string[] args)
+  {
+    Console.WriteLine("Hello, 7eben!");
+
+    var clientId = "FILL_ME";
+    var clientSecret = "FILL_ME";
+    var taskIdentifier = "FILL_ME";
+
+
     {
-        Console.WriteLine("Hello, 7eben!");
+      var client = new TaskClient(clientId, clientSecret);
 
-        System.Console.WriteLine("Bye");
+      var taskId = new Guid(taskIdentifier);
+      var taskResponse = client.RetrieveTask(taskId);
+      var task = taskResponse.Value;
 
-        // var client = new TaskClient();
+      System.Console.WriteLine("[TaskClient] ProcessId: " + task.ProcessId);
+
+      taskResponse = client.ActionsTaskAppendLog(taskId, new Kuflow.Rest.Models.Log("Mensaje de prueba", Kuflow.Rest.Models.LogLevel.Info));
+      task = taskResponse.Value;
     }
+
+    {
+      var client = new KuFlowRestClient(clientId, clientSecret);
+
+      var taskId = new Guid(taskIdentifier);
+      var taskResponse = client.TaskClient.RetrieveTask(taskId);
+      var task = taskResponse.Value;
+
+      System.Console.WriteLine("[KuFlowRestClient] ProcessId: " + task.ProcessId);
+
+    }
+
+    System.Console.WriteLine("Bye");
+
+
+  }
 }
