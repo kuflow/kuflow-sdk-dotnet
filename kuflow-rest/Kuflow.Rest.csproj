@@ -2,12 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <Nullable>annotations</Nullable>
+    <PackageId>KuFlow.Rest</PackageId>
+    <Version>0.0.1-alpha</Version>
+    <Authors>KuFlow S.L.</Authors>
+    <Company>KuFlow S.L.</Company>
+    <Description>Library of activities for UiPath that allow to interact with KuFlow</Description>
   </PropertyGroup>
 
   <PropertyGroup>
+    <!-- .net 6.x -->
     <LangVersion>10.0</LangVersion>
+
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Nullable>annotations</Nullable>
     <IncludeGeneratorSharedCode>true</IncludeGeneratorSharedCode>
     <RestoreAdditionalProjectSources>https://pkgs.dev.azure.com/azure-sdk/public/_packaging/azure-sdk-for-net/nuget/v3/index.json</RestoreAdditionalProjectSources>
   </PropertyGroup>

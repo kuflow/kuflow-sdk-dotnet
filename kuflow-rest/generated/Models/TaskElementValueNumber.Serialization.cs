@@ -8,7 +8,7 @@
 using System.Text.Json;
 using Azure.Core;
 
-namespace Kuflow.Rest.Models
+namespace KuFlow.Rest.Models
 {
     public partial class TaskElementValueNumber : IUtf8JsonSerializable
     {

@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Azure.Core;
 
-namespace Kuflow.Rest.Models
+namespace KuFlow.Rest.Models
 {
     /// <summary> The PrincipalPage. </summary>
     public partial class PrincipalPage : Page

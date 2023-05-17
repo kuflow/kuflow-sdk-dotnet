@@ -5,7 +5,7 @@
 
 #nullable disable
 
-namespace Kuflow.Rest.Models
+namespace KuFlow.Rest.Models
 {
     /// <summary> The ProcessElementValueNumber. </summary>
     public partial class ProcessElementValueNumber : ProcessElementValue

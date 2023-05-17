@@ -7,7 +7,7 @@
 
 using System;
 
-namespace Kuflow.Rest.Models
+namespace KuFlow.Rest.Models
 {
     /// <summary> In creation task, one of &apos;id, version or code&apos; is mandatory. </summary>
     public partial class TaskDefinitionSummary

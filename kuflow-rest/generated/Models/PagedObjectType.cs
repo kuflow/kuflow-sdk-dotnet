@@ -5,7 +5,7 @@
 
 #nullable disable
 
-namespace Kuflow.Rest.Models
+namespace KuFlow.Rest.Models
 {
     /// <summary> Paged Model types. </summary>
     public enum PagedObjectType

@@ -5,7 +5,7 @@
 
 #nullable disable
 
-namespace Kuflow.Rest.Models
+namespace KuFlow.Rest.Models
 {
     /// <summary> Process element value types. </summary>
     public enum ProcessElementValueType

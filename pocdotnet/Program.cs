@@ -1,4 +1,4 @@
-﻿using Kuflow.Rest;
+﻿using KuFlow.Rest;
 
 namespace MyProject;
 class Program
@@ -21,7 +21,7 @@ class Program
 
       System.Console.WriteLine("[TaskClient] ProcessId: " + task.ProcessId);
 
-      taskResponse = client.ActionsTaskAppendLog(taskId, new Kuflow.Rest.Models.Log("Mensaje de prueba", Kuflow.Rest.Models.LogLevel.Info));
+      taskResponse = client.ActionsTaskAppendLog(taskId, new KuFlow.Rest.Models.Log("Mensaje de prueba", KuFlow.Rest.Models.LogLevel.Info));
       task = taskResponse.Value;
     }
 

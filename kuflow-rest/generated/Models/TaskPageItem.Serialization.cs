@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using Azure.Core;
 
-namespace Kuflow.Rest.Models
+namespace KuFlow.Rest.Models
 {
     public partial class TaskPageItem : IUtf8JsonSerializable
     {

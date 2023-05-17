@@ -7,7 +7,7 @@
 
 using System;
 
-namespace Kuflow.Rest.Models
+namespace KuFlow.Rest.Models
 {
     /// <summary> The TaskElementValueDocumentItem. </summary>
     public partial class TaskElementValueDocumentItem

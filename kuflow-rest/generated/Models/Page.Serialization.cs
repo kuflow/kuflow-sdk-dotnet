@@ -7,7 +7,7 @@
 
 using System.Text.Json;
 
-namespace Kuflow.Rest.Models
+namespace KuFlow.Rest.Models
 {
     public partial class Page
     {

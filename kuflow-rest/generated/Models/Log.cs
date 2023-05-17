@@ -8,7 +8,7 @@
 using System;
 using Azure.Core;
 
-namespace Kuflow.Rest.Models
+namespace KuFlow.Rest.Models
 {
     /// <summary> The Log. </summary>
     public partial class Log

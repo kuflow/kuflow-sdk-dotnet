@@ -1,12 +1,12 @@
 using System;
 using Azure.Core.Pipeline;
 
-namespace Kuflow.Rest
+namespace KuFlow.Rest
 {
   /// <summary> The Principal service client. </summary>
   public partial class PrincipalClient
   {
-    public PrincipalClient(string clientId, string clientSecret, Uri endpoint = null, KuflowRestClientOptions options = null)
+    public PrincipalClient(string clientId, string clientSecret, Uri endpoint = null, KuFlowRestClientOptions options = null)
     {
       if (clientId == null)
       {
@@ -19,7 +19,7 @@ namespace Kuflow.Rest
       }
 
       endpoint ??= new Uri("https://api.kuflow.com/v2022-10-08");
-      options ??= new KuflowRestClientOptions();
+      options ??= new KuFlowRestClientOptions();
 
       _clientDiagnostics = new ClientDiagnostics(options);
       _pipeline = HttpPipelineBuilder.Build(options, new BasicAuthenticationPolicy(clientId, clientSecret));

@@ -2,16 +2,28 @@ using vscode:
 
 https://www.youtube.com/watch?v=fuBi4d7k1-M
 
-## Build and Export
+# Build and Export
 
-# build the project
+## Build the project
 
 dotnet build
 
-# create an exportable .dll (if needed)
+## Create an exportable .dll (if needed)
+
+### Debug
+
+dotnet publish --configuration Debug --self-contained
+
+## Release
 
 dotnet publish --configuration Release --self-contained
 
-# create a Nuget Package
+### Create a Nuget Package
+
+## Debug
+
+dotnet pack --configuration Debug
+
+### Release
 
 dotnet pack --configuration Release

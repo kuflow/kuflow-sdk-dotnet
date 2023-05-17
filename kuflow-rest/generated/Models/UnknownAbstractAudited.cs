@@ -7,7 +7,7 @@
 
 using System;
 
-namespace Kuflow.Rest.Models
+namespace KuFlow.Rest.Models
 {
     /// <summary> The UnknownAbstractAudited. </summary>
     internal partial class UnknownAbstractAudited : AbstractAudited

@@ -8,7 +8,7 @@
 using System.Collections.Generic;
 using Azure.Core;
 
-namespace Kuflow.Rest.Models
+namespace KuFlow.Rest.Models
 {
     /// <summary> The TaskElementValueObject. </summary>
     public partial class TaskElementValueObject : TaskElementValue

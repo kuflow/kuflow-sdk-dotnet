@@ -5,7 +5,7 @@
 
 #nullable disable
 
-namespace Kuflow.Rest.Models
+namespace KuFlow.Rest.Models
 {
     /// <summary> The TaskElementValueNumber. </summary>
     public partial class TaskElementValueNumber : TaskElementValue

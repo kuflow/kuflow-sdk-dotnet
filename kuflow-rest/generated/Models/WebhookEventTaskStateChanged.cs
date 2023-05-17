@@ -8,7 +8,7 @@
 using System;
 using Azure.Core;
 
-namespace Kuflow.Rest.Models
+namespace KuFlow.Rest.Models
 {
     /// <summary> Process Events. </summary>
     internal partial class WebhookEventTaskStateChanged : WebhookEvent

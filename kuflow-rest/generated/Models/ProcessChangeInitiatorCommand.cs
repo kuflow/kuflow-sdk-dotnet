@@ -7,7 +7,7 @@
 
 using System;
 
-namespace Kuflow.Rest.Models
+namespace KuFlow.Rest.Models
 {
     /// <summary> Command to change the process initiator, only one option is required. </summary>
     public partial class ProcessChangeInitiatorCommand

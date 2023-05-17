@@ -12,9 +12,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Azure;
 using Azure.Core.Pipeline;
-using Kuflow.Rest.Models;
+using KuFlow.Rest.Models;
 
-namespace Kuflow.Rest
+namespace KuFlow.Rest
 {
     /// <summary> The Process service client. </summary>
     public partial class ProcessClient

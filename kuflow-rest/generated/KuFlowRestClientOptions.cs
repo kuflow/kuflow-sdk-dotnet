@@ -8,10 +8,10 @@
 using System;
 using Azure.Core;
 
-namespace Kuflow.Rest
+namespace KuFlow.Rest
 {
-    /// <summary> Client options for KuflowRestClient. </summary>
-    public partial class KuflowRestClientOptions : ClientOptions
+    /// <summary> Client options for KuFlowRestClient. </summary>
+    public partial class KuFlowRestClientOptions : ClientOptions
     {
         private const ServiceVersion LatestVersion = ServiceVersion.V2022_10_08;
 
@@ -24,8 +24,8 @@ namespace Kuflow.Rest
 
         internal string Version { get; }
 
-        /// <summary> Initializes new instance of KuflowRestClientOptions. </summary>
-        public KuflowRestClientOptions(ServiceVersion version = LatestVersion)
+        /// <summary> Initializes new instance of KuFlowRestClientOptions. </summary>
+        public KuFlowRestClientOptions(ServiceVersion version = LatestVersion)
         {
             Version = version switch
             {

@@ -9,7 +9,7 @@ using System;
 using System.Text.Json;
 using Azure.Core;
 
-namespace Kuflow.Rest.Models
+namespace KuFlow.Rest.Models
 {
     internal partial class UnknownAbstractAudited : IUtf8JsonSerializable
     {
