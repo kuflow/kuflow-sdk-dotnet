@@ -1,5 +1,6 @@
 using System;
 using Azure.Core.Pipeline;
+using KuFlow.Rest.Configuration;
 
 namespace KuFlow.Rest
 {
