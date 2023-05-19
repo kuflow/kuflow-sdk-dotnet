@@ -3,7 +3,7 @@
 const fs = require('fs')
 const path = require('path')
 
-function removeUnnecessaryUnionOptions() {
+function applyWorkaround() {
 
   {
     // Authentication.cs
@@ -79,4 +79,4 @@ function removeUnnecessaryUnionOptions() {
 
 }
 
-removeUnnecessaryUnionOptions()
+applyWorkaround()

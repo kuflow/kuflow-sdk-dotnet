@@ -19,18 +19,22 @@ namespace KuFlow.Rest.Configuration
 
     public override void Process(HttpMessage message, ReadOnlyMemory<HttpPipelinePolicy> pipeline)
     {
-      string token = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes($"{_username}:{_password}"));
-      message.Request.Headers.SetValue("Authorization", $"Basic {token}");
+      SetAuthenticationHeaders(message);
 
       ProcessNext(message, pipeline);
     }
 
     public override async ValueTask ProcessAsync(HttpMessage message, ReadOnlyMemory<HttpPipelinePolicy> pipeline)
     {
-      string token = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes($"{_username}:{_password}"));
-      message.Request.Headers.SetValue("Authorization", $"Basic {token}");
+      SetAuthenticationHeaders(message);
 
       await ProcessNextAsync(message, pipeline);
+    }
+
+    private void SetAuthenticationHeaders(HttpMessage message)
+    {
+      string token = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes($"{_username}:{_password}"));
+      message.Request.Headers.SetValue("Authorization", $"Basic {token}");
     }
   }
 }
