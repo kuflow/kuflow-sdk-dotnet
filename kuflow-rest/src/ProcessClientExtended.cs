@@ -7,7 +7,7 @@ namespace KuFlow.Rest
   /// <summary> The Process service client. </summary>
   public partial class ProcessClient
   {
-    public ProcessClient(string clientId, string clientSecret, Uri endpoint = null, KuFlowRestClientOptions options = null)
+    public ProcessClient(string clientId, string clientSecret, Uri endpoint, KuFlowRestClientOptions options = null)
     {
       if (clientId == null)
       {
@@ -19,7 +19,11 @@ namespace KuFlow.Rest
         throw new ArgumentNullException(nameof(clientSecret));
       }
 
-      endpoint ??= new Uri("https://api.kuflow.com/v2022-10-08");
+      if (endpoint == null)
+      {
+        throw new ArgumentNullException(nameof(endpoint));
+      }
+
       options ??= new KuFlowRestClientOptions();
 
       _clientDiagnostics = new ClientDiagnostics(options);
