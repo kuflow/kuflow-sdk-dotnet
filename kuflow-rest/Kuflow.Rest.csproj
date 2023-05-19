@@ -11,6 +11,7 @@
     <PackageId>KuFlow.Rest</PackageId>
     <PackageIcon>icon.png</PackageIcon>
     <PackageTags>KuFlow, Automation, Rest, Client</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageProjectUrl>https://kuflow.com/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/kuflow/kuflow-sdk-dotnet.git</RepositoryUrl>
@@ -42,11 +43,12 @@
     <PackageVersion>0.1.0.$([System.DateTime]::UtcNow.ToString(MMddHHmmss))</PackageVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <PackageVersion>0.1.0</PackageVersion>
+    <PackageVersion>0.1.1-dev</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="../etc/images/icon.png" Pack="true" PackagePath="\"/>
+    <None Include="README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
   <ItemGroup>

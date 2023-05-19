@@ -1,3 +1,6 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/kuflow/kuflow-sdk-dotnet/blob/master/LICENSE)
+[![NuGet](https://img.shields.io/nuget/v/kuflow.rest.svg)](https://www.nuget.org/packages/KuFlow.Rest/)
+
 Mono repo for all .Net modules provided by KuFlow.
 
 ## Modules
