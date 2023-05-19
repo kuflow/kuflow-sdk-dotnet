@@ -8,7 +8,7 @@ More detailed docs are available in the [documentation pages](https://docs.kuflo
 
 ## Contributing
 
-We are happy to receive your help and comments, together we will dance a wonderful KuFlow. Please review our [contribution guide](CONTRIBUTING.md).
+We are happy to receive your help and comments, together we will dance a wonderful KuFlow. Please review our [contribution guide](https://github.com/kuflow/kuflow-sdk-dotnet/kuflow-rest/CONTRIBUTING.md).
 
 ## License
 
