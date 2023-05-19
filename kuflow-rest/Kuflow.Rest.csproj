@@ -2,11 +2,29 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <!-- Package Metadata -->
+  <PropertyGroup>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageId>KuFlow.Rest</PackageId>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageTags>KuFlow, Automation, Rest, Client</PackageTags>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://kuflow.com/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/kuflow/kuflow-sdk-dotnet.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+
     <Version>0.0.1-alpha</Version>
     <Authors>KuFlow S.L.</Authors>
     <Company>KuFlow S.L.</Company>
-    <Description>Library of activities for UiPath that allow to interact with KuFlow</Description>
+    <Copyright>© 2023 KuFlow S.L.</Copyright>
+    <Description>KuFlow Rest API client that allows you to interact with our API in a convenient way</Description>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -26,6 +44,10 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <PackageVersion>0.1.0</PackageVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../etc/images/icon.png" Pack="true" PackagePath="\"/>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.AutoRest.CSharp" Version="3.0.0-beta.20230508.3" PrivateAssets="All" />
