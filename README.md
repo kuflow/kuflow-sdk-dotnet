@@ -1,29 +1,31 @@
-using vscode:
+Mono repo for all .Net modules provided by KuFlow.
 
-https://www.youtube.com/watch?v=fuBi4d7k1-M
+## Modules
 
-# Build and Export
+### Rest Client
 
-## Build the project
+This is a client for the KuFlow API Rest that allows you to interact with our API in a comfortable way in the creation of your workers and tools.
 
-dotnet build
+In the `kuflow-rest` path there is a readme with information about the module.
 
-## Create an exportable .dll (if needed)
+The module is published in [NuGet](https://fillme) for its use.
 
-### Debug
+#### Installation
 
-dotnet publish --configuration Debug --self-contained
+Install from NuGet.
 
-## Release
+```python
+# FILL_ME
+```
 
-dotnet publish --configuration Release --self-contained
+## Documentation
 
-### Create a Nuget Package
+More detailed docs are available in the [documentation pages](https://docs.kuflow.com/developers/).
 
-## Debug
+## Contributing
 
-dotnet pack --configuration Debug
+We are happy to receive your help and comments, together we will dance a wonderful KuFlow. Please review our [contribution guide](CONTRIBUTING.md) as well as the **Readme** and **Contribution** guides in each module of this repository.
 
-### Release
+## License
 
-dotnet pack --configuration Release
+[MIT License](https://github.com/kuflow/kuflow-sdk-dotnet/blob/master/LICENSE)
