@@ -14,8 +14,8 @@ The module is published in [NuGet](https://fillme) for its use.
 
 Install from NuGet.
 
-```python
-# FILL_ME
+```bash
+dotnet add package KuFlow.Rest
 ```
 
 ## Documentation
