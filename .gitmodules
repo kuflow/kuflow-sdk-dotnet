@@ -1,0 +1,3 @@
+[submodule "kuflow-uipath-activities"]
+	path = kuflow-uipath-activities
+	url = https://github.com/kuflow/kuflow-uipath-activities
