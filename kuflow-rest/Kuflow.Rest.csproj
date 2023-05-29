@@ -17,7 +17,6 @@
     <RepositoryUrl>https://github.com/kuflow/kuflow-sdk-dotnet.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 
-    <Version>0.0.1-alpha</Version>
     <Authors>KuFlow S.L.</Authors>
     <Company>KuFlow S.L.</Company>
     <Copyright>© 2023 KuFlow S.L.</Copyright>
@@ -40,10 +39,10 @@
 
   <!-- Package Versions -->
   <PropertyGroup Condition="'$(Configuration)' == 'Debug' AND '$(DesignTimeBuild)' != 'true'">
-    <PackageVersion>0.1.0.$([System.DateTime]::UtcNow.ToString(MMddHHmmss))</PackageVersion>
+    <PackageVersion>1.0.0.$([System.DateTime]::UtcNow.ToString(MMddHHmmss))-snapshot</PackageVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <PackageVersion>0.1.1-dev</PackageVersion>
+    <PackageVersion>1.0.0</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>

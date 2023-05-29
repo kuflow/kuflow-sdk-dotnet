@@ -11,7 +11,7 @@ This is a client for the KuFlow API Rest that allows you to interact with our AP
 
 In the `kuflow-rest` path there is a readme with information about the module.
 
-The module is published in [NuGet](https://fillme) for its use.
+The module is published in [NuGet](https://www.nuget.org/packages/KuFlow.Rest/) for its use.
 
 #### Installation
 

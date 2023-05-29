@@ -2,8 +2,6 @@
 
 This doc is intended for contributors to `kuflow-sdk-dotnet` repository. See also the contribution guide for each module in this repository.
 
-
-
 ## Development Environment
 
 Main tools:
@@ -19,9 +17,6 @@ Using .Net in Visual Studio Code
 
 - https://www.youtube.com/watch?v=fuBi4d7k1-M
 
-
-
-
 ## Develop
 
 ### Code generation for the rest client
@@ -29,7 +24,7 @@ Using .Net in Visual Studio Code
 The Azure AutoRest tool is used for the generation of client code for the KuFlow Rest Api. This tool requires NodeJs for its execution. If you want to update the OpenApi definition, the client must be recreated:
 
 ```bash
-cd kuflow-rest/etc/openapi 
+cd kuflow-rest/etc/openapi
 
 # Install dependencies
 npm ci
@@ -38,8 +33,6 @@ npm run generate
 ```
 
 Some manual adjustments may be necessary, such as extending the generated code or modifying it.
-
-
 
 ### Build
 
@@ -64,9 +57,11 @@ dotnet pack --configuration Debug
 
 ### Release
 dotnet pack --configuration Release
+
+### Publish to Nuget
+dotnet nuget push kuflow-rest/bin/Release/KuFlow.Rest.X.X.X.nupkg --api-key YOUR_API_KEY --source https://api.nuget.org/v3/index.jso
+
 ```
-
-
 
 Some other examples of .Net commands:
 
@@ -96,6 +91,3 @@ dotnet add TestConsole/TestConsole.csprok reference kuflow-rest/Kuflow.Rest.cspr
 cd kuflow-rest
 dotnet add package Azure.Core
 ```
-
-
-
