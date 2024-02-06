@@ -52,7 +52,7 @@ openapi-type: data-plane
 ################
 # Shared flags
 ################
-input-file: https://raw.githubusercontent.com/kuflow/kuflow-openapi/2ee94645d20e3a0771db6ac0c9195dade8fabdc4/specs/api.kuflow.com/v2022-10-08/openapi.yaml
+input-file: https://raw.githubusercontent.com/kuflow/kuflow-openapi/dcc83aec8cfbf2c4a731835b940a318d2ca1d561/specs/api.kuflow.com/v2022-10-08/openapi.yaml
 
 output-folder: ../src-generated
 
@@ -113,6 +113,9 @@ library-name: KuFlow.Rest
 
 # Enabled the generation of models
 generation1-convenience-client: true
+
+# No generate model factory
+generate-model-factory: false
 
 # Whether to have your client public. Defaults to false.
 public-clients: true

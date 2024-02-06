@@ -40,21 +40,6 @@ function applyWorkaround() {
 
     fs.writeFileSync(file, fileAsStr, 'utf8')
   }
-
-  {
-    // KuFlowRestModelFactory.cs
-    const file = `${process.cwd()}/../src-generated/KuFlowRestModelFactory.cs`
-
-    const fileData = fs.readFileSync(file)
-    let fileAsStr = fileData.toString('utf8')
-
-    fileAsStr = fileAsStr.replace(/new AuditedObjectType\("Authentication"\)/, 'AuditedObjectType.Authentication')
-
-    fs.writeFileSync(file, fileAsStr, 'utf8')
-
-    const fileNew = `${process.cwd()}/../src-generated/Models/KuFlowRestModelFactory.cs`
-    fs.renameSync(file, fileNew)
-  }
 }
 
 applyWorkaround()

@@ -10,17 +10,13 @@ using Azure.Core;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary>
-    /// The Page.
-    /// Please note <see cref="Page"/> is the base class. According to the scenario, a derived class of the base class might need to be assigned here, or this property needs to be casted to one of the possible derived classes.
-    /// The available derived classes include <see cref="ProcessPage"/>, <see cref="TaskPage"/> and <see cref="PrincipalPage"/>.
-    /// </summary>
-    public abstract partial class Page
+    /// <summary> The Page. </summary>
+    public partial class Page
     {
         /// <summary> Initializes a new instance of <see cref="Page"/>. </summary>
         /// <param name="metadata"></param>
         /// <exception cref="ArgumentNullException"> <paramref name="metadata"/> is null. </exception>
-        protected Page(PageMetadata metadata)
+        internal Page(PageMetadata metadata)
         {
             Argument.AssertNotNull(metadata, nameof(metadata));
 
@@ -30,14 +26,14 @@ namespace KuFlow.Rest.Models
         /// <summary> Initializes a new instance of <see cref="Page"/>. </summary>
         /// <param name="objectType"> Paged Model types. </param>
         /// <param name="metadata"></param>
-        internal Page(PagedObjectType objectType, PageMetadata metadata)
+        internal Page(PagedObjectType? objectType, PageMetadata metadata)
         {
             ObjectType = objectType;
             Metadata = metadata;
         }
 
         /// <summary> Paged Model types. </summary>
-        internal PagedObjectType ObjectType { get; set; }
+        public PagedObjectType? ObjectType { get; }
         /// <summary> Gets the metadata. </summary>
         public PageMetadata Metadata { get; }
     }

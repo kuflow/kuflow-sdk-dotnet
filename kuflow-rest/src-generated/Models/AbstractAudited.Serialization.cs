@@ -5,6 +5,7 @@
 
 #nullable disable
 
+using System;
 using System.Text.Json;
 using Azure.Core;
 
@@ -15,8 +16,11 @@ namespace KuFlow.Rest.Models
         void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
         {
             writer.WriteStartObject();
-            writer.WritePropertyName("objectType"u8);
-            writer.WriteStringValue(ObjectType.ToSerialString());
+            if (Optional.IsDefined(ObjectType))
+            {
+                writer.WritePropertyName("objectType"u8);
+                writer.WriteStringValue(ObjectType.Value.ToSerialString());
+            }
             if (Optional.IsDefined(CreatedBy))
             {
                 writer.WritePropertyName("createdBy"u8);
@@ -46,18 +50,60 @@ namespace KuFlow.Rest.Models
             {
                 return null;
             }
-            if (element.TryGetProperty("objectType", out JsonElement discriminator))
+            Optional<AuditedObjectType> objectType = default;
+            Optional<Guid> createdBy = default;
+            Optional<DateTimeOffset> createdAt = default;
+            Optional<Guid> lastModifiedBy = default;
+            Optional<DateTimeOffset> lastModifiedAt = default;
+            foreach (var property in element.EnumerateObject())
             {
-                switch (discriminator.GetString())
+                if (property.NameEquals("objectType"u8))
                 {
-                    case "PROCESS_PAGE_ITEM": return ProcessPageItem.DeserializeProcessPageItem(element);
-                    case "Process": return Process.DeserializeProcess(element);
-                    case "TASK_PAGE_ITEM": return TaskPageItem.DeserializeTaskPageItem(element);
-                    case "Task": return Task.DeserializeTask(element);
-                    case "Authentication": return Authentication.DeserializeAuthentication(element);
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    objectType = property.Value.GetString().ToAuditedObjectType();
+                    continue;
+                }
+                if (property.NameEquals("createdBy"u8))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    createdBy = property.Value.GetGuid();
+                    continue;
+                }
+                if (property.NameEquals("createdAt"u8))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    createdAt = property.Value.GetDateTimeOffset("O");
+                    continue;
+                }
+                if (property.NameEquals("lastModifiedBy"u8))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    lastModifiedBy = property.Value.GetGuid();
+                    continue;
+                }
+                if (property.NameEquals("lastModifiedAt"u8))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    lastModifiedAt = property.Value.GetDateTimeOffset("O");
+                    continue;
                 }
             }
-            return UnknownAbstractAudited.DeserializeUnknownAbstractAudited(element);
+            return new AbstractAudited(Optional.ToNullable(objectType), Optional.ToNullable(createdBy), Optional.ToNullable(createdAt), Optional.ToNullable(lastModifiedBy), Optional.ToNullable(lastModifiedAt));
         }
     }
 }

@@ -14,16 +14,20 @@ namespace KuFlow.Rest.Models
         public static string ToSerialString(this PagedObjectType value) => value switch
         {
             PagedObjectType.PrincipalPage => "PRINCIPAL_PAGE",
+            PagedObjectType.TenantUserPage => "TENANT_USER_PAGE",
             PagedObjectType.ProcessPage => "PROCESS_PAGE",
             PagedObjectType.TaskPage => "TASK_PAGE",
+            PagedObjectType.RobotPage => "ROBOT_PAGE",
             _ => throw new ArgumentOutOfRangeException(nameof(value), value, "Unknown PagedObjectType value.")
         };
 
         public static PagedObjectType ToPagedObjectType(this string value)
         {
             if (StringComparer.OrdinalIgnoreCase.Equals(value, "PRINCIPAL_PAGE")) return PagedObjectType.PrincipalPage;
+            if (StringComparer.OrdinalIgnoreCase.Equals(value, "TENANT_USER_PAGE")) return PagedObjectType.TenantUserPage;
             if (StringComparer.OrdinalIgnoreCase.Equals(value, "PROCESS_PAGE")) return PagedObjectType.ProcessPage;
             if (StringComparer.OrdinalIgnoreCase.Equals(value, "TASK_PAGE")) return PagedObjectType.TaskPage;
+            if (StringComparer.OrdinalIgnoreCase.Equals(value, "ROBOT_PAGE")) return PagedObjectType.RobotPage;
             throw new ArgumentOutOfRangeException(nameof(value), value, "Unknown PagedObjectType value.");
         }
     }

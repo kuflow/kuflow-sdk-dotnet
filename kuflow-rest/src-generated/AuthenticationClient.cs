@@ -9,6 +9,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure;
+using Azure.Core;
 using Azure.Core.Pipeline;
 using KuFlow.Rest.Models;
 
@@ -24,6 +25,25 @@ namespace KuFlow.Rest
         /// <summary> Initializes a new instance of AuthenticationClient for mocking. </summary>
         protected AuthenticationClient()
         {
+        }
+
+        /// <summary> Initializes a new instance of AuthenticationClient. </summary>
+        /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
+        /// <param name="endpoint"> server parameter. </param>
+        /// <param name="options"> The options for configuring the client. </param>
+        public AuthenticationClient(TokenCredential credential, Uri endpoint = null, KuFlowRestClientOptions options = null)
+        {
+            if (credential == null)
+            {
+                throw new ArgumentNullException(nameof(credential));
+            }
+            endpoint ??= new Uri("https://api.kuflow.com/v2022-10-08");
+
+            options ??= new KuFlowRestClientOptions();
+            _clientDiagnostics = new ClientDiagnostics(options);
+            string[] scopes = { };
+            _pipeline = HttpPipelineBuilder.Build(options, new BearerTokenAuthenticationPolicy(credential, scopes));
+            RestClient = new AuthenticationRestClient(_clientDiagnostics, _pipeline, endpoint);
         }
 
         /// <summary> Initializes a new instance of AuthenticationClient. </summary>

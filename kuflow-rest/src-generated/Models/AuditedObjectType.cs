@@ -10,6 +10,10 @@ namespace KuFlow.Rest.Models
     /// <summary> Audited object Types. </summary>
     public enum AuditedObjectType
     {
+        /// <summary> AUTHENTICATION. </summary>
+        Authentication,
+        /// <summary> TENANT_USER. </summary>
+        TenantUser,
         /// <summary> PROCESS. </summary>
         Process,
         /// <summary> PROCESS_PAGE_ITEM. </summary>
@@ -18,7 +22,9 @@ namespace KuFlow.Rest.Models
         Task,
         /// <summary> TASK_PAGE_ITEM. </summary>
         TaskPageItem,
-        /// <summary> AUTHENTICATION. </summary>
-        Authentication
+        /// <summary> WORKER. </summary>
+        Worker,
+        /// <summary> ROBOT. </summary>
+        Robot
     }
 }

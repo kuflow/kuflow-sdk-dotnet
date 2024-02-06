@@ -7,6 +7,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
+using Azure.Core;
 
 namespace KuFlow.Rest.Models
 {
@@ -19,7 +20,7 @@ namespace KuFlow.Rest.Models
                 return null;
             }
             IReadOnlyList<TaskPageItem> content = default;
-            PagedObjectType objectType = default;
+            Optional<PagedObjectType> objectType = default;
             PageMetadata metadata = default;
             foreach (var property in element.EnumerateObject())
             {
@@ -35,6 +36,10 @@ namespace KuFlow.Rest.Models
                 }
                 if (property.NameEquals("objectType"u8))
                 {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
                     objectType = property.Value.GetString().ToPagedObjectType();
                     continue;
                 }
@@ -44,7 +49,7 @@ namespace KuFlow.Rest.Models
                     continue;
                 }
             }
-            return new TaskPage(objectType, metadata, content);
+            return new TaskPage(Optional.ToNullable(objectType), metadata, content);
         }
     }
 }

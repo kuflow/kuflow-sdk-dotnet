@@ -52,6 +52,11 @@ namespace KuFlow.Rest.Models
                 }
                 writer.WriteEndObject();
             }
+            if (Optional.IsDefined(JsonFormsValue))
+            {
+                writer.WritePropertyName("jsonFormsValue"u8);
+                writer.WriteObjectValue(JsonFormsValue);
+            }
             if (Optional.IsCollectionDefined(Logs))
             {
                 writer.WritePropertyName("logs"u8);
@@ -67,8 +72,16 @@ namespace KuFlow.Rest.Models
                 writer.WritePropertyName("owner"u8);
                 writer.WriteObjectValue(Owner);
             }
-            writer.WritePropertyName("objectType"u8);
-            writer.WriteStringValue(ObjectType.ToSerialString());
+            if (Optional.IsDefined(TenantId))
+            {
+                writer.WritePropertyName("tenantId"u8);
+                writer.WriteStringValue(TenantId.Value);
+            }
+            if (Optional.IsDefined(ObjectType))
+            {
+                writer.WritePropertyName("objectType"u8);
+                writer.WriteStringValue(ObjectType.Value.ToSerialString());
+            }
             if (Optional.IsDefined(CreatedBy))
             {
                 writer.WritePropertyName("createdBy"u8);
@@ -103,9 +116,11 @@ namespace KuFlow.Rest.Models
             TaskDefinitionSummary taskDefinition = default;
             Guid processId = default;
             Optional<IDictionary<string, IList<TaskElementValue>>> elementValues = default;
+            Optional<JsonFormsValue> jsonFormsValue = default;
             Optional<IList<Log>> logs = default;
             Optional<Principal> owner = default;
-            AuditedObjectType objectType = default;
+            Optional<Guid> tenantId = default;
+            Optional<AuditedObjectType> objectType = default;
             Optional<Guid> createdBy = default;
             Optional<DateTimeOffset> createdAt = default;
             Optional<Guid> lastModifiedBy = default;
@@ -166,6 +181,15 @@ namespace KuFlow.Rest.Models
                     elementValues = dictionary;
                     continue;
                 }
+                if (property.NameEquals("jsonFormsValue"u8))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    jsonFormsValue = JsonFormsValue.DeserializeJsonFormsValue(property.Value);
+                    continue;
+                }
                 if (property.NameEquals("logs"u8))
                 {
                     if (property.Value.ValueKind == JsonValueKind.Null)
@@ -189,8 +213,21 @@ namespace KuFlow.Rest.Models
                     owner = Principal.DeserializePrincipal(property.Value);
                     continue;
                 }
+                if (property.NameEquals("tenantId"u8))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    tenantId = property.Value.GetGuid();
+                    continue;
+                }
                 if (property.NameEquals("objectType"u8))
                 {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
                     objectType = property.Value.GetString().ToAuditedObjectType();
                     continue;
                 }
@@ -231,7 +268,7 @@ namespace KuFlow.Rest.Models
                     continue;
                 }
             }
-            return new Task(objectType, Optional.ToNullable(createdBy), Optional.ToNullable(createdAt), Optional.ToNullable(lastModifiedBy), Optional.ToNullable(lastModifiedAt), Optional.ToNullable(id), Optional.ToNullable(state), taskDefinition, processId, Optional.ToDictionary(elementValues), Optional.ToList(logs), owner.Value);
+            return new Task(Optional.ToNullable(objectType), Optional.ToNullable(createdBy), Optional.ToNullable(createdAt), Optional.ToNullable(lastModifiedBy), Optional.ToNullable(lastModifiedAt), Optional.ToNullable(id), Optional.ToNullable(state), taskDefinition, processId, Optional.ToDictionary(elementValues), jsonFormsValue.Value, Optional.ToList(logs), owner.Value, Optional.ToNullable(tenantId));
         }
     }
 }

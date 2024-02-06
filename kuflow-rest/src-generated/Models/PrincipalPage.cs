@@ -25,17 +25,15 @@ namespace KuFlow.Rest.Models
             Argument.AssertNotNull(content, nameof(content));
 
             Content = content.ToList();
-            ObjectType = PagedObjectType.PrincipalPage;
         }
 
         /// <summary> Initializes a new instance of <see cref="PrincipalPage"/>. </summary>
         /// <param name="objectType"> Paged Model types. </param>
         /// <param name="metadata"></param>
         /// <param name="content"></param>
-        internal PrincipalPage(PagedObjectType objectType, PageMetadata metadata, IReadOnlyList<Principal> content) : base(objectType, metadata)
+        internal PrincipalPage(PagedObjectType? objectType, PageMetadata metadata, IReadOnlyList<Principal> content) : base(objectType, metadata)
         {
             Content = content;
-            ObjectType = objectType;
         }
 
         /// <summary> Gets the content. </summary>

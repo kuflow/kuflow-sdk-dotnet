@@ -11,6 +11,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure;
+using Azure.Core;
 using Azure.Core.Pipeline;
 using KuFlow.Rest.Models;
 
@@ -26,6 +27,25 @@ namespace KuFlow.Rest
         /// <summary> Initializes a new instance of TaskClient for mocking. </summary>
         protected TaskClient()
         {
+        }
+
+        /// <summary> Initializes a new instance of TaskClient. </summary>
+        /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
+        /// <param name="endpoint"> server parameter. </param>
+        /// <param name="options"> The options for configuring the client. </param>
+        public TaskClient(TokenCredential credential, Uri endpoint = null, KuFlowRestClientOptions options = null)
+        {
+            if (credential == null)
+            {
+                throw new ArgumentNullException(nameof(credential));
+            }
+            endpoint ??= new Uri("https://api.kuflow.com/v2022-10-08");
+
+            options ??= new KuFlowRestClientOptions();
+            _clientDiagnostics = new ClientDiagnostics(options);
+            string[] scopes = { };
+            _pipeline = HttpPipelineBuilder.Build(options, new BearerTokenAuthenticationPolicy(credential, scopes));
+            RestClient = new TaskRestClient(_clientDiagnostics, _pipeline, endpoint);
         }
 
         /// <summary> Initializes a new instance of TaskClient. </summary>
@@ -54,6 +74,7 @@ namespace KuFlow.Rest
         /// <param name="processId"> Filter by an array of process ids. </param>
         /// <param name="state"> Filter by an array of task states. </param>
         /// <param name="taskDefinitionCode"> Filter by an array of task definition codes. </param>
+        /// <param name="tenantId"> Filter by tenantId. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// List all Tasks that have been created and the credentials has access.
@@ -61,13 +82,13 @@ namespace KuFlow.Rest
         /// Available sort query values: id, createdAt, lastModifiedAt, claimedAt, completedAt, cancelledAt
         ///
         /// </remarks>
-        public virtual async Task<Response<TaskPage>> FindTasksAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> processId = null, IEnumerable<TaskState> state = null, IEnumerable<string> taskDefinitionCode = null, CancellationToken cancellationToken = default)
+        public virtual async Task<Response<TaskPage>> FindTasksAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> processId = null, IEnumerable<TaskState> state = null, IEnumerable<string> taskDefinitionCode = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
         {
             using var scope = _clientDiagnostics.CreateScope("TaskClient.FindTasks");
             scope.Start();
             try
             {
-                return await RestClient.FindTasksAsync(size, page, sort, processId, state, taskDefinitionCode, cancellationToken).ConfigureAwait(false);
+                return await RestClient.FindTasksAsync(size, page, sort, processId, state, taskDefinitionCode, tenantId, cancellationToken).ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -90,6 +111,7 @@ namespace KuFlow.Rest
         /// <param name="processId"> Filter by an array of process ids. </param>
         /// <param name="state"> Filter by an array of task states. </param>
         /// <param name="taskDefinitionCode"> Filter by an array of task definition codes. </param>
+        /// <param name="tenantId"> Filter by tenantId. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// List all Tasks that have been created and the credentials has access.
@@ -97,13 +119,13 @@ namespace KuFlow.Rest
         /// Available sort query values: id, createdAt, lastModifiedAt, claimedAt, completedAt, cancelledAt
         ///
         /// </remarks>
-        public virtual Response<TaskPage> FindTasks(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> processId = null, IEnumerable<TaskState> state = null, IEnumerable<string> taskDefinitionCode = null, CancellationToken cancellationToken = default)
+        public virtual Response<TaskPage> FindTasks(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> processId = null, IEnumerable<TaskState> state = null, IEnumerable<string> taskDefinitionCode = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
         {
             using var scope = _clientDiagnostics.CreateScope("TaskClient.FindTasks");
             scope.Start();
             try
             {
-                return RestClient.FindTasks(size, page, sort, processId, state, taskDefinitionCode, cancellationToken);
+                return RestClient.FindTasks(size, page, sort, processId, state, taskDefinitionCode, tenantId, cancellationToken);
             }
             catch (Exception e)
             {
@@ -114,7 +136,12 @@ namespace KuFlow.Rest
 
         /// <summary> Create a new Task in the selected Process. </summary>
         /// <param name="task"> Task to be created. </param>
-        /// <param name="activityToken"> When create a Kuflow Task backed with a Temporal.io servers, this value is required and must be set with the context task token of Temporal.io activity. </param>
+        /// <param name="activityToken">
+        /// [DEPRECATED] When create a KuFlow Task backed with a Temporal.io servers, this value is required and must be
+        /// set with the context task token of Temporal.io activity. It is no longer necessary because it will be never
+        /// used for the latest SDKs versions
+        ///
+        /// </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// Create a Task and optionally fill its elements. We can fill in any type of element except documents.
@@ -147,7 +174,12 @@ namespace KuFlow.Rest
 
         /// <summary> Create a new Task in the selected Process. </summary>
         /// <param name="task"> Task to be created. </param>
-        /// <param name="activityToken"> When create a Kuflow Task backed with a Temporal.io servers, this value is required and must be set with the context task token of Temporal.io activity. </param>
+        /// <param name="activityToken">
+        /// [DEPRECATED] When create a KuFlow Task backed with a Temporal.io servers, this value is required and must be
+        /// set with the context task token of Temporal.io activity. It is no longer necessary because it will be never
+        /// used for the latest SDKs versions
+        ///
+        /// </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// Create a Task and optionally fill its elements. We can fill in any type of element except documents.
@@ -456,7 +488,7 @@ namespace KuFlow.Rest
 
         /// <summary> Delete an element document value. </summary>
         /// <param name="id"> The resource ID. </param>
-        /// <param name="command"> Command to delete a document elemente value. </param>
+        /// <param name="command"> Command to delete a document element value. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// Allow to delete a specific document from an element of document type using its id.
@@ -481,7 +513,7 @@ namespace KuFlow.Rest
 
         /// <summary> Delete an element document value. </summary>
         /// <param name="id"> The resource ID. </param>
-        /// <param name="command"> Command to delete a document elemente value. </param>
+        /// <param name="command"> Command to delete a document element value. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// Allow to delete a specific document from an element of document type using its id.
@@ -586,6 +618,152 @@ namespace KuFlow.Rest
             try
             {
                 return RestClient.ActionsTaskDownloadElementValueRendered(id, elementDefinitionCode, cancellationToken);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary> Save JSON data. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="command"> Command to save the JSON value. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <remarks>
+        /// Allow to save a JSON data validating that the data follow the related schema. If the data is invalid, then
+        /// the json form is marked as invalid.
+        ///
+        /// </remarks>
+        public virtual async Task<Response<Models.Task>> ActionsTaskSaveJsonFormsValueDataAsync(Guid id, TaskSaveJsonFormsValueDataCommand command, CancellationToken cancellationToken = default)
+        {
+            using var scope = _clientDiagnostics.CreateScope("TaskClient.ActionsTaskSaveJsonFormsValueData");
+            scope.Start();
+            try
+            {
+                return await RestClient.ActionsTaskSaveJsonFormsValueDataAsync(id, command, cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary> Save JSON data. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="command"> Command to save the JSON value. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <remarks>
+        /// Allow to save a JSON data validating that the data follow the related schema. If the data is invalid, then
+        /// the json form is marked as invalid.
+        ///
+        /// </remarks>
+        public virtual Response<Models.Task> ActionsTaskSaveJsonFormsValueData(Guid id, TaskSaveJsonFormsValueDataCommand command, CancellationToken cancellationToken = default)
+        {
+            using var scope = _clientDiagnostics.CreateScope("TaskClient.ActionsTaskSaveJsonFormsValueData");
+            scope.Start();
+            try
+            {
+                return RestClient.ActionsTaskSaveJsonFormsValueData(id, command, cancellationToken);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary> Save a JSON Forms document. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="fileContentType"> Document content type. </param>
+        /// <param name="fileName"> Document name. </param>
+        /// <param name="schemaPath">
+        /// JSON Schema path related to the document. The uploaded document must be validated by the passed schema path.
+        ///
+        /// </param>
+        /// <param name="file"> Document to save. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <remarks>
+        /// Save a document in the task to later be linked into the JSON data.
+        ///
+        /// </remarks>
+        public virtual async Task<Response<TaskSaveJsonFormsValueDocumentResponseCommand>> ActionsTaskSaveJsonFormsValueDocumentAsync(Guid id, string fileContentType, string fileName, string schemaPath, Stream file, CancellationToken cancellationToken = default)
+        {
+            using var scope = _clientDiagnostics.CreateScope("TaskClient.ActionsTaskSaveJsonFormsValueDocument");
+            scope.Start();
+            try
+            {
+                return await RestClient.ActionsTaskSaveJsonFormsValueDocumentAsync(id, fileContentType, fileName, schemaPath, file, cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary> Save a JSON Forms document. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="fileContentType"> Document content type. </param>
+        /// <param name="fileName"> Document name. </param>
+        /// <param name="schemaPath">
+        /// JSON Schema path related to the document. The uploaded document must be validated by the passed schema path.
+        ///
+        /// </param>
+        /// <param name="file"> Document to save. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <remarks>
+        /// Save a document in the task to later be linked into the JSON data.
+        ///
+        /// </remarks>
+        public virtual Response<TaskSaveJsonFormsValueDocumentResponseCommand> ActionsTaskSaveJsonFormsValueDocument(Guid id, string fileContentType, string fileName, string schemaPath, Stream file, CancellationToken cancellationToken = default)
+        {
+            using var scope = _clientDiagnostics.CreateScope("TaskClient.ActionsTaskSaveJsonFormsValueDocument");
+            scope.Start();
+            try
+            {
+                return RestClient.ActionsTaskSaveJsonFormsValueDocument(id, fileContentType, fileName, schemaPath, file, cancellationToken);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary> Download document. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="documentUri"> Document URI to download. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <remarks> Given a task, download a document from a json form data. </remarks>
+        public virtual async Task<Response<Stream>> ActionsTaskDownloadJsonFormsValueDocumentAsync(Guid id, string documentUri, CancellationToken cancellationToken = default)
+        {
+            using var scope = _clientDiagnostics.CreateScope("TaskClient.ActionsTaskDownloadJsonFormsValueDocument");
+            scope.Start();
+            try
+            {
+                return await RestClient.ActionsTaskDownloadJsonFormsValueDocumentAsync(id, documentUri, cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary> Download document. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="documentUri"> Document URI to download. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <remarks> Given a task, download a document from a json form data. </remarks>
+        public virtual Response<Stream> ActionsTaskDownloadJsonFormsValueDocument(Guid id, string documentUri, CancellationToken cancellationToken = default)
+        {
+            using var scope = _clientDiagnostics.CreateScope("TaskClient.ActionsTaskDownloadJsonFormsValueDocument");
+            scope.Start();
+            try
+            {
+                return RestClient.ActionsTaskDownloadJsonFormsValueDocument(id, documentUri, cancellationToken);
             }
             catch (Exception e)
             {

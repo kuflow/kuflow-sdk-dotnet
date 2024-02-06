@@ -38,7 +38,7 @@ namespace KuFlow.Rest
             _endpoint = endpoint ?? new Uri("https://api.kuflow.com/v2022-10-08");
         }
 
-        internal HttpMessage CreateFindTasksRequest(int? size, int? page, IEnumerable<string> sort, IEnumerable<Guid> processId, IEnumerable<TaskState> state, IEnumerable<string> taskDefinitionCode)
+        internal HttpMessage CreateFindTasksRequest(int? size, int? page, IEnumerable<string> sort, IEnumerable<Guid> processId, IEnumerable<TaskState> state, IEnumerable<string> taskDefinitionCode, IEnumerable<Guid> tenantId)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -82,6 +82,13 @@ namespace KuFlow.Rest
                     uri.AppendQuery("taskDefinitionCode", param, true);
                 }
             }
+            if (tenantId != null && Optional.IsCollectionDefined(tenantId))
+            {
+                foreach (var param in tenantId)
+                {
+                    uri.AppendQuery("tenantId", param, true);
+                }
+            }
             request.Uri = uri;
             request.Headers.Add("Accept", "application/json");
             return message;
@@ -101,6 +108,7 @@ namespace KuFlow.Rest
         /// <param name="processId"> Filter by an array of process ids. </param>
         /// <param name="state"> Filter by an array of task states. </param>
         /// <param name="taskDefinitionCode"> Filter by an array of task definition codes. </param>
+        /// <param name="tenantId"> Filter by tenantId. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// List all Tasks that have been created and the credentials has access.
@@ -108,9 +116,9 @@ namespace KuFlow.Rest
         /// Available sort query values: id, createdAt, lastModifiedAt, claimedAt, completedAt, cancelledAt
         ///
         /// </remarks>
-        public async Task<Response<TaskPage>> FindTasksAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> processId = null, IEnumerable<TaskState> state = null, IEnumerable<string> taskDefinitionCode = null, CancellationToken cancellationToken = default)
+        public async Task<Response<TaskPage>> FindTasksAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> processId = null, IEnumerable<TaskState> state = null, IEnumerable<string> taskDefinitionCode = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
         {
-            using var message = CreateFindTasksRequest(size, page, sort, processId, state, taskDefinitionCode);
+            using var message = CreateFindTasksRequest(size, page, sort, processId, state, taskDefinitionCode, tenantId);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
@@ -140,6 +148,7 @@ namespace KuFlow.Rest
         /// <param name="processId"> Filter by an array of process ids. </param>
         /// <param name="state"> Filter by an array of task states. </param>
         /// <param name="taskDefinitionCode"> Filter by an array of task definition codes. </param>
+        /// <param name="tenantId"> Filter by tenantId. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// List all Tasks that have been created and the credentials has access.
@@ -147,9 +156,9 @@ namespace KuFlow.Rest
         /// Available sort query values: id, createdAt, lastModifiedAt, claimedAt, completedAt, cancelledAt
         ///
         /// </remarks>
-        public Response<TaskPage> FindTasks(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> processId = null, IEnumerable<TaskState> state = null, IEnumerable<string> taskDefinitionCode = null, CancellationToken cancellationToken = default)
+        public Response<TaskPage> FindTasks(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> processId = null, IEnumerable<TaskState> state = null, IEnumerable<string> taskDefinitionCode = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
         {
-            using var message = CreateFindTasksRequest(size, page, sort, processId, state, taskDefinitionCode);
+            using var message = CreateFindTasksRequest(size, page, sort, processId, state, taskDefinitionCode, tenantId);
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {
@@ -188,7 +197,12 @@ namespace KuFlow.Rest
 
         /// <summary> Create a new Task in the selected Process. </summary>
         /// <param name="task"> Task to be created. </param>
-        /// <param name="activityToken"> When create a Kuflow Task backed with a Temporal.io servers, this value is required and must be set with the context task token of Temporal.io activity. </param>
+        /// <param name="activityToken">
+        /// [DEPRECATED] When create a KuFlow Task backed with a Temporal.io servers, this value is required and must be
+        /// set with the context task token of Temporal.io activity. It is no longer necessary because it will be never
+        /// used for the latest SDKs versions
+        ///
+        /// </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="task"/> is null. </exception>
         /// <remarks>
@@ -231,7 +245,12 @@ namespace KuFlow.Rest
 
         /// <summary> Create a new Task in the selected Process. </summary>
         /// <param name="task"> Task to be created. </param>
-        /// <param name="activityToken"> When create a Kuflow Task backed with a Temporal.io servers, this value is required and must be set with the context task token of Temporal.io activity. </param>
+        /// <param name="activityToken">
+        /// [DEPRECATED] When create a KuFlow Task backed with a Temporal.io servers, this value is required and must be
+        /// set with the context task token of Temporal.io activity. It is no longer necessary because it will be never
+        /// used for the latest SDKs versions
+        ///
+        /// </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="task"/> is null. </exception>
         /// <remarks>
@@ -791,7 +810,7 @@ namespace KuFlow.Rest
 
         /// <summary> Delete an element document value. </summary>
         /// <param name="id"> The resource ID. </param>
-        /// <param name="command"> Command to delete a document elemente value. </param>
+        /// <param name="command"> Command to delete a document element value. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="command"/> is null. </exception>
         /// <remarks>
@@ -825,7 +844,7 @@ namespace KuFlow.Rest
 
         /// <summary> Delete an element document value. </summary>
         /// <param name="id"> The resource ID. </param>
-        /// <param name="command"> Command to delete a document elemente value. </param>
+        /// <param name="command"> Command to delete a document element value. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="command"/> is null. </exception>
         /// <remarks>
@@ -982,6 +1001,281 @@ namespace KuFlow.Rest
             }
 
             using var message = CreateActionsTaskDownloadElementValueRenderedRequest(id, elementDefinitionCode);
+            _pipeline.Send(message, cancellationToken);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        var value = message.ExtractResponseContent();
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        internal HttpMessage CreateActionsTaskSaveJsonFormsValueDataRequest(Guid id, TaskSaveJsonFormsValueDataCommand command)
+        {
+            var message = _pipeline.CreateMessage();
+            var request = message.Request;
+            request.Method = RequestMethod.Post;
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/tasks/", false);
+            uri.AppendPath(id, true);
+            uri.AppendPath("/~actions/save-json-forms-value-data", false);
+            request.Uri = uri;
+            request.Headers.Add("Accept", "application/json");
+            request.Headers.Add("Content-Type", "application/json");
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue(command);
+            request.Content = content;
+            return message;
+        }
+
+        /// <summary> Save JSON data. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="command"> Command to save the JSON value. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="command"/> is null. </exception>
+        /// <remarks>
+        /// Allow to save a JSON data validating that the data follow the related schema. If the data is invalid, then
+        /// the json form is marked as invalid.
+        ///
+        /// </remarks>
+        public async Task<Response<Models.Task>> ActionsTaskSaveJsonFormsValueDataAsync(Guid id, TaskSaveJsonFormsValueDataCommand command, CancellationToken cancellationToken = default)
+        {
+            if (command == null)
+            {
+                throw new ArgumentNullException(nameof(command));
+            }
+
+            using var message = CreateActionsTaskSaveJsonFormsValueDataRequest(id, command);
+            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        Models.Task value = default;
+                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, default, cancellationToken).ConfigureAwait(false);
+                        value = Models.Task.DeserializeTask(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        /// <summary> Save JSON data. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="command"> Command to save the JSON value. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="command"/> is null. </exception>
+        /// <remarks>
+        /// Allow to save a JSON data validating that the data follow the related schema. If the data is invalid, then
+        /// the json form is marked as invalid.
+        ///
+        /// </remarks>
+        public Response<Models.Task> ActionsTaskSaveJsonFormsValueData(Guid id, TaskSaveJsonFormsValueDataCommand command, CancellationToken cancellationToken = default)
+        {
+            if (command == null)
+            {
+                throw new ArgumentNullException(nameof(command));
+            }
+
+            using var message = CreateActionsTaskSaveJsonFormsValueDataRequest(id, command);
+            _pipeline.Send(message, cancellationToken);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        Models.Task value = default;
+                        using var document = JsonDocument.Parse(message.Response.ContentStream);
+                        value = Models.Task.DeserializeTask(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        internal HttpMessage CreateActionsTaskSaveJsonFormsValueDocumentRequest(Guid id, string fileContentType, string fileName, string schemaPath, Stream file)
+        {
+            var message = _pipeline.CreateMessage();
+            var request = message.Request;
+            request.Method = RequestMethod.Post;
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/tasks/", false);
+            uri.AppendPath(id, true);
+            uri.AppendPath("/~actions/save-json-forms-value-document", false);
+            uri.AppendQuery("fileContentType", fileContentType, true);
+            uri.AppendQuery("fileName", fileName, true);
+            uri.AppendQuery("schemaPath", schemaPath, true);
+            request.Uri = uri;
+            request.Headers.Add("Accept", "application/json");
+            request.Headers.Add("Content-Type", "application/octet-stream");
+            request.Content = RequestContent.Create(file);
+            return message;
+        }
+
+        /// <summary> Save a JSON Forms document. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="fileContentType"> Document content type. </param>
+        /// <param name="fileName"> Document name. </param>
+        /// <param name="schemaPath">
+        /// JSON Schema path related to the document. The uploaded document must be validated by the passed schema path.
+        ///
+        /// </param>
+        /// <param name="file"> Document to save. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="fileContentType"/>, <paramref name="fileName"/>, <paramref name="schemaPath"/> or <paramref name="file"/> is null. </exception>
+        /// <remarks>
+        /// Save a document in the task to later be linked into the JSON data.
+        ///
+        /// </remarks>
+        public async Task<Response<TaskSaveJsonFormsValueDocumentResponseCommand>> ActionsTaskSaveJsonFormsValueDocumentAsync(Guid id, string fileContentType, string fileName, string schemaPath, Stream file, CancellationToken cancellationToken = default)
+        {
+            if (fileContentType == null)
+            {
+                throw new ArgumentNullException(nameof(fileContentType));
+            }
+            if (fileName == null)
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+            if (schemaPath == null)
+            {
+                throw new ArgumentNullException(nameof(schemaPath));
+            }
+            if (file == null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            using var message = CreateActionsTaskSaveJsonFormsValueDocumentRequest(id, fileContentType, fileName, schemaPath, file);
+            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        TaskSaveJsonFormsValueDocumentResponseCommand value = default;
+                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, default, cancellationToken).ConfigureAwait(false);
+                        value = TaskSaveJsonFormsValueDocumentResponseCommand.DeserializeTaskSaveJsonFormsValueDocumentResponseCommand(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        /// <summary> Save a JSON Forms document. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="fileContentType"> Document content type. </param>
+        /// <param name="fileName"> Document name. </param>
+        /// <param name="schemaPath">
+        /// JSON Schema path related to the document. The uploaded document must be validated by the passed schema path.
+        ///
+        /// </param>
+        /// <param name="file"> Document to save. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="fileContentType"/>, <paramref name="fileName"/>, <paramref name="schemaPath"/> or <paramref name="file"/> is null. </exception>
+        /// <remarks>
+        /// Save a document in the task to later be linked into the JSON data.
+        ///
+        /// </remarks>
+        public Response<TaskSaveJsonFormsValueDocumentResponseCommand> ActionsTaskSaveJsonFormsValueDocument(Guid id, string fileContentType, string fileName, string schemaPath, Stream file, CancellationToken cancellationToken = default)
+        {
+            if (fileContentType == null)
+            {
+                throw new ArgumentNullException(nameof(fileContentType));
+            }
+            if (fileName == null)
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+            if (schemaPath == null)
+            {
+                throw new ArgumentNullException(nameof(schemaPath));
+            }
+            if (file == null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            using var message = CreateActionsTaskSaveJsonFormsValueDocumentRequest(id, fileContentType, fileName, schemaPath, file);
+            _pipeline.Send(message, cancellationToken);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        TaskSaveJsonFormsValueDocumentResponseCommand value = default;
+                        using var document = JsonDocument.Parse(message.Response.ContentStream);
+                        value = TaskSaveJsonFormsValueDocumentResponseCommand.DeserializeTaskSaveJsonFormsValueDocumentResponseCommand(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        internal HttpMessage CreateActionsTaskDownloadJsonFormsValueDocumentRequest(Guid id, string documentUri)
+        {
+            var message = _pipeline.CreateMessage();
+            var request = message.Request;
+            request.Method = RequestMethod.Get;
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/tasks/", false);
+            uri.AppendPath(id, true);
+            uri.AppendPath("/~actions/download-json-forms-value-document", false);
+            uri.AppendQuery("documentUri", documentUri, true);
+            request.Uri = uri;
+            request.Headers.Add("Accept", "application/octet-stream, application/json");
+            return message;
+        }
+
+        /// <summary> Download document. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="documentUri"> Document URI to download. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="documentUri"/> is null. </exception>
+        /// <remarks> Given a task, download a document from a json form data. </remarks>
+        public async Task<Response<Stream>> ActionsTaskDownloadJsonFormsValueDocumentAsync(Guid id, string documentUri, CancellationToken cancellationToken = default)
+        {
+            if (documentUri == null)
+            {
+                throw new ArgumentNullException(nameof(documentUri));
+            }
+
+            using var message = CreateActionsTaskDownloadJsonFormsValueDocumentRequest(id, documentUri);
+            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        var value = message.ExtractResponseContent();
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        /// <summary> Download document. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="documentUri"> Document URI to download. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="documentUri"/> is null. </exception>
+        /// <remarks> Given a task, download a document from a json form data. </remarks>
+        public Response<Stream> ActionsTaskDownloadJsonFormsValueDocument(Guid id, string documentUri, CancellationToken cancellationToken = default)
+        {
+            if (documentUri == null)
+            {
+                throw new ArgumentNullException(nameof(documentUri));
+            }
+
+            using var message = CreateActionsTaskDownloadJsonFormsValueDocumentRequest(id, documentUri);
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {

@@ -11,13 +11,30 @@ using Azure.Core;
 
 namespace KuFlow.Rest.Models
 {
-    internal partial class UnknownAbstractAudited : IUtf8JsonSerializable
+    public partial class TenantUser : IUtf8JsonSerializable
     {
         void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
         {
             writer.WriteStartObject();
-            writer.WritePropertyName("objectType"u8);
-            writer.WriteStringValue(ObjectType.ToSerialString());
+            writer.WritePropertyName("id"u8);
+            writer.WriteStringValue(Id);
+            if (Optional.IsDefined(Metadata))
+            {
+                writer.WritePropertyName("metadata"u8);
+                writer.WriteObjectValue(Metadata);
+            }
+            writer.WritePropertyName("principal"u8);
+            writer.WriteObjectValue(Principal);
+            if (Optional.IsDefined(TenantId))
+            {
+                writer.WritePropertyName("tenantId"u8);
+                writer.WriteStringValue(TenantId.Value);
+            }
+            if (Optional.IsDefined(ObjectType))
+            {
+                writer.WritePropertyName("objectType"u8);
+                writer.WriteStringValue(ObjectType.Value.ToSerialString());
+            }
             if (Optional.IsDefined(CreatedBy))
             {
                 writer.WritePropertyName("createdBy"u8);
@@ -41,21 +58,57 @@ namespace KuFlow.Rest.Models
             writer.WriteEndObject();
         }
 
-        internal static UnknownAbstractAudited DeserializeUnknownAbstractAudited(JsonElement element)
+        internal static TenantUser DeserializeTenantUser(JsonElement element)
         {
             if (element.ValueKind == JsonValueKind.Null)
             {
                 return null;
             }
-            AuditedObjectType objectType = default;
+            Guid id = default;
+            Optional<TenantUserMetadata> metadata = default;
+            Principal principal = default;
+            Optional<Guid> tenantId = default;
+            Optional<AuditedObjectType> objectType = default;
             Optional<Guid> createdBy = default;
             Optional<DateTimeOffset> createdAt = default;
             Optional<Guid> lastModifiedBy = default;
             Optional<DateTimeOffset> lastModifiedAt = default;
             foreach (var property in element.EnumerateObject())
             {
+                if (property.NameEquals("id"u8))
+                {
+                    id = property.Value.GetGuid();
+                    continue;
+                }
+                if (property.NameEquals("metadata"u8))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    metadata = TenantUserMetadata.DeserializeTenantUserMetadata(property.Value);
+                    continue;
+                }
+                if (property.NameEquals("principal"u8))
+                {
+                    principal = Principal.DeserializePrincipal(property.Value);
+                    continue;
+                }
+                if (property.NameEquals("tenantId"u8))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    tenantId = property.Value.GetGuid();
+                    continue;
+                }
                 if (property.NameEquals("objectType"u8))
                 {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
                     objectType = property.Value.GetString().ToAuditedObjectType();
                     continue;
                 }
@@ -96,7 +149,7 @@ namespace KuFlow.Rest.Models
                     continue;
                 }
             }
-            return new UnknownAbstractAudited(objectType, Optional.ToNullable(createdBy), Optional.ToNullable(createdAt), Optional.ToNullable(lastModifiedBy), Optional.ToNullable(lastModifiedAt));
+            return new TenantUser(Optional.ToNullable(objectType), Optional.ToNullable(createdBy), Optional.ToNullable(createdAt), Optional.ToNullable(lastModifiedBy), Optional.ToNullable(lastModifiedAt), id, metadata.Value, principal, Optional.ToNullable(tenantId));
         }
     }
 }

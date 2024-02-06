@@ -9,25 +9,21 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary>
-    /// The AbstractAudited.
-    /// Please note <see cref="AbstractAudited"/> is the base class. According to the scenario, a derived class of the base class might need to be assigned here, or this property needs to be casted to one of the possible derived classes.
-    /// The available derived classes include <see cref="ProcessPageItem"/>, <see cref="Process"/>, <see cref="TaskPageItem"/>, <see cref="Task"/> and <see cref="Authentication"/>.
-    /// </summary>
-    public abstract partial class AbstractAudited
+    /// <summary> The AbstractAudited. </summary>
+    public partial class AbstractAudited
     {
         /// <summary> Initializes a new instance of <see cref="AbstractAudited"/>. </summary>
-        protected AbstractAudited()
+        public AbstractAudited()
         {
         }
 
         /// <summary> Initializes a new instance of <see cref="AbstractAudited"/>. </summary>
-        /// <param name="objectType"> Identifies the concrete type of the audited model. </param>
+        /// <param name="objectType"> Audited object Types. </param>
         /// <param name="createdBy"> Who create this model. </param>
         /// <param name="createdAt"> When this model was created. </param>
         /// <param name="lastModifiedBy"> Who was last update this model. </param>
         /// <param name="lastModifiedAt"> When this model type was last updated. </param>
-        internal AbstractAudited(AuditedObjectType objectType, Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt)
+        internal AbstractAudited(AuditedObjectType? objectType, Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt)
         {
             ObjectType = objectType;
             CreatedBy = createdBy;
@@ -36,8 +32,8 @@ namespace KuFlow.Rest.Models
             LastModifiedAt = lastModifiedAt;
         }
 
-        /// <summary> Identifies the concrete type of the audited model. </summary>
-        internal AuditedObjectType ObjectType { get; set; }
+        /// <summary> Audited object Types. </summary>
+        public AuditedObjectType? ObjectType { get; set; }
         /// <summary> Who create this model. </summary>
         public Guid? CreatedBy { get; set; }
         /// <summary> When this model was created. </summary>

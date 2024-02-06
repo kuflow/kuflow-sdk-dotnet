@@ -13,21 +13,27 @@ namespace KuFlow.Rest.Models
     {
         public static string ToSerialString(this AuditedObjectType value) => value switch
         {
+            AuditedObjectType.Authentication => "AUTHENTICATION",
+            AuditedObjectType.TenantUser => "TENANT_USER",
             AuditedObjectType.Process => "PROCESS",
             AuditedObjectType.ProcessPageItem => "PROCESS_PAGE_ITEM",
             AuditedObjectType.Task => "TASK",
             AuditedObjectType.TaskPageItem => "TASK_PAGE_ITEM",
-            AuditedObjectType.Authentication => "AUTHENTICATION",
+            AuditedObjectType.Worker => "WORKER",
+            AuditedObjectType.Robot => "ROBOT",
             _ => throw new ArgumentOutOfRangeException(nameof(value), value, "Unknown AuditedObjectType value.")
         };
 
         public static AuditedObjectType ToAuditedObjectType(this string value)
         {
+            if (StringComparer.OrdinalIgnoreCase.Equals(value, "AUTHENTICATION")) return AuditedObjectType.Authentication;
+            if (StringComparer.OrdinalIgnoreCase.Equals(value, "TENANT_USER")) return AuditedObjectType.TenantUser;
             if (StringComparer.OrdinalIgnoreCase.Equals(value, "PROCESS")) return AuditedObjectType.Process;
             if (StringComparer.OrdinalIgnoreCase.Equals(value, "PROCESS_PAGE_ITEM")) return AuditedObjectType.ProcessPageItem;
             if (StringComparer.OrdinalIgnoreCase.Equals(value, "TASK")) return AuditedObjectType.Task;
             if (StringComparer.OrdinalIgnoreCase.Equals(value, "TASK_PAGE_ITEM")) return AuditedObjectType.TaskPageItem;
-            if (StringComparer.OrdinalIgnoreCase.Equals(value, "AUTHENTICATION")) return AuditedObjectType.Authentication;
+            if (StringComparer.OrdinalIgnoreCase.Equals(value, "WORKER")) return AuditedObjectType.Worker;
+            if (StringComparer.OrdinalIgnoreCase.Equals(value, "ROBOT")) return AuditedObjectType.Robot;
             throw new ArgumentOutOfRangeException(nameof(value), value, "Unknown AuditedObjectType value.");
         }
     }
