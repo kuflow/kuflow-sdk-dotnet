@@ -37,7 +37,7 @@ namespace KuFlow.Rest
             _endpoint = endpoint ?? new Uri("https://api.kuflow.com/v2022-10-08");
         }
 
-        internal HttpMessage CreateFindPrincipalsRequest(int? size, int? page, IEnumerable<string> sort, PrincipalType? type, IEnumerable<Guid> groupId)
+        internal HttpMessage CreateFindPrincipalsRequest(int? size, int? page, IEnumerable<string> sort, PrincipalType? type, IEnumerable<Guid> groupId, IEnumerable<Guid> tenantId)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -71,6 +71,13 @@ namespace KuFlow.Rest
                     uri.AppendQuery("groupId", param, true);
                 }
             }
+            if (tenantId != null && Optional.IsCollectionDefined(tenantId))
+            {
+                foreach (var param in tenantId)
+                {
+                    uri.AppendQuery("tenantId", param, true);
+                }
+            }
             request.Uri = uri;
             request.Headers.Add("Accept", "application/json");
             return message;
@@ -88,7 +95,8 @@ namespace KuFlow.Rest
         ///
         /// </param>
         /// <param name="type"> Filter principals by type. </param>
-        /// <param name="groupId"> Filter principals that exists in one of group ids. </param>
+        /// <param name="groupId"> Filter by group ids. </param>
+        /// <param name="tenantId"> Filter by tenantId. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// List all the Principals that have been created and the used credentials has access.
@@ -96,9 +104,9 @@ namespace KuFlow.Rest
         /// Available sort query values: id, name
         ///
         /// </remarks>
-        public async Task<Response<PrincipalPage>> FindPrincipalsAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, PrincipalType? type = null, IEnumerable<Guid> groupId = null, CancellationToken cancellationToken = default)
+        public async Task<Response<PrincipalPage>> FindPrincipalsAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, PrincipalType? type = null, IEnumerable<Guid> groupId = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
         {
-            using var message = CreateFindPrincipalsRequest(size, page, sort, type, groupId);
+            using var message = CreateFindPrincipalsRequest(size, page, sort, type, groupId, tenantId);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
@@ -126,7 +134,8 @@ namespace KuFlow.Rest
         ///
         /// </param>
         /// <param name="type"> Filter principals by type. </param>
-        /// <param name="groupId"> Filter principals that exists in one of group ids. </param>
+        /// <param name="groupId"> Filter by group ids. </param>
+        /// <param name="tenantId"> Filter by tenantId. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// List all the Principals that have been created and the used credentials has access.
@@ -134,9 +143,9 @@ namespace KuFlow.Rest
         /// Available sort query values: id, name
         ///
         /// </remarks>
-        public Response<PrincipalPage> FindPrincipals(int? size = null, int? page = null, IEnumerable<string> sort = null, PrincipalType? type = null, IEnumerable<Guid> groupId = null, CancellationToken cancellationToken = default)
+        public Response<PrincipalPage> FindPrincipals(int? size = null, int? page = null, IEnumerable<string> sort = null, PrincipalType? type = null, IEnumerable<Guid> groupId = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
         {
-            using var message = CreateFindPrincipalsRequest(size, page, sort, type, groupId);
+            using var message = CreateFindPrincipalsRequest(size, page, sort, type, groupId, tenantId);
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {

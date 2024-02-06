@@ -11,6 +11,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure;
+using Azure.Core;
 using Azure.Core.Pipeline;
 using KuFlow.Rest.Models;
 
@@ -26,6 +27,25 @@ namespace KuFlow.Rest
         /// <summary> Initializes a new instance of ProcessClient for mocking. </summary>
         protected ProcessClient()
         {
+        }
+
+        /// <summary> Initializes a new instance of ProcessClient. </summary>
+        /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
+        /// <param name="endpoint"> server parameter. </param>
+        /// <param name="options"> The options for configuring the client. </param>
+        public ProcessClient(TokenCredential credential, Uri endpoint = null, KuFlowRestClientOptions options = null)
+        {
+            if (credential == null)
+            {
+                throw new ArgumentNullException(nameof(credential));
+            }
+            endpoint ??= new Uri("https://api.kuflow.com/v2022-10-08");
+
+            options ??= new KuFlowRestClientOptions();
+            _clientDiagnostics = new ClientDiagnostics(options);
+            string[] scopes = { };
+            _pipeline = HttpPipelineBuilder.Build(options, new BearerTokenAuthenticationPolicy(credential, scopes));
+            RestClient = new ProcessRestClient(_clientDiagnostics, _pipeline, endpoint);
         }
 
         /// <summary> Initializes a new instance of ProcessClient. </summary>
@@ -51,6 +71,7 @@ namespace KuFlow.Rest
         /// Please refer to the method description for supported properties.
         ///
         /// </param>
+        /// <param name="tenantId"> Filter by tenantId. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// List all the Processes that have been created and the credentials has access.
@@ -58,13 +79,13 @@ namespace KuFlow.Rest
         /// Available sort query values: id, createdAt, lastModifiedAt
         ///
         /// </remarks>
-        public virtual async Task<Response<ProcessPage>> FindProcessesAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, CancellationToken cancellationToken = default)
+        public virtual async Task<Response<ProcessPage>> FindProcessesAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
         {
             using var scope = _clientDiagnostics.CreateScope("ProcessClient.FindProcesses");
             scope.Start();
             try
             {
-                return await RestClient.FindProcessesAsync(size, page, sort, cancellationToken).ConfigureAwait(false);
+                return await RestClient.FindProcessesAsync(size, page, sort, tenantId, cancellationToken).ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -84,6 +105,7 @@ namespace KuFlow.Rest
         /// Please refer to the method description for supported properties.
         ///
         /// </param>
+        /// <param name="tenantId"> Filter by tenantId. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// List all the Processes that have been created and the credentials has access.
@@ -91,13 +113,13 @@ namespace KuFlow.Rest
         /// Available sort query values: id, createdAt, lastModifiedAt
         ///
         /// </remarks>
-        public virtual Response<ProcessPage> FindProcesses(int? size = null, int? page = null, IEnumerable<string> sort = null, CancellationToken cancellationToken = default)
+        public virtual Response<ProcessPage> FindProcesses(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
         {
             using var scope = _clientDiagnostics.CreateScope("ProcessClient.FindProcesses");
             scope.Start();
             try
             {
-                return RestClient.FindProcesses(size, page, sort, cancellationToken);
+                return RestClient.FindProcesses(size, page, sort, tenantId, cancellationToken);
             }
             catch (Exception e)
             {

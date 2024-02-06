@@ -38,7 +38,7 @@ namespace KuFlow.Rest
             _endpoint = endpoint ?? new Uri("https://api.kuflow.com/v2022-10-08");
         }
 
-        internal HttpMessage CreateFindProcessesRequest(int? size, int? page, IEnumerable<string> sort)
+        internal HttpMessage CreateFindProcessesRequest(int? size, int? page, IEnumerable<string> sort, IEnumerable<Guid> tenantId)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -61,6 +61,13 @@ namespace KuFlow.Rest
                     uri.AppendQuery("sort", param, true);
                 }
             }
+            if (tenantId != null && Optional.IsCollectionDefined(tenantId))
+            {
+                foreach (var param in tenantId)
+                {
+                    uri.AppendQuery("tenantId", param, true);
+                }
+            }
             request.Uri = uri;
             request.Headers.Add("Accept", "application/json");
             return message;
@@ -77,6 +84,7 @@ namespace KuFlow.Rest
         /// Please refer to the method description for supported properties.
         ///
         /// </param>
+        /// <param name="tenantId"> Filter by tenantId. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// List all the Processes that have been created and the credentials has access.
@@ -84,9 +92,9 @@ namespace KuFlow.Rest
         /// Available sort query values: id, createdAt, lastModifiedAt
         ///
         /// </remarks>
-        public async Task<Response<ProcessPage>> FindProcessesAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, CancellationToken cancellationToken = default)
+        public async Task<Response<ProcessPage>> FindProcessesAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
         {
-            using var message = CreateFindProcessesRequest(size, page, sort);
+            using var message = CreateFindProcessesRequest(size, page, sort, tenantId);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
@@ -113,6 +121,7 @@ namespace KuFlow.Rest
         /// Please refer to the method description for supported properties.
         ///
         /// </param>
+        /// <param name="tenantId"> Filter by tenantId. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// List all the Processes that have been created and the credentials has access.
@@ -120,9 +129,9 @@ namespace KuFlow.Rest
         /// Available sort query values: id, createdAt, lastModifiedAt
         ///
         /// </remarks>
-        public Response<ProcessPage> FindProcesses(int? size = null, int? page = null, IEnumerable<string> sort = null, CancellationToken cancellationToken = default)
+        public Response<ProcessPage> FindProcesses(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
         {
-            using var message = CreateFindProcessesRequest(size, page, sort);
+            using var message = CreateFindProcessesRequest(size, page, sort, tenantId);
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {

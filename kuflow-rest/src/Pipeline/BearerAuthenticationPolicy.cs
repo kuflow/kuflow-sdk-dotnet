@@ -3,17 +3,15 @@ using System.Threading.Tasks;
 using Azure.Core;
 using Azure.Core.Pipeline;
 
-namespace KuFlow.Rest
+namespace KuFlow.Rest.Pipeline
 {
-  public class BasicAuthenticationPolicy : HttpPipelinePolicy
+  public class BearerAuthenticationPolicy : HttpPipelinePolicy
   {
-    private readonly string _username;
-    private readonly string _password;
+    private readonly string _authorization;
 
-    public BasicAuthenticationPolicy(string username, string password)
+    public BearerAuthenticationPolicy(string token)
     {
-      _username = username;
-      _password = password;
+      _authorization = $"Bearer {token}";
     }
 
     public override void Process(HttpMessage message, ReadOnlyMemory<HttpPipelinePolicy> pipeline)
@@ -32,8 +30,7 @@ namespace KuFlow.Rest
 
     private void SetAuthenticationHeaders(HttpMessage message)
     {
-      var token = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes($"{_username}:{_password}"));
-      message.Request.Headers.SetValue("Authorization", $"Basic {token}");
+      message.Request.Headers.SetValue("Authorization", _authorization);
     }
   }
 }

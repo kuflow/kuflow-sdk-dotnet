@@ -1,4 +1,5 @@
-﻿using KuFlow.Rest;
+﻿using Azure.Core;
+using KuFlow.Rest;
 using KuFlow.Rest.Models;
 
 namespace KuFlow.Samples;
@@ -9,15 +10,26 @@ class Program
   {
     Console.WriteLine("Hello, World!");
 
-    const string clientId = "FILL_ME";
-    const string clientSecret = "FILL_ME";
+    const string clientId = "";
+    const string clientSecret = "";
+    const string clientToken = "";
     const string taskIdentifier = "FILL_ME";
     const string endpoint = "http://localhost:8080/apis/external";
 
-    {
-      var client = new KuFlowRestClient(clientId, clientSecret, endpoint);
+    // {
+    //   var client = new KuFlowRestClient(clientId: clientId, clientSecret: clientSecret, endpoint: endpoint);
+    //
+    //   var authenticationRequest = new Authentication { Type = AuthenticationType.Engine };
+    //   var authenticationResponse = client.AuthenticationClient.CreateAuthentication(authenticationRequest);
+    //
+    //   Console.WriteLine("Authentication " + authenticationResponse);
+    // }
 
-      var authenticationRequest = KuFlowRestModelFactory.Authentication(type: AuthenticationType.ENGINE);
+    {
+      // var credential = DelegatedTokenCredential.Create((_, _) => new AccessToken(oauth2Token, DateTimeOffset.MaxValue));
+      var client = new KuFlowRestClient(clientToken: clientToken, endpoint: endpoint);
+
+      var authenticationRequest = new Authentication { Type = AuthenticationType.Engine };
       var authenticationResponse = client.AuthenticationClient.CreateAuthentication(authenticationRequest);
 
       Console.WriteLine("Authentication " + authenticationResponse);

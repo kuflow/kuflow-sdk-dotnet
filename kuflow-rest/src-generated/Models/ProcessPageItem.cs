@@ -23,11 +23,10 @@ namespace KuFlow.Rest.Models
 
             ProcessDefinition = processDefinition;
             ElementValues = new ChangeTrackingDictionary<string, IList<ProcessElementValue>>();
-            ObjectType = AuditedObjectType.ProcessPageItem;
         }
 
         /// <summary> Initializes a new instance of <see cref="ProcessPageItem"/>. </summary>
-        /// <param name="objectType"> Identifies the concrete type of the audited model. </param>
+        /// <param name="objectType"> Audited object Types. </param>
         /// <param name="createdBy"> Who create this model. </param>
         /// <param name="createdAt"> When this model was created. </param>
         /// <param name="lastModifiedBy"> Who was last update this model. </param>
@@ -38,7 +37,8 @@ namespace KuFlow.Rest.Models
         /// <param name="processDefinition"></param>
         /// <param name="elementValues"> Process element values, an ElementValueDocument is not allowed. </param>
         /// <param name="initiator"></param>
-        internal ProcessPageItem(AuditedObjectType objectType, Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid? id, string subject, ProcessState? state, ProcessDefinitionSummary processDefinition, IDictionary<string, IList<ProcessElementValue>> elementValues, Principal initiator) : base(objectType, createdBy, createdAt, lastModifiedBy, lastModifiedAt)
+        /// <param name="tenantId"> Tenant ID. </param>
+        internal ProcessPageItem(AuditedObjectType? objectType, Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid? id, string subject, ProcessState? state, ProcessDefinitionSummary processDefinition, IDictionary<string, IList<ProcessElementValue>> elementValues, Principal initiator, Guid? tenantId) : base(objectType, createdBy, createdAt, lastModifiedBy, lastModifiedAt)
         {
             Id = id;
             Subject = subject;
@@ -46,7 +46,7 @@ namespace KuFlow.Rest.Models
             ProcessDefinition = processDefinition;
             ElementValues = elementValues;
             Initiator = initiator;
-            ObjectType = objectType;
+            TenantId = tenantId;
         }
 
         /// <summary> Process ID. </summary>
@@ -61,5 +61,7 @@ namespace KuFlow.Rest.Models
         public IDictionary<string, IList<ProcessElementValue>> ElementValues { get; }
         /// <summary> Gets or sets the initiator. </summary>
         public Principal Initiator { get; set; }
+        /// <summary> Tenant ID. </summary>
+        public Guid? TenantId { get; set; }
     }
 }

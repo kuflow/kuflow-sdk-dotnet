@@ -25,11 +25,10 @@ namespace KuFlow.Rest.Models
             TaskDefinition = taskDefinition;
             ProcessId = processId;
             ElementValues = new ChangeTrackingDictionary<string, IList<TaskElementValue>>();
-            ObjectType = AuditedObjectType.TaskPageItem;
         }
 
         /// <summary> Initializes a new instance of <see cref="TaskPageItem"/>. </summary>
-        /// <param name="objectType"> Identifies the concrete type of the audited model. </param>
+        /// <param name="objectType"> Audited object Types. </param>
         /// <param name="createdBy"> Who create this model. </param>
         /// <param name="createdAt"> When this model was created. </param>
         /// <param name="lastModifiedBy"> Who was last update this model. </param>
@@ -39,16 +38,22 @@ namespace KuFlow.Rest.Models
         /// <param name="taskDefinition"> In creation task, one of 'id, version or code' is mandatory. </param>
         /// <param name="processId"></param>
         /// <param name="elementValues"> Task element values, en ElementValueDocument is not allowed. </param>
+        /// <param name="jsonFormsValue">
+        /// Json form values, used when the render type selected is JSON Forms.
+        ///
+        /// </param>
         /// <param name="owner"></param>
-        internal TaskPageItem(AuditedObjectType objectType, Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid? id, TaskState? state, TaskDefinitionSummary taskDefinition, Guid processId, IDictionary<string, IList<TaskElementValue>> elementValues, Principal owner) : base(objectType, createdBy, createdAt, lastModifiedBy, lastModifiedAt)
+        /// <param name="tenantId"> Tenant ID. </param>
+        internal TaskPageItem(AuditedObjectType? objectType, Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid? id, TaskState? state, TaskDefinitionSummary taskDefinition, Guid processId, IDictionary<string, IList<TaskElementValue>> elementValues, JsonFormsValue jsonFormsValue, Principal owner, Guid? tenantId) : base(objectType, createdBy, createdAt, lastModifiedBy, lastModifiedAt)
         {
             Id = id;
             State = state;
             TaskDefinition = taskDefinition;
             ProcessId = processId;
             ElementValues = elementValues;
+            JsonFormsValue = jsonFormsValue;
             Owner = owner;
-            ObjectType = objectType;
+            TenantId = tenantId;
         }
 
         /// <summary> Gets or sets the id. </summary>
@@ -61,7 +66,14 @@ namespace KuFlow.Rest.Models
         public Guid ProcessId { get; set; }
         /// <summary> Task element values, en ElementValueDocument is not allowed. </summary>
         public IDictionary<string, IList<TaskElementValue>> ElementValues { get; }
+        /// <summary>
+        /// Json form values, used when the render type selected is JSON Forms.
+        ///
+        /// </summary>
+        public JsonFormsValue JsonFormsValue { get; set; }
         /// <summary> Gets or sets the owner. </summary>
         public Principal Owner { get; set; }
+        /// <summary> Tenant ID. </summary>
+        public Guid? TenantId { get; set; }
     }
 }

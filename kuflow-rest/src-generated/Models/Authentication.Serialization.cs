@@ -16,13 +16,41 @@ namespace KuFlow.Rest.Models
         void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
         {
             writer.WriteStartObject();
+            if (Optional.IsDefined(Id))
+            {
+                writer.WritePropertyName("id"u8);
+                writer.WriteStringValue(Id.Value);
+            }
             if (Optional.IsDefined(Type))
             {
                 writer.WritePropertyName("type"u8);
-                writer.WriteStringValue(Type.Value.ToString());
+                writer.WriteStringValue(Type.Value.ToSerialString());
             }
-            writer.WritePropertyName("objectType"u8);
-            writer.WriteStringValue(ObjectType.ToSerialString());
+            if (Optional.IsDefined(Token))
+            {
+                writer.WritePropertyName("token"u8);
+                writer.WriteStringValue(Token);
+            }
+            if (Optional.IsDefined(ExpiredAt))
+            {
+                writer.WritePropertyName("expiredAt"u8);
+                writer.WriteStringValue(ExpiredAt.Value, "O");
+            }
+            if (Optional.IsDefined(EngineToken))
+            {
+                writer.WritePropertyName("engineToken"u8);
+                writer.WriteObjectValue(EngineToken);
+            }
+            if (Optional.IsDefined(EngineCertificate))
+            {
+                writer.WritePropertyName("engineCertificate"u8);
+                writer.WriteObjectValue(EngineCertificate);
+            }
+            if (Optional.IsDefined(ObjectType))
+            {
+                writer.WritePropertyName("objectType"u8);
+                writer.WriteStringValue(ObjectType.Value.ToSerialString());
+            }
             if (Optional.IsDefined(CreatedBy))
             {
                 writer.WritePropertyName("createdBy"u8);
@@ -56,7 +84,9 @@ namespace KuFlow.Rest.Models
             Optional<AuthenticationType> type = default;
             Optional<string> token = default;
             Optional<DateTimeOffset> expiredAt = default;
-            AuditedObjectType objectType = default;
+            Optional<AuthenticationEngineToken> engineToken = default;
+            Optional<AuthenticationEngineCertificate> engineCertificate = default;
+            Optional<AuditedObjectType> objectType = default;
             Optional<Guid> createdBy = default;
             Optional<DateTimeOffset> createdAt = default;
             Optional<Guid> lastModifiedBy = default;
@@ -78,7 +108,7 @@ namespace KuFlow.Rest.Models
                     {
                         continue;
                     }
-                    type = new AuthenticationType(property.Value.GetString());
+                    type = property.Value.GetString().ToAuthenticationType();
                     continue;
                 }
                 if (property.NameEquals("token"u8))
@@ -95,8 +125,30 @@ namespace KuFlow.Rest.Models
                     expiredAt = property.Value.GetDateTimeOffset("O");
                     continue;
                 }
+                if (property.NameEquals("engineToken"u8))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    engineToken = AuthenticationEngineToken.DeserializeAuthenticationEngineToken(property.Value);
+                    continue;
+                }
+                if (property.NameEquals("engineCertificate"u8))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    engineCertificate = AuthenticationEngineCertificate.DeserializeAuthenticationEngineCertificate(property.Value);
+                    continue;
+                }
                 if (property.NameEquals("objectType"u8))
                 {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
                     objectType = property.Value.GetString().ToAuditedObjectType();
                     continue;
                 }
@@ -137,7 +189,7 @@ namespace KuFlow.Rest.Models
                     continue;
                 }
             }
-            return new Authentication(objectType, Optional.ToNullable(createdBy), Optional.ToNullable(createdAt), Optional.ToNullable(lastModifiedBy), Optional.ToNullable(lastModifiedAt), Optional.ToNullable(id), Optional.ToNullable(type), token.Value, Optional.ToNullable(expiredAt));
+            return new Authentication(Optional.ToNullable(objectType), Optional.ToNullable(createdBy), Optional.ToNullable(createdAt), Optional.ToNullable(lastModifiedBy), Optional.ToNullable(lastModifiedAt), Optional.ToNullable(id), Optional.ToNullable(type), token.Value, Optional.ToNullable(expiredAt), engineToken.Value, engineCertificate.Value);
         }
     }
 }

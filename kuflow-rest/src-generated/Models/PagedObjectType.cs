@@ -12,9 +12,13 @@ namespace KuFlow.Rest.Models
     {
         /// <summary> PRINCIPAL_PAGE. </summary>
         PrincipalPage,
+        /// <summary> TENANT_USER_PAGE. </summary>
+        TenantUserPage,
         /// <summary> PROCESS_PAGE. </summary>
         ProcessPage,
         /// <summary> TASK_PAGE. </summary>
-        TaskPage
+        TaskPage,
+        /// <summary> ROBOT_PAGE. </summary>
+        RobotPage
     }
 }

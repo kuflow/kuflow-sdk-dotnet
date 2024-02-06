@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure;
+using Azure.Core;
 using Azure.Core.Pipeline;
 using KuFlow.Rest.Models;
 
@@ -25,6 +26,25 @@ namespace KuFlow.Rest
         /// <summary> Initializes a new instance of PrincipalClient for mocking. </summary>
         protected PrincipalClient()
         {
+        }
+
+        /// <summary> Initializes a new instance of PrincipalClient. </summary>
+        /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
+        /// <param name="endpoint"> server parameter. </param>
+        /// <param name="options"> The options for configuring the client. </param>
+        public PrincipalClient(TokenCredential credential, Uri endpoint = null, KuFlowRestClientOptions options = null)
+        {
+            if (credential == null)
+            {
+                throw new ArgumentNullException(nameof(credential));
+            }
+            endpoint ??= new Uri("https://api.kuflow.com/v2022-10-08");
+
+            options ??= new KuFlowRestClientOptions();
+            _clientDiagnostics = new ClientDiagnostics(options);
+            string[] scopes = { };
+            _pipeline = HttpPipelineBuilder.Build(options, new BearerTokenAuthenticationPolicy(credential, scopes));
+            RestClient = new PrincipalRestClient(_clientDiagnostics, _pipeline, endpoint);
         }
 
         /// <summary> Initializes a new instance of PrincipalClient. </summary>
@@ -51,7 +71,8 @@ namespace KuFlow.Rest
         ///
         /// </param>
         /// <param name="type"> Filter principals by type. </param>
-        /// <param name="groupId"> Filter principals that exists in one of group ids. </param>
+        /// <param name="groupId"> Filter by group ids. </param>
+        /// <param name="tenantId"> Filter by tenantId. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// List all the Principals that have been created and the used credentials has access.
@@ -59,13 +80,13 @@ namespace KuFlow.Rest
         /// Available sort query values: id, name
         ///
         /// </remarks>
-        public virtual async Task<Response<PrincipalPage>> FindPrincipalsAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, PrincipalType? type = null, IEnumerable<Guid> groupId = null, CancellationToken cancellationToken = default)
+        public virtual async Task<Response<PrincipalPage>> FindPrincipalsAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, PrincipalType? type = null, IEnumerable<Guid> groupId = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
         {
             using var scope = _clientDiagnostics.CreateScope("PrincipalClient.FindPrincipals");
             scope.Start();
             try
             {
-                return await RestClient.FindPrincipalsAsync(size, page, sort, type, groupId, cancellationToken).ConfigureAwait(false);
+                return await RestClient.FindPrincipalsAsync(size, page, sort, type, groupId, tenantId, cancellationToken).ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -86,7 +107,8 @@ namespace KuFlow.Rest
         ///
         /// </param>
         /// <param name="type"> Filter principals by type. </param>
-        /// <param name="groupId"> Filter principals that exists in one of group ids. </param>
+        /// <param name="groupId"> Filter by group ids. </param>
+        /// <param name="tenantId"> Filter by tenantId. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// List all the Principals that have been created and the used credentials has access.
@@ -94,13 +116,13 @@ namespace KuFlow.Rest
         /// Available sort query values: id, name
         ///
         /// </remarks>
-        public virtual Response<PrincipalPage> FindPrincipals(int? size = null, int? page = null, IEnumerable<string> sort = null, PrincipalType? type = null, IEnumerable<Guid> groupId = null, CancellationToken cancellationToken = default)
+        public virtual Response<PrincipalPage> FindPrincipals(int? size = null, int? page = null, IEnumerable<string> sort = null, PrincipalType? type = null, IEnumerable<Guid> groupId = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
         {
             using var scope = _clientDiagnostics.CreateScope("PrincipalClient.FindPrincipals");
             scope.Start();
             try
             {
-                return RestClient.FindPrincipals(size, page, sort, type, groupId, cancellationToken);
+                return RestClient.FindPrincipals(size, page, sort, type, groupId, tenantId, cancellationToken);
             }
             catch (Exception e)
             {
