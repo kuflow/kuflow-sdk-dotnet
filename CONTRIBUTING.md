@@ -6,7 +6,7 @@ This doc is intended for contributors to `kuflow-sdk-dotnet` repository. See als
 
 Main tools:
 
-- .Net Core: 6.0.408
+- .Net Core: 7.0.405
 - NodeJs: 18
 
 Optionally you can use a version management tool like [ASDF](https://github.com/asdf-vm/asdf). In that case, the project is distributed with the appropriate `.tool-versions` file.

@@ -10,10 +10,10 @@ class Program
   {
     Console.WriteLine("Hello, World!");
 
-    const string clientId = "";
-    const string clientSecret = "";
+    // const string clientId = "";
+    // const string clientSecret = "";
     const string clientToken = "";
-    const string taskIdentifier = "FILL_ME";
+    // const string taskIdentifier = "FILL_ME";
     const string endpoint = "http://localhost:8080/apis/external";
 
     // {

@@ -4,16 +4,25 @@
     <TargetFramework>net7.0</TargetFramework>
     <RootNamespace>KuFlow.Samples</RootNamespace>
   </PropertyGroup>
+  
+  <PropertyGroup>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <LangVersion>11.0</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PackageVersion>2.0.0</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\kuflow-rest\KuFlow.Rest.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>
