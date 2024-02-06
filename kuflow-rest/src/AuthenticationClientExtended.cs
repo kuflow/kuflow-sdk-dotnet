@@ -1,13 +1,17 @@
 using System;
 using Azure.Core.Pipeline;
-using KuFlow.Rest.Configuration;
 
 namespace KuFlow.Rest
 {
   /// <summary> The Authentication service client. </summary>
   public partial class AuthenticationClient
   {
-    public AuthenticationClient(string clientId, string clientSecret, Uri endpoint, KuFlowRestClientOptions options = null)
+    internal AuthenticationClient(
+      string clientId,
+      string clientSecret,
+      Uri endpoint,
+      KuFlowRestClientOptions? options = null
+    )
     {
       if (clientId == null)
       {
@@ -31,5 +35,4 @@ namespace KuFlow.Rest
       RestClient = new AuthenticationRestClient(_clientDiagnostics, _pipeline, endpoint);
     }
   }
-
 }

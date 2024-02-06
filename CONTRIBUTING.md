@@ -90,4 +90,7 @@ dotnet add TestConsole/TestConsole.csprok reference kuflow-rest/Kuflow.Rest.cspr
 # Add a NuGet package
 cd kuflow-rest
 dotnet add package Azure.Core
+
+# Format code
+dotnet tool run dotnet-csharpier .
 ```

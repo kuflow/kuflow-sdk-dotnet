@@ -1,13 +1,12 @@
 using System;
 using Azure.Core.Pipeline;
-using KuFlow.Rest.Configuration;
 
 namespace KuFlow.Rest
 {
   /// <summary> The Process service client. </summary>
   public partial class ProcessClient
   {
-    public ProcessClient(string clientId, string clientSecret, Uri endpoint, KuFlowRestClientOptions options = null)
+    internal ProcessClient(string clientId, string clientSecret, Uri endpoint, KuFlowRestClientOptions? options = null)
     {
       if (clientId == null)
       {
@@ -31,5 +30,4 @@ namespace KuFlow.Rest
       RestClient = new ProcessRestClient(_clientDiagnostics, _pipeline, endpoint);
     }
   }
-
 }
