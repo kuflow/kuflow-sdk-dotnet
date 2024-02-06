@@ -59,7 +59,7 @@ dotnet pack --configuration Debug
 dotnet pack --configuration Release
 
 ### Publish to Nuget
-dotnet nuget push kuflow-rest/bin/Release/KuFlow.Rest.X.X.X.nupkg --api-key YOUR_API_KEY --source https://api.nuget.org/v3/index.jso
+dotnet nuget push kuflow-rest/bin/Release/KuFlow.Rest.X.X.X.nupkg --api-key YOUR_API_KEY --source https://api.nuget.org/v3/index.json
 
 ```
 
