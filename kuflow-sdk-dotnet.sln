@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kuflow.Rest", "kuflow-rest\Kuflow.Rest.csproj", "{B62E1968-37DB-4552-971F-305AD3C2AE71}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KuFlow.Rest", "kuflow-rest\KuFlow.Rest.csproj", "{B62E1968-37DB-4552-971F-305AD3C2AE71}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KuFlow.Samples", "kuflow-samples\KuFlow.Samples.csproj", "{22F50407-8535-4232-864E-7B874544640E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +20,9 @@ Global
 		{B62E1968-37DB-4552-971F-305AD3C2AE71}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B62E1968-37DB-4552-971F-305AD3C2AE71}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B62E1968-37DB-4552-971F-305AD3C2AE71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22F50407-8535-4232-864E-7B874544640E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22F50407-8535-4232-864E-7B874544640E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22F50407-8535-4232-864E-7B874544640E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22F50407-8535-4232-864E-7B874544640E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

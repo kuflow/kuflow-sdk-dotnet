@@ -3,9 +3,8 @@ using System.Threading.Tasks;
 using Azure.Core;
 using Azure.Core.Pipeline;
 
-namespace KuFlow.Rest.Configuration
+namespace KuFlow.Rest
 {
-
   public class BasicAuthenticationPolicy : HttpPipelinePolicy
   {
     private readonly string _username;
@@ -33,7 +32,7 @@ namespace KuFlow.Rest.Configuration
 
     private void SetAuthenticationHeaders(HttpMessage message)
     {
-      string token = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes($"{_username}:{_password}"));
+      var token = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes($"{_username}:{_password}"));
       message.Request.Headers.SetValue("Authorization", $"Basic {token}");
     }
   }
