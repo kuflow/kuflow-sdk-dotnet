@@ -24,7 +24,7 @@ Using .Net in Visual Studio Code
 The Azure AutoRest tool is used for the generation of client code for the KuFlow Rest Api. This tool requires NodeJs for its execution. If you want to update the OpenApi definition, the client must be recreated:
 
 ```bash
-cd kuflow-rest/etc/openapi
+cd kuflow-rest/openapi
 
 # Install dependencies
 npm ci
