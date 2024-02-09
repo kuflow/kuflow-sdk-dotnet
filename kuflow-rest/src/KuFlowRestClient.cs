@@ -110,12 +110,12 @@ namespace KuFlow.Rest
 
       if (!string.IsNullOrWhiteSpace(clientToken))
       {
-        return new BearerAuthenticationPolicy(clientToken.Trim());
+        return new BearerAuthenticationPolicy(clientToken!.Trim());
       }
 
       if (!string.IsNullOrWhiteSpace(clientId) && !string.IsNullOrWhiteSpace(clientSecret))
       {
-        return new BasicAuthenticationPolicy(clientId.Trim(), clientSecret.Trim());
+        return new BasicAuthenticationPolicy(clientId!.Trim(), clientSecret!.Trim());
       }
 
       throw new ArgumentException("credential or clientToken or clientId/clientSecret is required");
