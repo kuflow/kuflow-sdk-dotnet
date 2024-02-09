@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure;
@@ -78,7 +79,7 @@ namespace KuFlow.Rest
         /// Available sort query values: createdAt, lastModifiedAt
         ///
         /// </remarks>
-        public virtual async Task<Response<RobotPage>> FindRobotsAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
+        internal virtual async Task<Response<RobotPage>> FindRobotsAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
         {
             using var scope = _clientDiagnostics.CreateScope("RobotClient.FindRobots");
             scope.Start();
@@ -112,7 +113,7 @@ namespace KuFlow.Rest
         /// Available sort query values: createdAt, lastModifiedAt
         ///
         /// </remarks>
-        public virtual Response<RobotPage> FindRobots(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
+        internal virtual Response<RobotPage> FindRobots(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
         {
             using var scope = _clientDiagnostics.CreateScope("RobotClient.FindRobots");
             scope.Start();
@@ -157,6 +158,44 @@ namespace KuFlow.Rest
             try
             {
                 return RestClient.RetrieveRobot(id, cancellationToken);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary> Download robot code. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <remarks> Given a robot, download the source code. </remarks>
+        public virtual async Task<Response<Stream>> ActionsRobotDownloadSourceCodeAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            using var scope = _clientDiagnostics.CreateScope("RobotClient.ActionsRobotDownloadSourceCode");
+            scope.Start();
+            try
+            {
+                return await RestClient.ActionsRobotDownloadSourceCodeAsync(id, cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary> Download robot code. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <remarks> Given a robot, download the source code. </remarks>
+        public virtual Response<Stream> ActionsRobotDownloadSourceCode(Guid id, CancellationToken cancellationToken = default)
+        {
+            using var scope = _clientDiagnostics.CreateScope("RobotClient.ActionsRobotDownloadSourceCode");
+            scope.Start();
+            try
+            {
+                return RestClient.ActionsRobotDownloadSourceCode(id, cancellationToken);
             }
             catch (Exception e)
             {

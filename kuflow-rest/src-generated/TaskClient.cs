@@ -82,7 +82,7 @@ namespace KuFlow.Rest
         /// Available sort query values: id, createdAt, lastModifiedAt, claimedAt, completedAt, cancelledAt
         ///
         /// </remarks>
-        public virtual async Task<Response<TaskPage>> FindTasksAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> processId = null, IEnumerable<TaskState> state = null, IEnumerable<string> taskDefinitionCode = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
+        internal virtual async Task<Response<TaskPage>> FindTasksAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> processId = null, IEnumerable<TaskState> state = null, IEnumerable<string> taskDefinitionCode = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
         {
             using var scope = _clientDiagnostics.CreateScope("TaskClient.FindTasks");
             scope.Start();
@@ -119,7 +119,7 @@ namespace KuFlow.Rest
         /// Available sort query values: id, createdAt, lastModifiedAt, claimedAt, completedAt, cancelledAt
         ///
         /// </remarks>
-        public virtual Response<TaskPage> FindTasks(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> processId = null, IEnumerable<TaskState> state = null, IEnumerable<string> taskDefinitionCode = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
+        internal virtual Response<TaskPage> FindTasks(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> processId = null, IEnumerable<TaskState> state = null, IEnumerable<string> taskDefinitionCode = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
         {
             using var scope = _clientDiagnostics.CreateScope("TaskClient.FindTasks");
             scope.Start();

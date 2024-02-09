@@ -80,7 +80,7 @@ namespace KuFlow.Rest
         /// Available sort query values: id, name
         ///
         /// </remarks>
-        public virtual async Task<Response<PrincipalPage>> FindPrincipalsAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, PrincipalType? type = null, IEnumerable<Guid> groupId = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
+        internal virtual async Task<Response<PrincipalPage>> FindPrincipalsAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, PrincipalType? type = null, IEnumerable<Guid> groupId = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
         {
             using var scope = _clientDiagnostics.CreateScope("PrincipalClient.FindPrincipals");
             scope.Start();
@@ -116,7 +116,7 @@ namespace KuFlow.Rest
         /// Available sort query values: id, name
         ///
         /// </remarks>
-        public virtual Response<PrincipalPage> FindPrincipals(int? size = null, int? page = null, IEnumerable<string> sort = null, PrincipalType? type = null, IEnumerable<Guid> groupId = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
+        internal virtual Response<PrincipalPage> FindPrincipals(int? size = null, int? page = null, IEnumerable<string> sort = null, PrincipalType? type = null, IEnumerable<Guid> groupId = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
         {
             using var scope = _clientDiagnostics.CreateScope("PrincipalClient.FindPrincipals");
             scope.Start();
