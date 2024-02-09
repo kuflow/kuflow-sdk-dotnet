@@ -52,7 +52,7 @@ openapi-type: data-plane
 ################
 # Shared flags
 ################
-input-file: https://raw.githubusercontent.com/kuflow/kuflow-openapi/dcc83aec8cfbf2c4a731835b940a318d2ca1d561/specs/api.kuflow.com/v2022-10-08/openapi.yaml
+input-file: https://raw.githubusercontent.com/kuflow/kuflow-openapi/b1fa9afe6d9174afb20c59e44adf744ca0c65127/specs/api.kuflow.com/v2022-10-08/openapi.yaml
 
 output-folder: ../src-generated
 
@@ -122,6 +122,18 @@ public-clients: true
 
 # Use the customised one
 skip-csproj: true
+```
+
+## Set as internal all the find methods
+
+```yaml
+directive:
+- from: openapi-document
+  where: $.paths[*][*]
+  transform: |
+    if ($.operationId.startsWith('find')) {
+      $["x-accessibility"] = "internal";
+    }
 ```
 
 ### Group operations using tag

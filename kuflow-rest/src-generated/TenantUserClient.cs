@@ -80,7 +80,7 @@ namespace KuFlow.Rest
         /// Available sort query values: id, createdAt, lastModifiedAt
         ///
         /// </remarks>
-        public virtual async Task<Response<TenantUserPage>> FindTenantUsersAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> groupId = null, IEnumerable<string> email = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
+        internal virtual async Task<Response<TenantUserPage>> FindTenantUsersAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> groupId = null, IEnumerable<string> email = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
         {
             using var scope = _clientDiagnostics.CreateScope("TenantUserClient.FindTenantUsers");
             scope.Start();
@@ -116,7 +116,7 @@ namespace KuFlow.Rest
         /// Available sort query values: id, createdAt, lastModifiedAt
         ///
         /// </remarks>
-        public virtual Response<TenantUserPage> FindTenantUsers(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> groupId = null, IEnumerable<string> email = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
+        internal virtual Response<TenantUserPage> FindTenantUsers(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> groupId = null, IEnumerable<string> email = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
         {
             using var scope = _clientDiagnostics.CreateScope("TenantUserClient.FindTenantUsers");
             scope.Start();

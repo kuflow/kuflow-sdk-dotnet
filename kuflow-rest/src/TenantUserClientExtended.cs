@@ -29,10 +29,10 @@ using KuFlow.Rest.Models;
 
 namespace KuFlow.Rest;
 
-/// <summary> The Robot service client. </summary>
-public partial class RobotClient
+/// <summary> The Tenant User service client. </summary>
+public partial class TenantUserClient
 {
-  internal RobotClient(HttpPipelinePolicy policy, Uri endpoint, KuFlowRestClientOptions? options = null)
+  internal TenantUserClient(HttpPipelinePolicy policy, Uri endpoint, KuFlowRestClientOptions? options = null)
   {
     if (policy == null)
     {
@@ -47,50 +47,54 @@ public partial class RobotClient
 
     _clientDiagnostics = new ClientDiagnostics(options);
     _pipeline = HttpPipelineBuilder.Build(options, policy);
-    RestClient = new RobotRestClient(_clientDiagnostics, _pipeline, endpoint);
+    RestClient = new TenantUserRestClient(_clientDiagnostics, _pipeline, endpoint);
   }
 
-  /// <summary> Find all accessible Robots. </summary>
+  /// <summary> Find all accessible Tenant Users. </summary>
   /// <param name="options"> The filter options. </param>
   /// <param name="cancellationToken"> The cancellation token to use. </param>
   /// <remarks>
-  /// List all the Robots that have been created and the credentials has access.
+  /// List all the Tenant Users that have been created and the used credentials has access.
   ///
-  /// Available sort query values: createdAt, lastModifiedAt
+  /// Available sort query values: id, createdAt, lastModifiedAt
   ///
   /// </remarks>
-  public virtual Task<Response<RobotPage>> FindRobotsAsync(
-    FindRobotsOptions? options = null,
+  public Task<Response<TenantUserPage>> FindTenantUsersAsync(
+    FindTenantUsersOptions? options = null,
     CancellationToken cancellationToken = default
   )
   {
     var size = options?.Size;
     var page = options?.Page;
     var sort = options?.Sort;
+    var groupId = options?.GetGroupIds();
+    var email = options?.GetEmails();
     var tenantId = options?.GetTenantIds();
 
-    return FindRobotsAsync(size, page, sort, tenantId, cancellationToken);
+    return FindTenantUsersAsync(size, page, sort, groupId, email, tenantId, cancellationToken);
   }
 
-  /// <summary> Find all accessible Robots. </summary>
+  /// <summary> Find all accessible Tenant Users. </summary>
   /// <param name="options"> The filter options. </param>
   /// <param name="cancellationToken"> The cancellation token to use. </param>
   /// <remarks>
-  /// List all the Robots that have been created and the credentials has access.
+  /// List all the Tenant Users that have been created and the used credentials has access.
   ///
-  /// Available sort query values: createdAt, lastModifiedAt
+  /// Available sort query values: id, createdAt, lastModifiedAt
   ///
   /// </remarks>
-  public virtual Response<RobotPage> FindRobots(
-    FindRobotsOptions? options = null,
+  public Response<TenantUserPage> FindTenantUsers(
+    FindTenantUsersOptions? options = null,
     CancellationToken cancellationToken = default
   )
   {
     var size = options?.Size;
     var page = options?.Page;
     var sort = options?.Sort;
+    var groupId = options?.GetGroupIds();
+    var email = options?.GetEmails();
     var tenantId = options?.GetTenantIds();
 
-    return FindRobots(size, page, sort, tenantId, cancellationToken);
+    return FindTenantUsers(size, page, sort, groupId, email, tenantId, cancellationToken);
   }
 }

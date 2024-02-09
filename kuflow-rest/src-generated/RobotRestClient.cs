@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -197,6 +198,61 @@ namespace KuFlow.Rest
                         Robot value = default;
                         using var document = JsonDocument.Parse(message.Response.ContentStream);
                         value = Robot.DeserializeRobot(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        internal HttpMessage CreateActionsRobotDownloadSourceCodeRequest(Guid id)
+        {
+            var message = _pipeline.CreateMessage();
+            var request = message.Request;
+            request.Method = RequestMethod.Get;
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/robots/", false);
+            uri.AppendPath(id, true);
+            uri.AppendPath("/~actions/download-source-code", false);
+            request.Uri = uri;
+            request.Headers.Add("Accept", "application/octet-stream, application/json");
+            return message;
+        }
+
+        /// <summary> Download robot code. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <remarks> Given a robot, download the source code. </remarks>
+        public async Task<Response<Stream>> ActionsRobotDownloadSourceCodeAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            using var message = CreateActionsRobotDownloadSourceCodeRequest(id);
+            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        var value = message.ExtractResponseContent();
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        /// <summary> Download robot code. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <remarks> Given a robot, download the source code. </remarks>
+        public Response<Stream> ActionsRobotDownloadSourceCode(Guid id, CancellationToken cancellationToken = default)
+        {
+            using var message = CreateActionsRobotDownloadSourceCodeRequest(id);
+            _pipeline.Send(message, cancellationToken);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        var value = message.ExtractResponseContent();
                         return Response.FromValue(value, message.Response);
                     }
                 default:

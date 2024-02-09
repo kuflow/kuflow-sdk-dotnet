@@ -79,7 +79,7 @@ namespace KuFlow.Rest
         /// Available sort query values: id, createdAt, lastModifiedAt
         ///
         /// </remarks>
-        public virtual async Task<Response<ProcessPage>> FindProcessesAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
+        internal virtual async Task<Response<ProcessPage>> FindProcessesAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
         {
             using var scope = _clientDiagnostics.CreateScope("ProcessClient.FindProcesses");
             scope.Start();
@@ -113,7 +113,7 @@ namespace KuFlow.Rest
         /// Available sort query values: id, createdAt, lastModifiedAt
         ///
         /// </remarks>
-        public virtual Response<ProcessPage> FindProcesses(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
+        internal virtual Response<ProcessPage> FindProcesses(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
         {
             using var scope = _clientDiagnostics.CreateScope("ProcessClient.FindProcesses");
             scope.Start();
