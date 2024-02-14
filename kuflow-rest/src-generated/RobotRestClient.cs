@@ -259,5 +259,84 @@ namespace KuFlow.Rest
                     throw new RequestFailedException(message.Response);
             }
         }
+
+        internal HttpMessage CreateActionsRobotDownloadAssetRequest(Guid id, RobotAssetType type, string version, RobotAssetPlatform platform, RobotAssetArchitecture architecture)
+        {
+            var message = _pipeline.CreateMessage();
+            var request = message.Request;
+            request.Method = RequestMethod.Get;
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/robots/", false);
+            uri.AppendPath(id, true);
+            uri.AppendPath("/~actions/download-asset", false);
+            uri.AppendQuery("type", type.ToSerialString(), true);
+            uri.AppendQuery("version", version, true);
+            uri.AppendQuery("platform", platform.ToSerialString(), true);
+            uri.AppendQuery("architecture", architecture.ToSerialString(), true);
+            request.Uri = uri;
+            request.Headers.Add("Accept", "application/octet-stream, application/json");
+            return message;
+        }
+
+        /// <summary> Download robot asset. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="type"> The asset type. </param>
+        /// <param name="version"> The asset version. </param>
+        /// <param name="platform"> The asset platform. </param>
+        /// <param name="architecture"> The asset platform architecture. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="version"/> is null. </exception>
+        /// <remarks> Given a robot, download the requested asset. </remarks>
+        public async Task<Response<Stream>> ActionsRobotDownloadAssetAsync(Guid id, RobotAssetType type, string version, RobotAssetPlatform platform, RobotAssetArchitecture architecture, CancellationToken cancellationToken = default)
+        {
+            if (version == null)
+            {
+                throw new ArgumentNullException(nameof(version));
+            }
+
+            using var message = CreateActionsRobotDownloadAssetRequest(id, type, version, platform, architecture);
+            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        var value = message.ExtractResponseContent();
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        /// <summary> Download robot asset. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="type"> The asset type. </param>
+        /// <param name="version"> The asset version. </param>
+        /// <param name="platform"> The asset platform. </param>
+        /// <param name="architecture"> The asset platform architecture. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="version"/> is null. </exception>
+        /// <remarks> Given a robot, download the requested asset. </remarks>
+        public Response<Stream> ActionsRobotDownloadAsset(Guid id, RobotAssetType type, string version, RobotAssetPlatform platform, RobotAssetArchitecture architecture, CancellationToken cancellationToken = default)
+        {
+            if (version == null)
+            {
+                throw new ArgumentNullException(nameof(version));
+            }
+
+            using var message = CreateActionsRobotDownloadAssetRequest(id, type, version, platform, architecture);
+            _pipeline.Send(message, cancellationToken);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        var value = message.ExtractResponseContent();
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
     }
 }
