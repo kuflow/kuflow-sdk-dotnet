@@ -203,5 +203,51 @@ namespace KuFlow.Rest
                 throw;
             }
         }
+
+        /// <summary> Download robot asset. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="type"> The asset type. </param>
+        /// <param name="version"> The asset version. </param>
+        /// <param name="platform"> The asset platform. </param>
+        /// <param name="architecture"> The asset platform architecture. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <remarks> Given a robot, download the requested asset. </remarks>
+        public virtual async Task<Response<Stream>> ActionsRobotDownloadAssetAsync(Guid id, RobotAssetType type, string version, RobotAssetPlatform platform, RobotAssetArchitecture architecture, CancellationToken cancellationToken = default)
+        {
+            using var scope = _clientDiagnostics.CreateScope("RobotClient.ActionsRobotDownloadAsset");
+            scope.Start();
+            try
+            {
+                return await RestClient.ActionsRobotDownloadAssetAsync(id, type, version, platform, architecture, cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary> Download robot asset. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="type"> The asset type. </param>
+        /// <param name="version"> The asset version. </param>
+        /// <param name="platform"> The asset platform. </param>
+        /// <param name="architecture"> The asset platform architecture. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <remarks> Given a robot, download the requested asset. </remarks>
+        public virtual Response<Stream> ActionsRobotDownloadAsset(Guid id, RobotAssetType type, string version, RobotAssetPlatform platform, RobotAssetArchitecture architecture, CancellationToken cancellationToken = default)
+        {
+            using var scope = _clientDiagnostics.CreateScope("RobotClient.ActionsRobotDownloadAsset");
+            scope.Start();
+            try
+            {
+                return RestClient.ActionsRobotDownloadAsset(id, type, version, platform, architecture, cancellationToken);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
     }
 }

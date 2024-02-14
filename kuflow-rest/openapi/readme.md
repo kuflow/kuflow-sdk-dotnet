@@ -36,7 +36,7 @@ $> npm run generate
 version: "3"
 
 use-extension:
-  "@autorest/csharp": "3.0.0-beta.20240205.1"
+  "@autorest/csharp": "3.0.0-beta.20240207.2"
   "@autorest/modelerfour": "4.26.1"
 
 modelerfour:
@@ -52,7 +52,7 @@ openapi-type: data-plane
 ################
 # Shared flags
 ################
-input-file: https://raw.githubusercontent.com/kuflow/kuflow-openapi/b1fa9afe6d9174afb20c59e44adf744ca0c65127/specs/api.kuflow.com/v2022-10-08/openapi.yaml
+input-file: https://raw.githubusercontent.com/kuflow/kuflow-openapi/a477b4e7e2ab278de1b381fac173a8682ea6d4a6/specs/api.kuflow.com/v2022-10-08/openapi.yaml
 
 output-folder: ../src-generated
 
