@@ -43,40 +43,13 @@ public class FindRobotsOptions
   public IEnumerable<string>? Sort { get; set; } = null;
 
   /// <summary> Filter principals by type. </summary>
-  public PrincipalType? Type { get; set; } = null;
-
-  /// <summary> Filter by group id. </summary>
-  public Guid? GroupId { get; set; } = null;
-
-  /// <summary> Filter by group ids. </summary>
-  public IEnumerable<Guid>? GroupIds { get; set; } = null;
+  public RobotFilterContext? FilterContext { get; set; } = null;
 
   /// <summary> Filter by tenant ids. </summary>
   public Guid? TenantId { get; set; } = null;
 
   /// <summary> Filter by tenant ids. </summary>
   public IEnumerable<Guid>? TenantIds { get; set; } = null;
-
-  internal IEnumerable<Guid>? GetGroupIds()
-  {
-    if (GroupId == null && GroupIds == null)
-    {
-      return null;
-    }
-
-    var groupId = new List<Guid>();
-
-    if (GroupId != null)
-    {
-      groupId.Add(GroupId.Value);
-    }
-    if (GroupIds != null)
-    {
-      groupId.AddRange(GroupIds);
-    }
-
-    return groupId;
-  }
 
   internal IEnumerable<Guid>? GetTenantIds()
   {

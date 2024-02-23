@@ -68,8 +68,9 @@ public partial class RobotClient
     var page = options?.Page;
     var sort = options?.Sort;
     var tenantId = options?.GetTenantIds();
+    var filterContext = options?.FilterContext;
 
-    return FindRobotsAsync(size, page, sort, tenantId, cancellationToken);
+    return FindRobotsAsync(size, page, sort, tenantId, filterContext, cancellationToken);
   }
 
   /// <summary> Find all accessible Robots. </summary>
@@ -90,7 +91,8 @@ public partial class RobotClient
     var page = options?.Page;
     var sort = options?.Sort;
     var tenantId = options?.GetTenantIds();
+    var filterContext = options?.FilterContext;
 
-    return FindRobots(size, page, sort, tenantId, cancellationToken);
+    return FindRobots(size, page, sort, tenantId, filterContext, cancellationToken);
   }
 }

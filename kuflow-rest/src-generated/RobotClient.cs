@@ -72,6 +72,7 @@ namespace KuFlow.Rest
         ///
         /// </param>
         /// <param name="tenantId"> Filter by tenantId. </param>
+        /// <param name="filterContext"> Filter by the specified context. The default value is AutoRest.CSharp.Output.Models.Types.EnumTypeValue. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// List all the Robots that have been created and the credentials has access.
@@ -79,13 +80,13 @@ namespace KuFlow.Rest
         /// Available sort query values: createdAt, lastModifiedAt
         ///
         /// </remarks>
-        internal virtual async Task<Response<RobotPage>> FindRobotsAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
+        internal virtual async Task<Response<RobotPage>> FindRobotsAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> tenantId = null, RobotFilterContext? filterContext = null, CancellationToken cancellationToken = default)
         {
             using var scope = _clientDiagnostics.CreateScope("RobotClient.FindRobots");
             scope.Start();
             try
             {
-                return await RestClient.FindRobotsAsync(size, page, sort, tenantId, cancellationToken).ConfigureAwait(false);
+                return await RestClient.FindRobotsAsync(size, page, sort, tenantId, filterContext, cancellationToken).ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -106,6 +107,7 @@ namespace KuFlow.Rest
         ///
         /// </param>
         /// <param name="tenantId"> Filter by tenantId. </param>
+        /// <param name="filterContext"> Filter by the specified context. The default value is AutoRest.CSharp.Output.Models.Types.EnumTypeValue. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// List all the Robots that have been created and the credentials has access.
@@ -113,13 +115,13 @@ namespace KuFlow.Rest
         /// Available sort query values: createdAt, lastModifiedAt
         ///
         /// </remarks>
-        internal virtual Response<RobotPage> FindRobots(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
+        internal virtual Response<RobotPage> FindRobots(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> tenantId = null, RobotFilterContext? filterContext = null, CancellationToken cancellationToken = default)
         {
             using var scope = _clientDiagnostics.CreateScope("RobotClient.FindRobots");
             scope.Start();
             try
             {
-                return RestClient.FindRobots(size, page, sort, tenantId, cancellationToken);
+                return RestClient.FindRobots(size, page, sort, tenantId, filterContext, cancellationToken);
             }
             catch (Exception e)
             {
