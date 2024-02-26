@@ -38,7 +38,7 @@ namespace KuFlow.Rest
             _endpoint = endpoint ?? new Uri("https://api.kuflow.com/v2022-10-08");
         }
 
-        internal HttpMessage CreateFindRobotsRequest(int? size, int? page, IEnumerable<string> sort, IEnumerable<Guid> tenantId)
+        internal HttpMessage CreateFindRobotsRequest(int? size, int? page, IEnumerable<string> sort, IEnumerable<Guid> tenantId, RobotFilterContext? filterContext)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -68,6 +68,10 @@ namespace KuFlow.Rest
                     uri.AppendQuery("tenantId", param, true);
                 }
             }
+            if (filterContext != null)
+            {
+                uri.AppendQuery("filterContext", filterContext.Value.ToString(), true);
+            }
             request.Uri = uri;
             request.Headers.Add("Accept", "application/json");
             return message;
@@ -85,6 +89,7 @@ namespace KuFlow.Rest
         ///
         /// </param>
         /// <param name="tenantId"> Filter by tenantId. </param>
+        /// <param name="filterContext"> Filter by the specified context. The default value is AutoRest.CSharp.Output.Models.Types.EnumTypeValue. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// List all the Robots that have been created and the credentials has access.
@@ -92,9 +97,9 @@ namespace KuFlow.Rest
         /// Available sort query values: createdAt, lastModifiedAt
         ///
         /// </remarks>
-        public async Task<Response<RobotPage>> FindRobotsAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
+        public async Task<Response<RobotPage>> FindRobotsAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> tenantId = null, RobotFilterContext? filterContext = null, CancellationToken cancellationToken = default)
         {
-            using var message = CreateFindRobotsRequest(size, page, sort, tenantId);
+            using var message = CreateFindRobotsRequest(size, page, sort, tenantId, filterContext);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
@@ -122,6 +127,7 @@ namespace KuFlow.Rest
         ///
         /// </param>
         /// <param name="tenantId"> Filter by tenantId. </param>
+        /// <param name="filterContext"> Filter by the specified context. The default value is AutoRest.CSharp.Output.Models.Types.EnumTypeValue. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// List all the Robots that have been created and the credentials has access.
@@ -129,9 +135,9 @@ namespace KuFlow.Rest
         /// Available sort query values: createdAt, lastModifiedAt
         ///
         /// </remarks>
-        public Response<RobotPage> FindRobots(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
+        public Response<RobotPage> FindRobots(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> tenantId = null, RobotFilterContext? filterContext = null, CancellationToken cancellationToken = default)
         {
-            using var message = CreateFindRobotsRequest(size, page, sort, tenantId);
+            using var message = CreateFindRobotsRequest(size, page, sort, tenantId, filterContext);
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {
