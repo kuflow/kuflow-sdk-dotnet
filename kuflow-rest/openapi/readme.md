@@ -37,7 +37,7 @@ version: "3"
 
 use-extension:
   "@autorest/csharp": "3.0.0-beta.20240207.2"
-  "@autorest/modelerfour": "4.26.1"
+  "@autorest/modelerfour": "4.26.2"
 
 modelerfour:
   seal-single-value-enum-by-default: false
@@ -52,7 +52,7 @@ openapi-type: data-plane
 ################
 # Shared flags
 ################
-input-file: https://raw.githubusercontent.com/kuflow/kuflow-openapi/ac9e21fbcec54ce059bdce4c10ec4f747d7e0b5d/specs/api.kuflow.com/v2022-10-08/openapi.yaml
+input-file: https://raw.githubusercontent.com/kuflow/kuflow-openapi/e6cedc8a84a1a0b620a70d68f6c8082398b45849/specs/api.kuflow.com/v2022-10-08/openapi.yaml
 
 output-folder: ../src-generated
 
