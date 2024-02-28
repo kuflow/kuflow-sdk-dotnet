@@ -18,8 +18,9 @@ namespace KuFlow.Rest.Models
         /// <param name="id"> Robot ID. </param>
         /// <param name="code"> Robot Code. </param>
         /// <param name="name"> Robot name. </param>
+        /// <param name="sourceType"> Robot source type. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="code"/> or <paramref name="name"/> is null. </exception>
-        public Robot(Guid id, string code, string name)
+        public Robot(Guid id, string code, string name, RobotSourceType sourceType)
         {
             Argument.AssertNotNull(code, nameof(code));
             Argument.AssertNotNull(name, nameof(name));
@@ -27,7 +28,7 @@ namespace KuFlow.Rest.Models
             Id = id;
             Code = code;
             Name = name;
-            SourceType = RobotSourceType.ROBOTFRAMEWORKPYTHONWHEEL;
+            SourceType = sourceType;
             EnvironmentVariables = new ChangeTrackingDictionary<string, string>();
         }
 
@@ -66,7 +67,7 @@ namespace KuFlow.Rest.Models
         /// <summary> Robot description. </summary>
         public string Description { get; set; }
         /// <summary> Robot source type. </summary>
-        public RobotSourceType SourceType { get; }
+        public RobotSourceType SourceType { get; set; }
         /// <summary> Robot source type. </summary>
         public RobotSourceFile SourceFile { get; set; }
         /// <summary> Environment variables to load when the robot is executed. </summary>

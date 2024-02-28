@@ -29,7 +29,7 @@ namespace KuFlow.Rest.Models
                 writer.WriteStringValue(Description);
             }
             writer.WritePropertyName("sourceType"u8);
-            writer.WriteStringValue(SourceType.ToString());
+            writer.WriteStringValue(SourceType.ToSerialString());
             if (Optional.IsDefined(SourceFile))
             {
                 writer.WritePropertyName("sourceFile"u8);
@@ -122,7 +122,7 @@ namespace KuFlow.Rest.Models
                 }
                 if (property.NameEquals("sourceType"u8))
                 {
-                    sourceType = new RobotSourceType(property.Value.GetString());
+                    sourceType = property.Value.GetString().ToRobotSourceType();
                     continue;
                 }
                 if (property.NameEquals("sourceFile"u8))
