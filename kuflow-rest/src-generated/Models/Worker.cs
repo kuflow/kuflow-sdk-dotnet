@@ -33,6 +33,7 @@ namespace KuFlow.Rest.Models
             ActivityTypes = new ChangeTrackingList<string>();
             Hostname = hostname;
             Ip = ip;
+            RobotIds = new ChangeTrackingList<Guid>();
         }
 
         /// <summary> Initializes a new instance of <see cref="Worker"/>. </summary>
@@ -48,8 +49,10 @@ namespace KuFlow.Rest.Models
         /// <param name="activityTypes"></param>
         /// <param name="hostname"></param>
         /// <param name="ip"></param>
+        /// <param name="installationId"> Installation Id. </param>
+        /// <param name="robotIds"> Robot Ids that this worker implements. </param>
         /// <param name="tenantId"> Tenant ID. </param>
-        internal Worker(AuditedObjectType? objectType, Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid? id, string identity, string taskQueue, IList<string> workflowTypes, IList<string> activityTypes, string hostname, string ip, Guid? tenantId) : base(objectType, createdBy, createdAt, lastModifiedBy, lastModifiedAt)
+        internal Worker(AuditedObjectType? objectType, Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid? id, string identity, string taskQueue, IList<string> workflowTypes, IList<string> activityTypes, string hostname, string ip, Guid? installationId, IList<Guid> robotIds, Guid? tenantId) : base(objectType, createdBy, createdAt, lastModifiedBy, lastModifiedAt)
         {
             Id = id;
             Identity = identity;
@@ -58,6 +61,8 @@ namespace KuFlow.Rest.Models
             ActivityTypes = activityTypes;
             Hostname = hostname;
             Ip = ip;
+            InstallationId = installationId;
+            RobotIds = robotIds;
             TenantId = tenantId;
         }
 
@@ -75,6 +80,10 @@ namespace KuFlow.Rest.Models
         public string Hostname { get; set; }
         /// <summary> Gets or sets the ip. </summary>
         public string Ip { get; set; }
+        /// <summary> Installation Id. </summary>
+        public Guid? InstallationId { get; set; }
+        /// <summary> Robot Ids that this worker implements. </summary>
+        public IList<Guid> RobotIds { get; }
         /// <summary> Tenant ID. </summary>
         public Guid? TenantId { get; set; }
     }
