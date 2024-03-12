@@ -52,7 +52,7 @@ openapi-type: data-plane
 ################
 # Shared flags
 ################
-input-file: https://raw.githubusercontent.com/kuflow/kuflow-openapi/e6cedc8a84a1a0b620a70d68f6c8082398b45849/specs/api.kuflow.com/v2022-10-08/openapi.yaml
+input-file: https://raw.githubusercontent.com/kuflow/kuflow-openapi/375957d52fa291a738786865f5708cdf54f5eecb/specs/api.kuflow.com/v2022-10-08/openapi.yaml
 
 output-folder: ../src-generated
 

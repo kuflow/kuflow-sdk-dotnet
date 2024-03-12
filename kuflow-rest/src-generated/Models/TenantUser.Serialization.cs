@@ -25,11 +25,6 @@ namespace KuFlow.Rest.Models
             }
             writer.WritePropertyName("principal"u8);
             writer.WriteObjectValue(Principal);
-            if (Optional.IsDefined(TenantId))
-            {
-                writer.WritePropertyName("tenantId"u8);
-                writer.WriteStringValue(TenantId.Value);
-            }
             if (Optional.IsDefined(ObjectType))
             {
                 writer.WritePropertyName("objectType"u8);
@@ -67,7 +62,7 @@ namespace KuFlow.Rest.Models
             Guid id = default;
             Optional<TenantUserMetadata> metadata = default;
             Principal principal = default;
-            Optional<Guid> tenantId = default;
+            Guid tenantId = default;
             Optional<AuditedObjectType> objectType = default;
             Optional<Guid> createdBy = default;
             Optional<DateTimeOffset> createdAt = default;
@@ -96,10 +91,6 @@ namespace KuFlow.Rest.Models
                 }
                 if (property.NameEquals("tenantId"u8))
                 {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
                     tenantId = property.Value.GetGuid();
                     continue;
                 }
@@ -149,7 +140,7 @@ namespace KuFlow.Rest.Models
                     continue;
                 }
             }
-            return new TenantUser(Optional.ToNullable(objectType), Optional.ToNullable(createdBy), Optional.ToNullable(createdAt), Optional.ToNullable(lastModifiedBy), Optional.ToNullable(lastModifiedAt), id, metadata.Value, principal, Optional.ToNullable(tenantId));
+            return new TenantUser(Optional.ToNullable(objectType), Optional.ToNullable(createdBy), Optional.ToNullable(createdAt), Optional.ToNullable(lastModifiedBy), Optional.ToNullable(lastModifiedAt), id, metadata.Value, principal, tenantId);
         }
     }
 }

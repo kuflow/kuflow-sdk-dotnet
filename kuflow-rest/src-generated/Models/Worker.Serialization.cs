@@ -50,6 +50,21 @@ namespace KuFlow.Rest.Models
             writer.WriteStringValue(Hostname);
             writer.WritePropertyName("ip"u8);
             writer.WriteStringValue(Ip);
+            if (Optional.IsDefined(InstallationId))
+            {
+                writer.WritePropertyName("installationId"u8);
+                writer.WriteStringValue(InstallationId.Value);
+            }
+            if (Optional.IsCollectionDefined(RobotIds))
+            {
+                writer.WritePropertyName("robotIds"u8);
+                writer.WriteStartArray();
+                foreach (var item in RobotIds)
+                {
+                    writer.WriteStringValue(item);
+                }
+                writer.WriteEndArray();
+            }
             if (Optional.IsDefined(TenantId))
             {
                 writer.WritePropertyName("tenantId"u8);
@@ -96,6 +111,8 @@ namespace KuFlow.Rest.Models
             Optional<IList<string>> activityTypes = default;
             string hostname = default;
             string ip = default;
+            Optional<Guid> installationId = default;
+            Optional<IList<Guid>> robotIds = default;
             Optional<Guid> tenantId = default;
             Optional<AuditedObjectType> objectType = default;
             Optional<Guid> createdBy = default;
@@ -161,6 +178,29 @@ namespace KuFlow.Rest.Models
                     ip = property.Value.GetString();
                     continue;
                 }
+                if (property.NameEquals("installationId"u8))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    installationId = property.Value.GetGuid();
+                    continue;
+                }
+                if (property.NameEquals("robotIds"u8))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    List<Guid> array = new List<Guid>();
+                    foreach (var item in property.Value.EnumerateArray())
+                    {
+                        array.Add(item.GetGuid());
+                    }
+                    robotIds = array;
+                    continue;
+                }
                 if (property.NameEquals("tenantId"u8))
                 {
                     if (property.Value.ValueKind == JsonValueKind.Null)
@@ -216,7 +256,7 @@ namespace KuFlow.Rest.Models
                     continue;
                 }
             }
-            return new Worker(Optional.ToNullable(objectType), Optional.ToNullable(createdBy), Optional.ToNullable(createdAt), Optional.ToNullable(lastModifiedBy), Optional.ToNullable(lastModifiedAt), Optional.ToNullable(id), identity, taskQueue, Optional.ToList(workflowTypes), Optional.ToList(activityTypes), hostname, ip, Optional.ToNullable(tenantId));
+            return new Worker(Optional.ToNullable(objectType), Optional.ToNullable(createdBy), Optional.ToNullable(createdAt), Optional.ToNullable(lastModifiedBy), Optional.ToNullable(lastModifiedAt), Optional.ToNullable(id), identity, taskQueue, Optional.ToList(workflowTypes), Optional.ToList(activityTypes), hostname, ip, Optional.ToNullable(installationId), Optional.ToList(robotIds), Optional.ToNullable(tenantId));
         }
     }
 }

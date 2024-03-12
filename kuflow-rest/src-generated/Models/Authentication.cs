@@ -26,7 +26,6 @@ namespace KuFlow.Rest.Models
         /// <param name="id"></param>
         /// <param name="type"></param>
         /// <param name="tenantId"> Tenant id. This attribute is required when an OAuth2 authentication is used. </param>
-        /// <param name="robotId"> Robot id. This attribute is required when an OAuth2 authentication is used. </param>
         /// <param name="token">
         /// Engine authentication token.
         ///
@@ -41,12 +40,11 @@ namespace KuFlow.Rest.Models
         /// </param>
         /// <param name="engineToken"></param>
         /// <param name="engineCertificate"></param>
-        internal Authentication(AuditedObjectType? objectType, Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid? id, AuthenticationType? type, Guid? tenantId, Guid? robotId, string token, DateTimeOffset? expiredAt, AuthenticationEngineToken engineToken, AuthenticationEngineCertificate engineCertificate) : base(objectType, createdBy, createdAt, lastModifiedBy, lastModifiedAt)
+        internal Authentication(AuditedObjectType? objectType, Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid? id, AuthenticationType? type, Guid? tenantId, string token, DateTimeOffset? expiredAt, AuthenticationEngineToken engineToken, AuthenticationEngineCertificate engineCertificate) : base(objectType, createdBy, createdAt, lastModifiedBy, lastModifiedAt)
         {
             Id = id;
             Type = type;
             TenantId = tenantId;
-            RobotId = robotId;
             Token = token;
             ExpiredAt = expiredAt;
             EngineToken = engineToken;
@@ -59,8 +57,6 @@ namespace KuFlow.Rest.Models
         public AuthenticationType? Type { get; set; }
         /// <summary> Tenant id. This attribute is required when an OAuth2 authentication is used. </summary>
         public Guid? TenantId { get; set; }
-        /// <summary> Robot id. This attribute is required when an OAuth2 authentication is used. </summary>
-        public Guid? RobotId { get; set; }
         /// <summary>
         /// Engine authentication token.
         ///

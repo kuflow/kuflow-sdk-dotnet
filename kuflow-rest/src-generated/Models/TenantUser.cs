@@ -16,13 +16,15 @@ namespace KuFlow.Rest.Models
         /// <summary> Initializes a new instance of <see cref="TenantUser"/>. </summary>
         /// <param name="id"></param>
         /// <param name="principal"></param>
+        /// <param name="tenantId"></param>
         /// <exception cref="ArgumentNullException"> <paramref name="principal"/> is null. </exception>
-        public TenantUser(Guid id, Principal principal)
+        public TenantUser(Guid id, Principal principal, Guid tenantId)
         {
             Argument.AssertNotNull(principal, nameof(principal));
 
             Id = id;
             Principal = principal;
+            TenantId = tenantId;
         }
 
         /// <summary> Initializes a new instance of <see cref="TenantUser"/>. </summary>
@@ -35,7 +37,7 @@ namespace KuFlow.Rest.Models
         /// <param name="metadata"></param>
         /// <param name="principal"></param>
         /// <param name="tenantId"></param>
-        internal TenantUser(AuditedObjectType? objectType, Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid id, TenantUserMetadata metadata, Principal principal, Guid? tenantId) : base(objectType, createdBy, createdAt, lastModifiedBy, lastModifiedAt)
+        internal TenantUser(AuditedObjectType? objectType, Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid id, TenantUserMetadata metadata, Principal principal, Guid tenantId) : base(objectType, createdBy, createdAt, lastModifiedBy, lastModifiedAt)
         {
             Id = id;
             Metadata = metadata;
@@ -49,7 +51,7 @@ namespace KuFlow.Rest.Models
         public TenantUserMetadata Metadata { get; set; }
         /// <summary> Gets or sets the principal. </summary>
         public Principal Principal { get; set; }
-        /// <summary> Gets or sets the tenant id. </summary>
-        public Guid? TenantId { get; set; }
+        /// <summary> Gets the tenant id. </summary>
+        public Guid TenantId { get; }
     }
 }

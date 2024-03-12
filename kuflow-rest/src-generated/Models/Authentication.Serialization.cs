@@ -31,11 +31,6 @@ namespace KuFlow.Rest.Models
                 writer.WritePropertyName("tenantId"u8);
                 writer.WriteStringValue(TenantId.Value);
             }
-            if (Optional.IsDefined(RobotId))
-            {
-                writer.WritePropertyName("robotId"u8);
-                writer.WriteStringValue(RobotId.Value);
-            }
             if (Optional.IsDefined(Token))
             {
                 writer.WritePropertyName("token"u8);
@@ -93,7 +88,6 @@ namespace KuFlow.Rest.Models
             Optional<Guid> id = default;
             Optional<AuthenticationType> type = default;
             Optional<Guid> tenantId = default;
-            Optional<Guid> robotId = default;
             Optional<string> token = default;
             Optional<DateTimeOffset> expiredAt = default;
             Optional<AuthenticationEngineToken> engineToken = default;
@@ -130,15 +124,6 @@ namespace KuFlow.Rest.Models
                         continue;
                     }
                     tenantId = property.Value.GetGuid();
-                    continue;
-                }
-                if (property.NameEquals("robotId"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    robotId = property.Value.GetGuid();
                     continue;
                 }
                 if (property.NameEquals("token"u8))
@@ -219,7 +204,7 @@ namespace KuFlow.Rest.Models
                     continue;
                 }
             }
-            return new Authentication(Optional.ToNullable(objectType), Optional.ToNullable(createdBy), Optional.ToNullable(createdAt), Optional.ToNullable(lastModifiedBy), Optional.ToNullable(lastModifiedAt), Optional.ToNullable(id), Optional.ToNullable(type), Optional.ToNullable(tenantId), Optional.ToNullable(robotId), token.Value, Optional.ToNullable(expiredAt), engineToken.Value, engineCertificate.Value);
+            return new Authentication(Optional.ToNullable(objectType), Optional.ToNullable(createdBy), Optional.ToNullable(createdAt), Optional.ToNullable(lastModifiedBy), Optional.ToNullable(lastModifiedAt), Optional.ToNullable(id), Optional.ToNullable(type), Optional.ToNullable(tenantId), token.Value, Optional.ToNullable(expiredAt), engineToken.Value, engineCertificate.Value);
         }
     }
 }
