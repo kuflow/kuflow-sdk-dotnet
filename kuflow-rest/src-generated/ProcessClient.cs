@@ -535,5 +535,151 @@ namespace KuFlow.Rest
                 throw;
             }
         }
+
+        /// <summary> Save JSON data. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="command"> Command to save the JSON value. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <remarks>
+        /// Allow to save a JSON validating that the data follow the related schema. If the data is invalid, then
+        /// the json form is marked as invalid.
+        ///
+        /// </remarks>
+        public virtual async Task<Response<Process>> ActionsProcessSaveEntityDataAsync(Guid id, ProcessSaveEntityDataCommand command, CancellationToken cancellationToken = default)
+        {
+            using var scope = _clientDiagnostics.CreateScope("ProcessClient.ActionsProcessSaveEntityData");
+            scope.Start();
+            try
+            {
+                return await RestClient.ActionsProcessSaveEntityDataAsync(id, command, cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary> Save JSON data. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="command"> Command to save the JSON value. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <remarks>
+        /// Allow to save a JSON validating that the data follow the related schema. If the data is invalid, then
+        /// the json form is marked as invalid.
+        ///
+        /// </remarks>
+        public virtual Response<Process> ActionsProcessSaveEntityData(Guid id, ProcessSaveEntityDataCommand command, CancellationToken cancellationToken = default)
+        {
+            using var scope = _clientDiagnostics.CreateScope("ProcessClient.ActionsProcessSaveEntityData");
+            scope.Start();
+            try
+            {
+                return RestClient.ActionsProcessSaveEntityData(id, command, cancellationToken);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary> Save an entity value document. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="fileContentType"> Document content type. </param>
+        /// <param name="fileName"> Document name. </param>
+        /// <param name="schemaPath">
+        /// JSON Schema path related to the document. The uploaded document will be validated by the passed schema path.
+        ///
+        /// </param>
+        /// <param name="file"> Document to save. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <remarks>
+        /// Save a document in the process to later be linked into the JSON data.
+        ///
+        /// </remarks>
+        public virtual async Task<Response<ProcessSaveEntityDocumentResponseCommand>> ActionsProcessSaveEntityDocumentAsync(Guid id, string fileContentType, string fileName, string schemaPath, Stream file, CancellationToken cancellationToken = default)
+        {
+            using var scope = _clientDiagnostics.CreateScope("ProcessClient.ActionsProcessSaveEntityDocument");
+            scope.Start();
+            try
+            {
+                return await RestClient.ActionsProcessSaveEntityDocumentAsync(id, fileContentType, fileName, schemaPath, file, cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary> Save an entity value document. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="fileContentType"> Document content type. </param>
+        /// <param name="fileName"> Document name. </param>
+        /// <param name="schemaPath">
+        /// JSON Schema path related to the document. The uploaded document will be validated by the passed schema path.
+        ///
+        /// </param>
+        /// <param name="file"> Document to save. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <remarks>
+        /// Save a document in the process to later be linked into the JSON data.
+        ///
+        /// </remarks>
+        public virtual Response<ProcessSaveEntityDocumentResponseCommand> ActionsProcessSaveEntityDocument(Guid id, string fileContentType, string fileName, string schemaPath, Stream file, CancellationToken cancellationToken = default)
+        {
+            using var scope = _clientDiagnostics.CreateScope("ProcessClient.ActionsProcessSaveEntityDocument");
+            scope.Start();
+            try
+            {
+                return RestClient.ActionsProcessSaveEntityDocument(id, fileContentType, fileName, schemaPath, file, cancellationToken);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary> Download document. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="documentUri"> Document URI to download. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <remarks> Given a process and a documentUri, download a document. </remarks>
+        public virtual async Task<Response<Stream>> ActionsProcessDownloadEntityDocumentAsync(Guid id, string documentUri, CancellationToken cancellationToken = default)
+        {
+            using var scope = _clientDiagnostics.CreateScope("ProcessClient.ActionsProcessDownloadEntityDocument");
+            scope.Start();
+            try
+            {
+                return await RestClient.ActionsProcessDownloadEntityDocumentAsync(id, documentUri, cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary> Download document. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="documentUri"> Document URI to download. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <remarks> Given a process and a documentUri, download a document. </remarks>
+        public virtual Response<Stream> ActionsProcessDownloadEntityDocument(Guid id, string documentUri, CancellationToken cancellationToken = default)
+        {
+            using var scope = _clientDiagnostics.CreateScope("ProcessClient.ActionsProcessDownloadEntityDocument");
+            scope.Start();
+            try
+            {
+                return RestClient.ActionsProcessDownloadEntityDocument(id, documentUri, cancellationToken);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
     }
 }

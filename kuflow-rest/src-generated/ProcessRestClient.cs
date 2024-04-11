@@ -822,5 +822,280 @@ namespace KuFlow.Rest
                     throw new RequestFailedException(message.Response);
             }
         }
+
+        internal HttpMessage CreateActionsProcessSaveEntityDataRequest(Guid id, ProcessSaveEntityDataCommand command)
+        {
+            var message = _pipeline.CreateMessage();
+            var request = message.Request;
+            request.Method = RequestMethod.Post;
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/processes/", false);
+            uri.AppendPath(id, true);
+            uri.AppendPath("/~actions/save-entity-data", false);
+            request.Uri = uri;
+            request.Headers.Add("Accept", "application/json");
+            request.Headers.Add("Content-Type", "application/json");
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue(command);
+            request.Content = content;
+            return message;
+        }
+
+        /// <summary> Save JSON data. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="command"> Command to save the JSON value. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="command"/> is null. </exception>
+        /// <remarks>
+        /// Allow to save a JSON validating that the data follow the related schema. If the data is invalid, then
+        /// the json form is marked as invalid.
+        ///
+        /// </remarks>
+        public async Task<Response<Process>> ActionsProcessSaveEntityDataAsync(Guid id, ProcessSaveEntityDataCommand command, CancellationToken cancellationToken = default)
+        {
+            if (command == null)
+            {
+                throw new ArgumentNullException(nameof(command));
+            }
+
+            using var message = CreateActionsProcessSaveEntityDataRequest(id, command);
+            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        Process value = default;
+                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, default, cancellationToken).ConfigureAwait(false);
+                        value = Process.DeserializeProcess(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        /// <summary> Save JSON data. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="command"> Command to save the JSON value. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="command"/> is null. </exception>
+        /// <remarks>
+        /// Allow to save a JSON validating that the data follow the related schema. If the data is invalid, then
+        /// the json form is marked as invalid.
+        ///
+        /// </remarks>
+        public Response<Process> ActionsProcessSaveEntityData(Guid id, ProcessSaveEntityDataCommand command, CancellationToken cancellationToken = default)
+        {
+            if (command == null)
+            {
+                throw new ArgumentNullException(nameof(command));
+            }
+
+            using var message = CreateActionsProcessSaveEntityDataRequest(id, command);
+            _pipeline.Send(message, cancellationToken);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        Process value = default;
+                        using var document = JsonDocument.Parse(message.Response.ContentStream);
+                        value = Process.DeserializeProcess(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        internal HttpMessage CreateActionsProcessSaveEntityDocumentRequest(Guid id, string fileContentType, string fileName, string schemaPath, Stream file)
+        {
+            var message = _pipeline.CreateMessage();
+            var request = message.Request;
+            request.Method = RequestMethod.Post;
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/processes/", false);
+            uri.AppendPath(id, true);
+            uri.AppendPath("/~actions/save-entity-document", false);
+            uri.AppendQuery("fileContentType", fileContentType, true);
+            uri.AppendQuery("fileName", fileName, true);
+            uri.AppendQuery("schemaPath", schemaPath, true);
+            request.Uri = uri;
+            request.Headers.Add("Accept", "application/json");
+            request.Headers.Add("Content-Type", "application/octet-stream");
+            request.Content = RequestContent.Create(file);
+            return message;
+        }
+
+        /// <summary> Save an entity value document. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="fileContentType"> Document content type. </param>
+        /// <param name="fileName"> Document name. </param>
+        /// <param name="schemaPath">
+        /// JSON Schema path related to the document. The uploaded document will be validated by the passed schema path.
+        ///
+        /// </param>
+        /// <param name="file"> Document to save. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="fileContentType"/>, <paramref name="fileName"/>, <paramref name="schemaPath"/> or <paramref name="file"/> is null. </exception>
+        /// <remarks>
+        /// Save a document in the process to later be linked into the JSON data.
+        ///
+        /// </remarks>
+        public async Task<Response<ProcessSaveEntityDocumentResponseCommand>> ActionsProcessSaveEntityDocumentAsync(Guid id, string fileContentType, string fileName, string schemaPath, Stream file, CancellationToken cancellationToken = default)
+        {
+            if (fileContentType == null)
+            {
+                throw new ArgumentNullException(nameof(fileContentType));
+            }
+            if (fileName == null)
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+            if (schemaPath == null)
+            {
+                throw new ArgumentNullException(nameof(schemaPath));
+            }
+            if (file == null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            using var message = CreateActionsProcessSaveEntityDocumentRequest(id, fileContentType, fileName, schemaPath, file);
+            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        ProcessSaveEntityDocumentResponseCommand value = default;
+                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, default, cancellationToken).ConfigureAwait(false);
+                        value = ProcessSaveEntityDocumentResponseCommand.DeserializeProcessSaveEntityDocumentResponseCommand(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        /// <summary> Save an entity value document. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="fileContentType"> Document content type. </param>
+        /// <param name="fileName"> Document name. </param>
+        /// <param name="schemaPath">
+        /// JSON Schema path related to the document. The uploaded document will be validated by the passed schema path.
+        ///
+        /// </param>
+        /// <param name="file"> Document to save. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="fileContentType"/>, <paramref name="fileName"/>, <paramref name="schemaPath"/> or <paramref name="file"/> is null. </exception>
+        /// <remarks>
+        /// Save a document in the process to later be linked into the JSON data.
+        ///
+        /// </remarks>
+        public Response<ProcessSaveEntityDocumentResponseCommand> ActionsProcessSaveEntityDocument(Guid id, string fileContentType, string fileName, string schemaPath, Stream file, CancellationToken cancellationToken = default)
+        {
+            if (fileContentType == null)
+            {
+                throw new ArgumentNullException(nameof(fileContentType));
+            }
+            if (fileName == null)
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+            if (schemaPath == null)
+            {
+                throw new ArgumentNullException(nameof(schemaPath));
+            }
+            if (file == null)
+            {
+                throw new ArgumentNullException(nameof(file));
+            }
+
+            using var message = CreateActionsProcessSaveEntityDocumentRequest(id, fileContentType, fileName, schemaPath, file);
+            _pipeline.Send(message, cancellationToken);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        ProcessSaveEntityDocumentResponseCommand value = default;
+                        using var document = JsonDocument.Parse(message.Response.ContentStream);
+                        value = ProcessSaveEntityDocumentResponseCommand.DeserializeProcessSaveEntityDocumentResponseCommand(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        internal HttpMessage CreateActionsProcessDownloadEntityDocumentRequest(Guid id, string documentUri)
+        {
+            var message = _pipeline.CreateMessage();
+            var request = message.Request;
+            request.Method = RequestMethod.Get;
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/processes/", false);
+            uri.AppendPath(id, true);
+            uri.AppendPath("/~actions/download-entity-document", false);
+            uri.AppendQuery("documentUri", documentUri, true);
+            request.Uri = uri;
+            request.Headers.Add("Accept", "application/octet-stream, application/json");
+            return message;
+        }
+
+        /// <summary> Download document. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="documentUri"> Document URI to download. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="documentUri"/> is null. </exception>
+        /// <remarks> Given a process and a documentUri, download a document. </remarks>
+        public async Task<Response<Stream>> ActionsProcessDownloadEntityDocumentAsync(Guid id, string documentUri, CancellationToken cancellationToken = default)
+        {
+            if (documentUri == null)
+            {
+                throw new ArgumentNullException(nameof(documentUri));
+            }
+
+            using var message = CreateActionsProcessDownloadEntityDocumentRequest(id, documentUri);
+            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        var value = message.ExtractResponseContent();
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        /// <summary> Download document. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="documentUri"> Document URI to download. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="documentUri"/> is null. </exception>
+        /// <remarks> Given a process and a documentUri, download a document. </remarks>
+        public Response<Stream> ActionsProcessDownloadEntityDocument(Guid id, string documentUri, CancellationToken cancellationToken = default)
+        {
+            if (documentUri == null)
+            {
+                throw new ArgumentNullException(nameof(documentUri));
+            }
+
+            using var message = CreateActionsProcessDownloadEntityDocumentRequest(id, documentUri);
+            _pipeline.Send(message, cancellationToken);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        var value = message.ExtractResponseContent();
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
     }
 }

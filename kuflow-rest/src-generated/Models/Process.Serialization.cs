@@ -55,6 +55,11 @@ namespace KuFlow.Rest.Models
                 }
                 writer.WriteEndObject();
             }
+            if (Optional.IsDefined(Entity))
+            {
+                writer.WritePropertyName("entity"u8);
+                writer.WriteObjectValue(Entity);
+            }
             if (Optional.IsDefined(Initiator))
             {
                 writer.WritePropertyName("initiator"u8);
@@ -109,6 +114,7 @@ namespace KuFlow.Rest.Models
             Optional<ProcessState> state = default;
             ProcessDefinitionSummary processDefinition = default;
             Optional<IDictionary<string, IList<ProcessElementValue>>> elementValues = default;
+            Optional<JsonFormsValue> entity = default;
             Optional<Principal> initiator = default;
             Optional<RelatedProcess> relatedProcess = default;
             Optional<Guid> tenantId = default;
@@ -171,6 +177,15 @@ namespace KuFlow.Rest.Models
                         }
                     }
                     elementValues = dictionary;
+                    continue;
+                }
+                if (property.NameEquals("entity"u8))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    entity = JsonFormsValue.DeserializeJsonFormsValue(property.Value);
                     continue;
                 }
                 if (property.NameEquals("initiator"u8))
@@ -246,7 +261,7 @@ namespace KuFlow.Rest.Models
                     continue;
                 }
             }
-            return new Process(Optional.ToNullable(objectType), Optional.ToNullable(createdBy), Optional.ToNullable(createdAt), Optional.ToNullable(lastModifiedBy), Optional.ToNullable(lastModifiedAt), Optional.ToNullable(id), subject.Value, Optional.ToNullable(state), processDefinition, Optional.ToDictionary(elementValues), initiator.Value, relatedProcess.Value, Optional.ToNullable(tenantId));
+            return new Process(Optional.ToNullable(objectType), Optional.ToNullable(createdBy), Optional.ToNullable(createdAt), Optional.ToNullable(lastModifiedBy), Optional.ToNullable(lastModifiedAt), Optional.ToNullable(id), subject.Value, Optional.ToNullable(state), processDefinition, Optional.ToDictionary(elementValues), entity.Value, initiator.Value, relatedProcess.Value, Optional.ToNullable(tenantId));
         }
     }
 }

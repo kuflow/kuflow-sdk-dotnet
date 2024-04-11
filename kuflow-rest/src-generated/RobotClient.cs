@@ -72,7 +72,7 @@ namespace KuFlow.Rest
         ///
         /// </param>
         /// <param name="tenantId"> Filter by tenantId. </param>
-        /// <param name="filterContext"> Filter by the specified context. The default value is AutoRest.CSharp.Output.Models.Types.EnumTypeValue. </param>
+        /// <param name="filterContext"> Filter by the specified context. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// List all the Robots that have been created and the credentials has access.
@@ -107,7 +107,7 @@ namespace KuFlow.Rest
         ///
         /// </param>
         /// <param name="tenantId"> Filter by tenantId. </param>
-        /// <param name="filterContext"> Filter by the specified context. The default value is AutoRest.CSharp.Output.Models.Types.EnumTypeValue. </param>
+        /// <param name="filterContext"> Filter by the specified context. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// List all the Robots that have been created and the credentials has access.
