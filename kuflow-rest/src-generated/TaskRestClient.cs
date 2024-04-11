@@ -1124,7 +1124,7 @@ namespace KuFlow.Rest
         /// <param name="fileContentType"> Document content type. </param>
         /// <param name="fileName"> Document name. </param>
         /// <param name="schemaPath">
-        /// JSON Schema path related to the document. The uploaded document must be validated by the passed schema path.
+        /// JSON Schema path related to the document. The uploaded document will be validated by the passed schema path.
         ///
         /// </param>
         /// <param name="file"> Document to save. </param>
@@ -1174,7 +1174,7 @@ namespace KuFlow.Rest
         /// <param name="fileContentType"> Document content type. </param>
         /// <param name="fileName"> Document name. </param>
         /// <param name="schemaPath">
-        /// JSON Schema path related to the document. The uploaded document must be validated by the passed schema path.
+        /// JSON Schema path related to the document. The uploaded document will be validated by the passed schema path.
         ///
         /// </param>
         /// <param name="file"> Document to save. </param>
