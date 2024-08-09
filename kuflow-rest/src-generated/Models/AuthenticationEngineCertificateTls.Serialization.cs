@@ -6,24 +6,12 @@
 #nullable disable
 
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class AuthenticationEngineCertificateTls : IUtf8JsonSerializable
+    public partial class AuthenticationEngineCertificateTls
     {
-        void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
-        {
-            writer.WriteStartObject();
-            writer.WritePropertyName("serverRootCaCertificate"u8);
-            writer.WriteStringValue(ServerRootCaCertificate);
-            writer.WritePropertyName("clientCertificate"u8);
-            writer.WriteStringValue(ClientCertificate);
-            writer.WritePropertyName("clientPrivateKey"u8);
-            writer.WriteStringValue(ClientPrivateKey);
-            writer.WriteEndObject();
-        }
-
         internal static AuthenticationEngineCertificateTls DeserializeAuthenticationEngineCertificateTls(JsonElement element)
         {
             if (element.ValueKind == JsonValueKind.Null)
@@ -52,6 +40,14 @@ namespace KuFlow.Rest.Models
                 }
             }
             return new AuthenticationEngineCertificateTls(serverRootCaCertificate, clientCertificate, clientPrivateKey);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static AuthenticationEngineCertificateTls FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeAuthenticationEngineCertificateTls(document.RootElement);
         }
     }
 }

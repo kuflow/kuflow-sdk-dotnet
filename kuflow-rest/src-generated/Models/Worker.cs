@@ -7,7 +7,6 @@
 
 using System;
 using System.Collections.Generic;
-using Azure.Core;
 
 namespace KuFlow.Rest.Models
 {
@@ -20,7 +19,7 @@ namespace KuFlow.Rest.Models
         /// <param name="hostname"></param>
         /// <param name="ip"></param>
         /// <exception cref="ArgumentNullException"> <paramref name="identity"/>, <paramref name="taskQueue"/>, <paramref name="hostname"/> or <paramref name="ip"/> is null. </exception>
-        public Worker(string identity, string taskQueue, string hostname, string ip)
+        internal Worker(string identity, string taskQueue, string hostname, string ip)
         {
             Argument.AssertNotNull(identity, nameof(identity));
             Argument.AssertNotNull(taskQueue, nameof(taskQueue));
@@ -37,7 +36,6 @@ namespace KuFlow.Rest.Models
         }
 
         /// <summary> Initializes a new instance of <see cref="Worker"/>. </summary>
-        /// <param name="objectType"> Audited object Types. </param>
         /// <param name="createdBy"> Who create this model. </param>
         /// <param name="createdAt"> When this model was created. </param>
         /// <param name="lastModifiedBy"> Who was last update this model. </param>
@@ -52,7 +50,7 @@ namespace KuFlow.Rest.Models
         /// <param name="installationId"> Installation Id. </param>
         /// <param name="robotIds"> Robot Ids that this worker implements. </param>
         /// <param name="tenantId"> Tenant ID. </param>
-        internal Worker(AuditedObjectType? objectType, Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid? id, string identity, string taskQueue, IList<string> workflowTypes, IList<string> activityTypes, string hostname, string ip, Guid? installationId, IList<Guid> robotIds, Guid? tenantId) : base(objectType, createdBy, createdAt, lastModifiedBy, lastModifiedAt)
+        internal Worker(Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid? id, string identity, string taskQueue, IReadOnlyList<string> workflowTypes, IReadOnlyList<string> activityTypes, string hostname, string ip, Guid? installationId, IReadOnlyList<Guid> robotIds, Guid? tenantId) : base(createdBy, createdAt, lastModifiedBy, lastModifiedAt)
         {
             Id = id;
             Identity = identity;
@@ -66,25 +64,25 @@ namespace KuFlow.Rest.Models
             TenantId = tenantId;
         }
 
-        /// <summary> Gets or sets the id. </summary>
-        public Guid? Id { get; set; }
-        /// <summary> Gets or sets the identity. </summary>
-        public string Identity { get; set; }
-        /// <summary> Gets or sets the task queue. </summary>
-        public string TaskQueue { get; set; }
+        /// <summary> Gets the id. </summary>
+        public Guid? Id { get; }
+        /// <summary> Gets the identity. </summary>
+        public string Identity { get; }
+        /// <summary> Gets the task queue. </summary>
+        public string TaskQueue { get; }
         /// <summary> Gets the workflow types. </summary>
-        public IList<string> WorkflowTypes { get; }
+        public IReadOnlyList<string> WorkflowTypes { get; }
         /// <summary> Gets the activity types. </summary>
-        public IList<string> ActivityTypes { get; }
-        /// <summary> Gets or sets the hostname. </summary>
-        public string Hostname { get; set; }
-        /// <summary> Gets or sets the ip. </summary>
-        public string Ip { get; set; }
+        public IReadOnlyList<string> ActivityTypes { get; }
+        /// <summary> Gets the hostname. </summary>
+        public string Hostname { get; }
+        /// <summary> Gets the ip. </summary>
+        public string Ip { get; }
         /// <summary> Installation Id. </summary>
-        public Guid? InstallationId { get; set; }
+        public Guid? InstallationId { get; }
         /// <summary> Robot Ids that this worker implements. </summary>
-        public IList<Guid> RobotIds { get; }
+        public IReadOnlyList<Guid> RobotIds { get; }
         /// <summary> Tenant ID. </summary>
-        public Guid? TenantId { get; set; }
+        public Guid? TenantId { get; }
     }
 }

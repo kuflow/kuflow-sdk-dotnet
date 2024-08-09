@@ -7,65 +7,31 @@
 
 using System;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class TaskDefinitionSummary : IUtf8JsonSerializable
+    public partial class TaskDefinitionSummary
     {
-        void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
-        {
-            writer.WriteStartObject();
-            if (Optional.IsDefined(Id))
-            {
-                writer.WritePropertyName("id"u8);
-                writer.WriteStringValue(Id.Value);
-            }
-            if (Optional.IsDefined(Version))
-            {
-                writer.WritePropertyName("version"u8);
-                writer.WriteStringValue(Version.Value);
-            }
-            if (Optional.IsDefined(Code))
-            {
-                writer.WritePropertyName("code"u8);
-                writer.WriteStringValue(Code);
-            }
-            if (Optional.IsDefined(Name))
-            {
-                writer.WritePropertyName("name"u8);
-                writer.WriteStringValue(Name);
-            }
-            writer.WriteEndObject();
-        }
-
         internal static TaskDefinitionSummary DeserializeTaskDefinitionSummary(JsonElement element)
         {
             if (element.ValueKind == JsonValueKind.Null)
             {
                 return null;
             }
-            Optional<Guid> id = default;
-            Optional<Guid> version = default;
-            Optional<string> code = default;
-            Optional<string> name = default;
+            Guid id = default;
+            Guid version = default;
+            string code = default;
+            string name = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("id"u8))
                 {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
                     id = property.Value.GetGuid();
                     continue;
                 }
                 if (property.NameEquals("version"u8))
                 {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
                     version = property.Value.GetGuid();
                     continue;
                 }
@@ -80,7 +46,15 @@ namespace KuFlow.Rest.Models
                     continue;
                 }
             }
-            return new TaskDefinitionSummary(Optional.ToNullable(id), Optional.ToNullable(version), code.Value, name.Value);
+            return new TaskDefinitionSummary(id, version, code, name);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static TaskDefinitionSummary FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeTaskDefinitionSummary(document.RootElement);
         }
     }
 }

@@ -37,7 +37,7 @@ namespace KuFlow.Rest
             {
                 throw new ArgumentNullException(nameof(credential));
             }
-            endpoint ??= new Uri("https://api.kuflow.com/v2022-10-08");
+            endpoint ??= new Uri("https://api.kuflow.com/v2024-06-14");
 
             options ??= new KuFlowRestClientOptions();
             _clientDiagnostics = new ClientDiagnostics(options);
@@ -59,15 +59,15 @@ namespace KuFlow.Rest
         }
 
         /// <summary> Create an authentication for the current principal. </summary>
-        /// <param name="authentication"> Authentication to be created. </param>
+        /// <param name="authenticationCreateParams"> Authentication to be created. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public virtual async Task<Response<Authentication>> CreateAuthenticationAsync(Authentication authentication, CancellationToken cancellationToken = default)
+        public virtual async Task<Response<Authentication>> CreateAuthenticationAsync(AuthenticationCreateParams authenticationCreateParams, CancellationToken cancellationToken = default)
         {
             using var scope = _clientDiagnostics.CreateScope("AuthenticationClient.CreateAuthentication");
             scope.Start();
             try
             {
-                return await RestClient.CreateAuthenticationAsync(authentication, cancellationToken).ConfigureAwait(false);
+                return await RestClient.CreateAuthenticationAsync(authenticationCreateParams, cancellationToken).ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -77,15 +77,15 @@ namespace KuFlow.Rest
         }
 
         /// <summary> Create an authentication for the current principal. </summary>
-        /// <param name="authentication"> Authentication to be created. </param>
+        /// <param name="authenticationCreateParams"> Authentication to be created. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public virtual Response<Authentication> CreateAuthentication(Authentication authentication, CancellationToken cancellationToken = default)
+        public virtual Response<Authentication> CreateAuthentication(AuthenticationCreateParams authenticationCreateParams, CancellationToken cancellationToken = default)
         {
             using var scope = _clientDiagnostics.CreateScope("AuthenticationClient.CreateAuthentication");
             scope.Start();
             try
             {
-                return RestClient.CreateAuthentication(authentication, cancellationToken);
+                return RestClient.CreateAuthentication(authenticationCreateParams, cancellationToken);
             }
             catch (Exception e)
             {

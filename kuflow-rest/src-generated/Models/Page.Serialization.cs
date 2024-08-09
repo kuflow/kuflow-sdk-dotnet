@@ -6,7 +6,7 @@
 #nullable disable
 
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace KuFlow.Rest.Models
 {
@@ -18,26 +18,24 @@ namespace KuFlow.Rest.Models
             {
                 return null;
             }
-            Optional<PagedObjectType> objectType = default;
             PageMetadata metadata = default;
             foreach (var property in element.EnumerateObject())
             {
-                if (property.NameEquals("objectType"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    objectType = property.Value.GetString().ToPagedObjectType();
-                    continue;
-                }
                 if (property.NameEquals("metadata"u8))
                 {
                     metadata = PageMetadata.DeserializePageMetadata(property.Value);
                     continue;
                 }
             }
-            return new Page(Optional.ToNullable(objectType), metadata);
+            return new Page(metadata);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static Page FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializePage(document.RootElement);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace KuFlow.Rest.Models
     public partial class PrincipalUser
     {
         /// <summary> Initializes a new instance of <see cref="PrincipalUser"/>. </summary>
-        public PrincipalUser()
+        internal PrincipalUser()
         {
         }
 
@@ -26,9 +26,9 @@ namespace KuFlow.Rest.Models
             Email = email;
         }
 
-        /// <summary> Gets or sets the id. </summary>
-        public Guid? Id { get; set; }
-        /// <summary> Gets or sets the email. </summary>
-        public string Email { get; set; }
+        /// <summary> Gets the id. </summary>
+        public Guid? Id { get; }
+        /// <summary> Gets the email. </summary>
+        public string Email { get; }
     }
 }

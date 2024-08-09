@@ -8,77 +8,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class Robot : IUtf8JsonSerializable
+    public partial class Robot
     {
-        void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
-        {
-            writer.WriteStartObject();
-            writer.WritePropertyName("id"u8);
-            writer.WriteStringValue(Id);
-            writer.WritePropertyName("code"u8);
-            writer.WriteStringValue(Code);
-            writer.WritePropertyName("name"u8);
-            writer.WriteStringValue(Name);
-            if (Optional.IsDefined(Description))
-            {
-                writer.WritePropertyName("description"u8);
-                writer.WriteStringValue(Description);
-            }
-            writer.WritePropertyName("sourceType"u8);
-            writer.WriteStringValue(SourceType.ToSerialString());
-            if (Optional.IsDefined(SourceFile))
-            {
-                writer.WritePropertyName("sourceFile"u8);
-                writer.WriteObjectValue(SourceFile);
-            }
-            if (Optional.IsCollectionDefined(EnvironmentVariables))
-            {
-                writer.WritePropertyName("environmentVariables"u8);
-                writer.WriteStartObject();
-                foreach (var item in EnvironmentVariables)
-                {
-                    writer.WritePropertyName(item.Key);
-                    writer.WriteStringValue(item.Value);
-                }
-                writer.WriteEndObject();
-            }
-            if (Optional.IsDefined(TenantId))
-            {
-                writer.WritePropertyName("tenantId"u8);
-                writer.WriteStringValue(TenantId.Value);
-            }
-            if (Optional.IsDefined(ObjectType))
-            {
-                writer.WritePropertyName("objectType"u8);
-                writer.WriteStringValue(ObjectType.Value.ToSerialString());
-            }
-            if (Optional.IsDefined(CreatedBy))
-            {
-                writer.WritePropertyName("createdBy"u8);
-                writer.WriteStringValue(CreatedBy.Value);
-            }
-            if (Optional.IsDefined(CreatedAt))
-            {
-                writer.WritePropertyName("createdAt"u8);
-                writer.WriteStringValue(CreatedAt.Value, "O");
-            }
-            if (Optional.IsDefined(LastModifiedBy))
-            {
-                writer.WritePropertyName("lastModifiedBy"u8);
-                writer.WriteStringValue(LastModifiedBy.Value);
-            }
-            if (Optional.IsDefined(LastModifiedAt))
-            {
-                writer.WritePropertyName("lastModifiedAt"u8);
-                writer.WriteStringValue(LastModifiedAt.Value, "O");
-            }
-            writer.WriteEndObject();
-        }
-
         internal static Robot DeserializeRobot(JsonElement element)
         {
             if (element.ValueKind == JsonValueKind.Null)
@@ -88,16 +23,15 @@ namespace KuFlow.Rest.Models
             Guid id = default;
             string code = default;
             string name = default;
-            Optional<string> description = default;
+            string description = default;
             RobotSourceType sourceType = default;
-            Optional<RobotSourceFile> sourceFile = default;
-            Optional<IDictionary<string, string>> environmentVariables = default;
-            Optional<Guid> tenantId = default;
-            Optional<AuditedObjectType> objectType = default;
-            Optional<Guid> createdBy = default;
-            Optional<DateTimeOffset> createdAt = default;
-            Optional<Guid> lastModifiedBy = default;
-            Optional<DateTimeOffset> lastModifiedAt = default;
+            RobotSourceFile sourceFile = default;
+            IReadOnlyDictionary<string, string> environmentVariables = default;
+            Guid tenantId = default;
+            Guid? createdBy = default;
+            DateTimeOffset? createdAt = default;
+            Guid? lastModifiedBy = default;
+            DateTimeOffset? lastModifiedAt = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("id"u8))
@@ -127,10 +61,6 @@ namespace KuFlow.Rest.Models
                 }
                 if (property.NameEquals("sourceFile"u8))
                 {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
                     sourceFile = RobotSourceFile.DeserializeRobotSourceFile(property.Value);
                     continue;
                 }
@@ -150,20 +80,7 @@ namespace KuFlow.Rest.Models
                 }
                 if (property.NameEquals("tenantId"u8))
                 {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
                     tenantId = property.Value.GetGuid();
-                    continue;
-                }
-                if (property.NameEquals("objectType"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    objectType = property.Value.GetString().ToAuditedObjectType();
                     continue;
                 }
                 if (property.NameEquals("createdBy"u8))
@@ -203,7 +120,27 @@ namespace KuFlow.Rest.Models
                     continue;
                 }
             }
-            return new Robot(Optional.ToNullable(objectType), Optional.ToNullable(createdBy), Optional.ToNullable(createdAt), Optional.ToNullable(lastModifiedBy), Optional.ToNullable(lastModifiedAt), id, code, name, description.Value, sourceType, sourceFile.Value, Optional.ToDictionary(environmentVariables), Optional.ToNullable(tenantId));
+            return new Robot(
+                createdBy,
+                createdAt,
+                lastModifiedBy,
+                lastModifiedAt,
+                id,
+                code,
+                name,
+                description,
+                sourceType,
+                sourceFile,
+                environmentVariables ?? new ChangeTrackingDictionary<string, string>(),
+                tenantId);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static new Robot FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeRobot(document.RootElement);
         }
     }
 }

@@ -13,15 +13,19 @@ namespace KuFlow.Rest.Models
     {
         public static string ToSerialString(this WebhookType value) => value switch
         {
+            WebhookType.ProcessCreated => "PROCESS.CREATED",
             WebhookType.ProcessStateChanged => "PROCESS.STATE_CHANGED",
-            WebhookType.TaskStateChanged => "TASK.STATE_CHANGED",
+            WebhookType.ProcessItemCreated => "PROCESS_ITEM.CREATED",
+            WebhookType.ProcessItemTaskStateChanged => "PROCESS_ITEM.TASK_STATE_CHANGED",
             _ => throw new ArgumentOutOfRangeException(nameof(value), value, "Unknown WebhookType value.")
         };
 
         public static WebhookType ToWebhookType(this string value)
         {
+            if (StringComparer.OrdinalIgnoreCase.Equals(value, "PROCESS.CREATED")) return WebhookType.ProcessCreated;
             if (StringComparer.OrdinalIgnoreCase.Equals(value, "PROCESS.STATE_CHANGED")) return WebhookType.ProcessStateChanged;
-            if (StringComparer.OrdinalIgnoreCase.Equals(value, "TASK.STATE_CHANGED")) return WebhookType.TaskStateChanged;
+            if (StringComparer.OrdinalIgnoreCase.Equals(value, "PROCESS_ITEM.CREATED")) return WebhookType.ProcessItemCreated;
+            if (StringComparer.OrdinalIgnoreCase.Equals(value, "PROCESS_ITEM.TASK_STATE_CHANGED")) return WebhookType.ProcessItemTaskStateChanged;
             throw new ArgumentOutOfRangeException(nameof(value), value, "Unknown WebhookType value.");
         }
     }

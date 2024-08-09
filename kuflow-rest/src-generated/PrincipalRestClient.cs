@@ -34,7 +34,7 @@ namespace KuFlow.Rest
         {
             ClientDiagnostics = clientDiagnostics ?? throw new ArgumentNullException(nameof(clientDiagnostics));
             _pipeline = pipeline ?? throw new ArgumentNullException(nameof(pipeline));
-            _endpoint = endpoint ?? new Uri("https://api.kuflow.com/v2022-10-08");
+            _endpoint = endpoint ?? new Uri("https://api.kuflow.com/v2024-06-14");
         }
 
         internal HttpMessage CreateFindPrincipalsRequest(int? size, int? page, IEnumerable<string> sort, PrincipalType? type, IEnumerable<Guid> groupId, IEnumerable<Guid> tenantId)
@@ -53,7 +53,7 @@ namespace KuFlow.Rest
             {
                 uri.AppendQuery("page", page.Value, true);
             }
-            if (sort != null && Optional.IsCollectionDefined(sort))
+            if (sort != null && !(sort is ChangeTrackingList<string> changeTrackingList && changeTrackingList.IsUndefined))
             {
                 foreach (var param in sort)
                 {
@@ -64,14 +64,14 @@ namespace KuFlow.Rest
             {
                 uri.AppendQuery("type", type.Value.ToSerialString(), true);
             }
-            if (groupId != null && Optional.IsCollectionDefined(groupId))
+            if (groupId != null && !(groupId is ChangeTrackingList<Guid> changeTrackingList0 && changeTrackingList0.IsUndefined))
             {
                 foreach (var param in groupId)
                 {
                     uri.AppendQuery("groupId", param, true);
                 }
             }
-            if (tenantId != null && Optional.IsCollectionDefined(tenantId))
+            if (tenantId != null && !(tenantId is ChangeTrackingList<Guid> changeTrackingList1 && changeTrackingList1.IsUndefined))
             {
                 foreach (var param in tenantId)
                 {

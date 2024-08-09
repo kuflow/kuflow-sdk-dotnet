@@ -10,8 +10,6 @@ namespace KuFlow.Rest.Models
     /// <summary> The AuthenticationType. </summary>
     public enum AuthenticationType
     {
-        /// <summary> ENGINE. </summary>
-        Engine,
         /// <summary> ENGINE_TOKEN. </summary>
         EngineToken,
         /// <summary> ENGINE_CERTIFICATE. </summary>

@@ -6,7 +6,6 @@
 #nullable disable
 
 using System;
-using Azure.Core;
 
 namespace KuFlow.Rest.Models
 {
@@ -20,7 +19,7 @@ namespace KuFlow.Rest.Models
         /// <param name="contentLength"> Source file length. </param>
         /// <param name="contentHash"> Source file to check the integrity. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="name"/>, <paramref name="contentType"/> or <paramref name="contentHash"/> is null. </exception>
-        public RobotSourceFile(Guid id, string name, string contentType, long contentLength, string contentHash)
+        internal RobotSourceFile(Guid id, string name, string contentType, long contentLength, string contentHash)
         {
             Argument.AssertNotNull(name, nameof(name));
             Argument.AssertNotNull(contentType, nameof(contentType));
@@ -34,14 +33,14 @@ namespace KuFlow.Rest.Models
         }
 
         /// <summary> Robot ID. </summary>
-        public Guid Id { get; set; }
+        public Guid Id { get; }
         /// <summary> Source file name. </summary>
-        public string Name { get; set; }
+        public string Name { get; }
         /// <summary> Source file content type. </summary>
-        public string ContentType { get; set; }
+        public string ContentType { get; }
         /// <summary> Source file length. </summary>
-        public long ContentLength { get; set; }
+        public long ContentLength { get; }
         /// <summary> Source file to check the integrity. </summary>
-        public string ContentHash { get; set; }
+        public string ContentHash { get; }
     }
 }

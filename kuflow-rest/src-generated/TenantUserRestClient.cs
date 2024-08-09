@@ -34,7 +34,7 @@ namespace KuFlow.Rest
         {
             ClientDiagnostics = clientDiagnostics ?? throw new ArgumentNullException(nameof(clientDiagnostics));
             _pipeline = pipeline ?? throw new ArgumentNullException(nameof(pipeline));
-            _endpoint = endpoint ?? new Uri("https://api.kuflow.com/v2022-10-08");
+            _endpoint = endpoint ?? new Uri("https://api.kuflow.com/v2024-06-14");
         }
 
         internal HttpMessage CreateFindTenantUsersRequest(int? size, int? page, IEnumerable<string> sort, IEnumerable<Guid> groupId, IEnumerable<string> email, IEnumerable<Guid> tenantId)
@@ -53,28 +53,28 @@ namespace KuFlow.Rest
             {
                 uri.AppendQuery("page", page.Value, true);
             }
-            if (sort != null && Optional.IsCollectionDefined(sort))
+            if (sort != null && !(sort is ChangeTrackingList<string> changeTrackingList && changeTrackingList.IsUndefined))
             {
                 foreach (var param in sort)
                 {
                     uri.AppendQuery("sort", param, true);
                 }
             }
-            if (groupId != null && Optional.IsCollectionDefined(groupId))
+            if (groupId != null && !(groupId is ChangeTrackingList<Guid> changeTrackingList0 && changeTrackingList0.IsUndefined))
             {
                 foreach (var param in groupId)
                 {
                     uri.AppendQuery("groupId", param, true);
                 }
             }
-            if (email != null && Optional.IsCollectionDefined(email))
+            if (email != null && !(email is ChangeTrackingList<string> changeTrackingList1 && changeTrackingList1.IsUndefined))
             {
                 foreach (var param in email)
                 {
                     uri.AppendQuery("email", param, true);
                 }
             }
-            if (tenantId != null && Optional.IsCollectionDefined(tenantId))
+            if (tenantId != null && !(tenantId is ChangeTrackingList<Guid> changeTrackingList2 && changeTrackingList2.IsUndefined))
             {
                 foreach (var param in tenantId)
                 {

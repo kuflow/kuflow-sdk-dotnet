@@ -7,52 +7,12 @@
 
 using System;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class TenantUser : IUtf8JsonSerializable
+    public partial class TenantUser
     {
-        void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
-        {
-            writer.WriteStartObject();
-            writer.WritePropertyName("id"u8);
-            writer.WriteStringValue(Id);
-            if (Optional.IsDefined(Metadata))
-            {
-                writer.WritePropertyName("metadata"u8);
-                writer.WriteObjectValue(Metadata);
-            }
-            writer.WritePropertyName("principal"u8);
-            writer.WriteObjectValue(Principal);
-            if (Optional.IsDefined(ObjectType))
-            {
-                writer.WritePropertyName("objectType"u8);
-                writer.WriteStringValue(ObjectType.Value.ToSerialString());
-            }
-            if (Optional.IsDefined(CreatedBy))
-            {
-                writer.WritePropertyName("createdBy"u8);
-                writer.WriteStringValue(CreatedBy.Value);
-            }
-            if (Optional.IsDefined(CreatedAt))
-            {
-                writer.WritePropertyName("createdAt"u8);
-                writer.WriteStringValue(CreatedAt.Value, "O");
-            }
-            if (Optional.IsDefined(LastModifiedBy))
-            {
-                writer.WritePropertyName("lastModifiedBy"u8);
-                writer.WriteStringValue(LastModifiedBy.Value);
-            }
-            if (Optional.IsDefined(LastModifiedAt))
-            {
-                writer.WritePropertyName("lastModifiedAt"u8);
-                writer.WriteStringValue(LastModifiedAt.Value, "O");
-            }
-            writer.WriteEndObject();
-        }
-
         internal static TenantUser DeserializeTenantUser(JsonElement element)
         {
             if (element.ValueKind == JsonValueKind.Null)
@@ -60,14 +20,13 @@ namespace KuFlow.Rest.Models
                 return null;
             }
             Guid id = default;
-            Optional<TenantUserMetadata> metadata = default;
+            JsonValue metadata = default;
             Principal principal = default;
             Guid tenantId = default;
-            Optional<AuditedObjectType> objectType = default;
-            Optional<Guid> createdBy = default;
-            Optional<DateTimeOffset> createdAt = default;
-            Optional<Guid> lastModifiedBy = default;
-            Optional<DateTimeOffset> lastModifiedAt = default;
+            Guid? createdBy = default;
+            DateTimeOffset? createdAt = default;
+            Guid? lastModifiedBy = default;
+            DateTimeOffset? lastModifiedAt = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("id"u8))
@@ -81,7 +40,7 @@ namespace KuFlow.Rest.Models
                     {
                         continue;
                     }
-                    metadata = TenantUserMetadata.DeserializeTenantUserMetadata(property.Value);
+                    metadata = JsonValue.DeserializeJsonValue(property.Value);
                     continue;
                 }
                 if (property.NameEquals("principal"u8))
@@ -92,15 +51,6 @@ namespace KuFlow.Rest.Models
                 if (property.NameEquals("tenantId"u8))
                 {
                     tenantId = property.Value.GetGuid();
-                    continue;
-                }
-                if (property.NameEquals("objectType"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    objectType = property.Value.GetString().ToAuditedObjectType();
                     continue;
                 }
                 if (property.NameEquals("createdBy"u8))
@@ -140,7 +90,23 @@ namespace KuFlow.Rest.Models
                     continue;
                 }
             }
-            return new TenantUser(Optional.ToNullable(objectType), Optional.ToNullable(createdBy), Optional.ToNullable(createdAt), Optional.ToNullable(lastModifiedBy), Optional.ToNullable(lastModifiedAt), id, metadata.Value, principal, tenantId);
+            return new TenantUser(
+                createdBy,
+                createdAt,
+                lastModifiedBy,
+                lastModifiedAt,
+                id,
+                metadata,
+                principal,
+                tenantId);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static new TenantUser FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeTenantUser(document.RootElement);
         }
     }
 }

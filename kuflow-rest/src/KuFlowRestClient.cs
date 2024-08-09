@@ -76,10 +76,10 @@ namespace KuFlow.Rest
       KuFlowRestClientOptions? options = null
     )
     {
-      endpoint ??= "https://api.kuflow.com/v2022-10-08";
-      if (!endpoint.EndsWith("/v2022-10-08"))
+      endpoint ??= "https://api.kuflow.com/v2024-06-14";
+      if (!endpoint.EndsWith("/v2024-06-14"))
       {
-        endpoint += "/v2022-10-08";
+        endpoint += "/v2024-06-14";
       }
 
       options ??= new KuFlowRestClientOptions();
@@ -89,7 +89,7 @@ namespace KuFlow.Rest
       AuthenticationClient = new AuthenticationClient(policy, new Uri(endpoint), options);
       PrincipalClient = new PrincipalClient(policy, new Uri(endpoint), options);
       ProcessClient = new ProcessClient(policy, new Uri(endpoint), options);
-      TaskClient = new TaskClient(policy, new Uri(endpoint), options);
+      ProcessItemClient = new ProcessItemClient(policy, new Uri(endpoint), options);
       WorkerClient = new WorkerClient(policy, new Uri(endpoint), options);
       TenantUserClient = new TenantUserClient(policy, new Uri(endpoint), options);
       RobotClient = new RobotClient(policy, new Uri(endpoint), options);
@@ -130,8 +130,8 @@ namespace KuFlow.Rest
     /// <summary> Get client to operate with processes. </summary>
     public ProcessClient ProcessClient { get; }
 
-    /// <summary> Get client to operate with tasks. </summary>
-    public TaskClient TaskClient { get; }
+    /// <summary> Get client to operate with process items. </summary>
+    public ProcessItemClient ProcessItemClient { get; }
 
     /// <summary> Get client to operate with workers. </summary>
     public WorkerClient WorkerClient { get; }

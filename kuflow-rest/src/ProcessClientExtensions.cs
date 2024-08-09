@@ -60,7 +60,7 @@ public partial class ProcessClient
   ///
   /// </remarks>
   public virtual Task<Response<ProcessPage>> FindProcessesAsync(
-    FindProcessesOptions? options = null,
+    ProcessFindOptions? options = null,
     CancellationToken cancellationToken = default
   )
   {
@@ -82,7 +82,7 @@ public partial class ProcessClient
   ///
   /// </remarks>
   internal virtual Response<ProcessPage> FindProcesses(
-    FindProcessesOptions? options = null,
+    ProcessFindOptions? options = null,
     CancellationToken cancellationToken = default
   )
   {

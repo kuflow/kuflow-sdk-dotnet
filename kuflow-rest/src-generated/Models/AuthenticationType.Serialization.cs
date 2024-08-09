@@ -13,7 +13,6 @@ namespace KuFlow.Rest.Models
     {
         public static string ToSerialString(this AuthenticationType value) => value switch
         {
-            AuthenticationType.Engine => "ENGINE",
             AuthenticationType.EngineToken => "ENGINE_TOKEN",
             AuthenticationType.EngineCertificate => "ENGINE_CERTIFICATE",
             _ => throw new ArgumentOutOfRangeException(nameof(value), value, "Unknown AuthenticationType value.")
@@ -21,7 +20,6 @@ namespace KuFlow.Rest.Models
 
         public static AuthenticationType ToAuthenticationType(this string value)
         {
-            if (StringComparer.OrdinalIgnoreCase.Equals(value, "ENGINE")) return AuthenticationType.Engine;
             if (StringComparer.OrdinalIgnoreCase.Equals(value, "ENGINE_TOKEN")) return AuthenticationType.EngineToken;
             if (StringComparer.OrdinalIgnoreCase.Equals(value, "ENGINE_CERTIFICATE")) return AuthenticationType.EngineCertificate;
             throw new ArgumentOutOfRangeException(nameof(value), value, "Unknown AuthenticationType value.");

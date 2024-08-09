@@ -8,7 +8,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Azure.Core;
 
 namespace KuFlow.Rest.Models
 {
@@ -19,7 +18,7 @@ namespace KuFlow.Rest.Models
         /// <param name="metadata"></param>
         /// <param name="content"></param>
         /// <exception cref="ArgumentNullException"> <paramref name="metadata"/> or <paramref name="content"/> is null. </exception>
-        internal PrincipalPage(PageMetadata metadata, IEnumerable<Principal> content) : base(metadata)
+        internal PrincipalPage(PageMetadata metadata, IEnumerable<PrincipalPageItem> content) : base(metadata)
         {
             Argument.AssertNotNull(metadata, nameof(metadata));
             Argument.AssertNotNull(content, nameof(content));
@@ -28,15 +27,17 @@ namespace KuFlow.Rest.Models
         }
 
         /// <summary> Initializes a new instance of <see cref="PrincipalPage"/>. </summary>
-        /// <param name="objectType"> Paged Model types. </param>
         /// <param name="metadata"></param>
         /// <param name="content"></param>
-        internal PrincipalPage(PagedObjectType? objectType, PageMetadata metadata, IReadOnlyList<Principal> content) : base(objectType, metadata)
+        /// <exception cref="ArgumentNullException"> <paramref name="metadata"/> is null. </exception>
+        internal PrincipalPage(PageMetadata metadata, IReadOnlyList<PrincipalPageItem> content) : base(metadata)
         {
+            Argument.AssertNotNull(metadata, nameof(metadata));
+
             Content = content;
         }
 
         /// <summary> Gets the content. </summary>
-        public IReadOnlyList<Principal> Content { get; }
+        public IReadOnlyList<PrincipalPageItem> Content { get; }
     }
 }

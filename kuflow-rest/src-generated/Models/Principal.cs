@@ -13,7 +13,7 @@ namespace KuFlow.Rest.Models
     public partial class Principal
     {
         /// <summary> Initializes a new instance of <see cref="Principal"/>. </summary>
-        public Principal()
+        internal Principal()
         {
         }
 
@@ -32,15 +32,15 @@ namespace KuFlow.Rest.Models
             Application = application;
         }
 
-        /// <summary> Gets or sets the id. </summary>
-        public Guid? Id { get; set; }
-        /// <summary> Gets or sets the type. </summary>
-        public PrincipalType? Type { get; set; }
-        /// <summary> Gets or sets the name. </summary>
-        public string Name { get; set; }
-        /// <summary> Gets or sets the user. </summary>
-        public PrincipalUser User { get; set; }
-        /// <summary> Gets or sets the application. </summary>
-        public PrincipalApplication Application { get; set; }
+        /// <summary> Gets the id. </summary>
+        public Guid? Id { get; }
+        /// <summary> Gets the type. </summary>
+        public PrincipalType? Type { get; }
+        /// <summary> Gets the name. </summary>
+        public string Name { get; }
+        /// <summary> Gets the user. </summary>
+        public PrincipalUser User { get; }
+        /// <summary> Gets the application. </summary>
+        public PrincipalApplication Application { get; }
     }
 }

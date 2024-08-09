@@ -13,13 +13,13 @@ namespace KuFlow.Rest
     /// <summary> Client options for KuFlowRestClient. </summary>
     public partial class KuFlowRestClientOptions : ClientOptions
     {
-        private const ServiceVersion LatestVersion = ServiceVersion.V2022_10_08;
+        private const ServiceVersion LatestVersion = ServiceVersion.V2024_06_14;
 
         /// <summary> The version of the service to use. </summary>
         public enum ServiceVersion
         {
-            /// <summary> Service version "2022-10-08". </summary>
-            V2022_10_08 = 1,
+            /// <summary> Service version "2024-06-14". </summary>
+            V2024_06_14 = 1,
         }
 
         internal string Version { get; }
@@ -29,7 +29,7 @@ namespace KuFlow.Rest
         {
             Version = version switch
             {
-                ServiceVersion.V2022_10_08 => "2022-10-08",
+                ServiceVersion.V2024_06_14 => "2024-06-14",
                 _ => throw new NotSupportedException()
             };
         }

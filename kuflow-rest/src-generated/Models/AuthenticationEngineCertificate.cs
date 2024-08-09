@@ -6,7 +6,6 @@
 #nullable disable
 
 using System;
-using Azure.Core;
 
 namespace KuFlow.Rest.Models
 {
@@ -17,7 +16,7 @@ namespace KuFlow.Rest.Models
         /// <param name="namespace"></param>
         /// <param name="tls"></param>
         /// <exception cref="ArgumentNullException"> <paramref name="namespace"/> or <paramref name="tls"/> is null. </exception>
-        public AuthenticationEngineCertificate(string @namespace, AuthenticationEngineCertificateTls tls)
+        internal AuthenticationEngineCertificate(string @namespace, AuthenticationEngineCertificateTls tls)
         {
             Argument.AssertNotNull(@namespace, nameof(@namespace));
             Argument.AssertNotNull(tls, nameof(tls));
@@ -26,9 +25,9 @@ namespace KuFlow.Rest.Models
             Tls = tls;
         }
 
-        /// <summary> Gets or sets the namespace. </summary>
-        public string Namespace { get; set; }
-        /// <summary> Gets or sets the tls. </summary>
-        public AuthenticationEngineCertificateTls Tls { get; set; }
+        /// <summary> Gets the namespace. </summary>
+        public string Namespace { get; }
+        /// <summary> Gets the tls. </summary>
+        public AuthenticationEngineCertificateTls Tls { get; }
     }
 }

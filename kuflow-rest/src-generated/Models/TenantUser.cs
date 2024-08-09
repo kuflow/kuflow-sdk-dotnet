@@ -6,7 +6,6 @@
 #nullable disable
 
 using System;
-using Azure.Core;
 
 namespace KuFlow.Rest.Models
 {
@@ -18,7 +17,7 @@ namespace KuFlow.Rest.Models
         /// <param name="principal"></param>
         /// <param name="tenantId"></param>
         /// <exception cref="ArgumentNullException"> <paramref name="principal"/> is null. </exception>
-        public TenantUser(Guid id, Principal principal, Guid tenantId)
+        internal TenantUser(Guid id, Principal principal, Guid tenantId)
         {
             Argument.AssertNotNull(principal, nameof(principal));
 
@@ -28,16 +27,15 @@ namespace KuFlow.Rest.Models
         }
 
         /// <summary> Initializes a new instance of <see cref="TenantUser"/>. </summary>
-        /// <param name="objectType"> Audited object Types. </param>
         /// <param name="createdBy"> Who create this model. </param>
         /// <param name="createdAt"> When this model was created. </param>
         /// <param name="lastModifiedBy"> Who was last update this model. </param>
         /// <param name="lastModifiedAt"> When this model type was last updated. </param>
         /// <param name="id"></param>
-        /// <param name="metadata"></param>
+        /// <param name="metadata"> Json value. </param>
         /// <param name="principal"></param>
         /// <param name="tenantId"></param>
-        internal TenantUser(AuditedObjectType? objectType, Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid id, TenantUserMetadata metadata, Principal principal, Guid tenantId) : base(objectType, createdBy, createdAt, lastModifiedBy, lastModifiedAt)
+        internal TenantUser(Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid id, JsonValue metadata, Principal principal, Guid tenantId) : base(createdBy, createdAt, lastModifiedBy, lastModifiedAt)
         {
             Id = id;
             Metadata = metadata;
@@ -45,12 +43,12 @@ namespace KuFlow.Rest.Models
             TenantId = tenantId;
         }
 
-        /// <summary> Gets or sets the id. </summary>
-        public Guid Id { get; set; }
-        /// <summary> Gets or sets the metadata. </summary>
-        public TenantUserMetadata Metadata { get; set; }
-        /// <summary> Gets or sets the principal. </summary>
-        public Principal Principal { get; set; }
+        /// <summary> Gets the id. </summary>
+        public Guid Id { get; }
+        /// <summary> Json value. </summary>
+        public JsonValue Metadata { get; }
+        /// <summary> Gets the principal. </summary>
+        public Principal Principal { get; }
         /// <summary> Gets the tenant id. </summary>
         public Guid TenantId { get; }
     }

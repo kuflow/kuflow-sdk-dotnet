@@ -12,7 +12,7 @@ namespace KuFlow.Rest.Models
     {
         /// <summary> PACKAGE. </summary>
         Package,
-        /// <summary> ROBOT_FRAMEWORK_PYTHON_WHEEL. </summary>
-        RobotFrameworkPythonWheel
+        /// <summary> UNKNOWN. </summary>
+        Unknown
     }
 }

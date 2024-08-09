@@ -10,9 +10,13 @@ namespace KuFlow.Rest.Models
     /// <summary> Type of the Event. </summary>
     internal enum WebhookType
     {
+        /// <summary> PROCESS.CREATED. </summary>
+        ProcessCreated,
         /// <summary> PROCESS.STATE_CHANGED. </summary>
         ProcessStateChanged,
-        /// <summary> TASK.STATE_CHANGED. </summary>
-        TaskStateChanged
+        /// <summary> PROCESS_ITEM.CREATED. </summary>
+        ProcessItemCreated,
+        /// <summary> PROCESS_ITEM.TASK_STATE_CHANGED. </summary>
+        ProcessItemTaskStateChanged
     }
 }

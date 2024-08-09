@@ -7,30 +7,12 @@
 
 using System;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class ProcessDefinitionSummary : IUtf8JsonSerializable
+    public partial class ProcessDefinitionSummary
     {
-        void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
-        {
-            writer.WriteStartObject();
-            writer.WritePropertyName("id"u8);
-            writer.WriteStringValue(Id);
-            if (Optional.IsDefined(Version))
-            {
-                writer.WritePropertyName("version"u8);
-                writer.WriteStringValue(Version.Value);
-            }
-            if (Optional.IsDefined(Name))
-            {
-                writer.WritePropertyName("name"u8);
-                writer.WriteStringValue(Name);
-            }
-            writer.WriteEndObject();
-        }
-
         internal static ProcessDefinitionSummary DeserializeProcessDefinitionSummary(JsonElement element)
         {
             if (element.ValueKind == JsonValueKind.Null)
@@ -38,8 +20,8 @@ namespace KuFlow.Rest.Models
                 return null;
             }
             Guid id = default;
-            Optional<Guid> version = default;
-            Optional<string> name = default;
+            Guid version = default;
+            string name = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("id"u8))
@@ -49,10 +31,6 @@ namespace KuFlow.Rest.Models
                 }
                 if (property.NameEquals("version"u8))
                 {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
                     version = property.Value.GetGuid();
                     continue;
                 }
@@ -62,7 +40,15 @@ namespace KuFlow.Rest.Models
                     continue;
                 }
             }
-            return new ProcessDefinitionSummary(id, Optional.ToNullable(version), name.Value);
+            return new ProcessDefinitionSummary(id, version, name);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static ProcessDefinitionSummary FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeProcessDefinitionSummary(document.RootElement);
         }
     }
 }

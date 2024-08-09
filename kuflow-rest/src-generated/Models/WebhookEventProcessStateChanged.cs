@@ -6,7 +6,6 @@
 #nullable disable
 
 using System;
-using Azure.Core;
 
 namespace KuFlow.Rest.Models
 {
@@ -15,11 +14,13 @@ namespace KuFlow.Rest.Models
     {
         /// <summary> Initializes a new instance of <see cref="WebhookEventProcessStateChanged"/>. </summary>
         /// <param name="id"></param>
+        /// <param name="version"></param>
         /// <param name="timestamp"></param>
         /// <param name="data"></param>
-        /// <exception cref="ArgumentNullException"> <paramref name="data"/> is null. </exception>
-        internal WebhookEventProcessStateChanged(Guid id, DateTimeOffset timestamp, WebhookEventProcessStateChangedData data) : base(id, timestamp)
+        /// <exception cref="ArgumentNullException"> <paramref name="version"/> or <paramref name="data"/> is null. </exception>
+        internal WebhookEventProcessStateChanged(Guid id, string version, DateTimeOffset timestamp, WebhookEventProcessStateChangedData data) : base(id, version, timestamp)
         {
+            Argument.AssertNotNull(version, nameof(version));
             Argument.AssertNotNull(data, nameof(data));
 
             Data = data;
@@ -28,10 +29,11 @@ namespace KuFlow.Rest.Models
 
         /// <summary> Initializes a new instance of <see cref="WebhookEventProcessStateChanged"/>. </summary>
         /// <param name="id"></param>
+        /// <param name="version"></param>
         /// <param name="type"> Type of the Event. </param>
         /// <param name="timestamp"></param>
         /// <param name="data"></param>
-        internal WebhookEventProcessStateChanged(Guid id, WebhookType type, DateTimeOffset timestamp, WebhookEventProcessStateChangedData data) : base(id, type, timestamp)
+        internal WebhookEventProcessStateChanged(Guid id, string version, WebhookType type, DateTimeOffset timestamp, WebhookEventProcessStateChangedData data) : base(id, version, type, timestamp)
         {
             Data = data;
             Type = type;

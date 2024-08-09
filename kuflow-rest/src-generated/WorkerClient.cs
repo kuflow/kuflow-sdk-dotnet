@@ -37,7 +37,7 @@ namespace KuFlow.Rest
             {
                 throw new ArgumentNullException(nameof(credential));
             }
-            endpoint ??= new Uri("https://api.kuflow.com/v2022-10-08");
+            endpoint ??= new Uri("https://api.kuflow.com/v2024-06-14");
 
             options ??= new KuFlowRestClientOptions();
             _clientDiagnostics = new ClientDiagnostics(options);
@@ -59,7 +59,7 @@ namespace KuFlow.Rest
         }
 
         /// <summary> Create or update a worker. </summary>
-        /// <param name="worker"> Worker to create or update. </param>
+        /// <param name="workerCreateParams"> Worker to create or update. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// Register a worker in KuFlow, this allows the platform to have a catalogue of all registered workers.
@@ -67,13 +67,13 @@ namespace KuFlow.Rest
         /// If already exist a worker for the same identity, the worker will be updated.
         ///
         /// </remarks>
-        public virtual async Task<Response<Worker>> CreateWorkerAsync(Worker worker, CancellationToken cancellationToken = default)
+        public virtual async Task<Response<Worker>> CreateWorkerAsync(WorkerCreateParams workerCreateParams, CancellationToken cancellationToken = default)
         {
             using var scope = _clientDiagnostics.CreateScope("WorkerClient.CreateWorker");
             scope.Start();
             try
             {
-                return await RestClient.CreateWorkerAsync(worker, cancellationToken).ConfigureAwait(false);
+                return await RestClient.CreateWorkerAsync(workerCreateParams, cancellationToken).ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -83,7 +83,7 @@ namespace KuFlow.Rest
         }
 
         /// <summary> Create or update a worker. </summary>
-        /// <param name="worker"> Worker to create or update. </param>
+        /// <param name="workerCreateParams"> Worker to create or update. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// Register a worker in KuFlow, this allows the platform to have a catalogue of all registered workers.
@@ -91,13 +91,13 @@ namespace KuFlow.Rest
         /// If already exist a worker for the same identity, the worker will be updated.
         ///
         /// </remarks>
-        public virtual Response<Worker> CreateWorker(Worker worker, CancellationToken cancellationToken = default)
+        public virtual Response<Worker> CreateWorker(WorkerCreateParams workerCreateParams, CancellationToken cancellationToken = default)
         {
             using var scope = _clientDiagnostics.CreateScope("WorkerClient.CreateWorker");
             scope.Start();
             try
             {
-                return RestClient.CreateWorker(worker, cancellationToken);
+                return RestClient.CreateWorker(workerCreateParams, cancellationToken);
             }
             catch (Exception e)
             {

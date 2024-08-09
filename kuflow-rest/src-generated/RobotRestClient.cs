@@ -35,7 +35,7 @@ namespace KuFlow.Rest
         {
             ClientDiagnostics = clientDiagnostics ?? throw new ArgumentNullException(nameof(clientDiagnostics));
             _pipeline = pipeline ?? throw new ArgumentNullException(nameof(pipeline));
-            _endpoint = endpoint ?? new Uri("https://api.kuflow.com/v2022-10-08");
+            _endpoint = endpoint ?? new Uri("https://api.kuflow.com/v2024-06-14");
         }
 
         internal HttpMessage CreateFindRobotsRequest(int? size, int? page, IEnumerable<string> sort, IEnumerable<Guid> tenantId, RobotFilterContext? filterContext)
@@ -54,14 +54,14 @@ namespace KuFlow.Rest
             {
                 uri.AppendQuery("page", page.Value, true);
             }
-            if (sort != null && Optional.IsCollectionDefined(sort))
+            if (sort != null && !(sort is ChangeTrackingList<string> changeTrackingList && changeTrackingList.IsUndefined))
             {
                 foreach (var param in sort)
                 {
                     uri.AppendQuery("sort", param, true);
                 }
             }
-            if (tenantId != null && Optional.IsCollectionDefined(tenantId))
+            if (tenantId != null && !(tenantId is ChangeTrackingList<Guid> changeTrackingList0 && changeTrackingList0.IsUndefined))
             {
                 foreach (var param in tenantId)
                 {
@@ -211,7 +211,7 @@ namespace KuFlow.Rest
             }
         }
 
-        internal HttpMessage CreateActionsRobotDownloadSourceCodeRequest(Guid id)
+        internal HttpMessage CreateDownloadRobotSourceCodeRequest(Guid id)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -230,9 +230,9 @@ namespace KuFlow.Rest
         /// <param name="id"> The resource ID. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks> Given a robot, download the source code. </remarks>
-        public async Task<Response<Stream>> ActionsRobotDownloadSourceCodeAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<Response<Stream>> DownloadRobotSourceCodeAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            using var message = CreateActionsRobotDownloadSourceCodeRequest(id);
+            using var message = CreateDownloadRobotSourceCodeRequest(id);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
@@ -250,9 +250,9 @@ namespace KuFlow.Rest
         /// <param name="id"> The resource ID. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks> Given a robot, download the source code. </remarks>
-        public Response<Stream> ActionsRobotDownloadSourceCode(Guid id, CancellationToken cancellationToken = default)
+        public Response<Stream> DownloadRobotSourceCode(Guid id, CancellationToken cancellationToken = default)
         {
-            using var message = CreateActionsRobotDownloadSourceCodeRequest(id);
+            using var message = CreateDownloadRobotSourceCodeRequest(id);
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {
@@ -266,7 +266,7 @@ namespace KuFlow.Rest
             }
         }
 
-        internal HttpMessage CreateActionsRobotDownloadAssetRequest(Guid id, RobotAssetType type, string version, RobotAssetPlatform platform, RobotAssetArchitecture architecture)
+        internal HttpMessage CreateDownloadRobotAssetRequest(Guid id, RobotAssetType type, string version, RobotAssetPlatform platform, RobotAssetArchitecture architecture)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -294,14 +294,14 @@ namespace KuFlow.Rest
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="version"/> is null. </exception>
         /// <remarks> Given a robot, download the requested asset. </remarks>
-        public async Task<Response<Stream>> ActionsRobotDownloadAssetAsync(Guid id, RobotAssetType type, string version, RobotAssetPlatform platform, RobotAssetArchitecture architecture, CancellationToken cancellationToken = default)
+        public async Task<Response<Stream>> DownloadRobotAssetAsync(Guid id, RobotAssetType type, string version, RobotAssetPlatform platform, RobotAssetArchitecture architecture, CancellationToken cancellationToken = default)
         {
             if (version == null)
             {
                 throw new ArgumentNullException(nameof(version));
             }
 
-            using var message = CreateActionsRobotDownloadAssetRequest(id, type, version, platform, architecture);
+            using var message = CreateDownloadRobotAssetRequest(id, type, version, platform, architecture);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
@@ -324,14 +324,14 @@ namespace KuFlow.Rest
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="version"/> is null. </exception>
         /// <remarks> Given a robot, download the requested asset. </remarks>
-        public Response<Stream> ActionsRobotDownloadAsset(Guid id, RobotAssetType type, string version, RobotAssetPlatform platform, RobotAssetArchitecture architecture, CancellationToken cancellationToken = default)
+        public Response<Stream> DownloadRobotAsset(Guid id, RobotAssetType type, string version, RobotAssetPlatform platform, RobotAssetArchitecture architecture, CancellationToken cancellationToken = default)
         {
             if (version == null)
             {
                 throw new ArgumentNullException(nameof(version));
             }
 
-            using var message = CreateActionsRobotDownloadAssetRequest(id, type, version, platform, architecture);
+            using var message = CreateDownloadRobotAssetRequest(id, type, version, platform, architecture);
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {

@@ -7,7 +7,6 @@
 
 using System;
 using System.Collections.Generic;
-using Azure.Core;
 
 namespace KuFlow.Rest.Models
 {
@@ -19,21 +18,25 @@ namespace KuFlow.Rest.Models
         /// <param name="code"> Robot Code. </param>
         /// <param name="name"> Robot name. </param>
         /// <param name="sourceType"> Robot source type. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="code"/> or <paramref name="name"/> is null. </exception>
-        public Robot(Guid id, string code, string name, RobotSourceType sourceType)
+        /// <param name="sourceFile"> Robot source type. </param>
+        /// <param name="tenantId"> Tenant ID. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="code"/>, <paramref name="name"/> or <paramref name="sourceFile"/> is null. </exception>
+        internal Robot(Guid id, string code, string name, RobotSourceType sourceType, RobotSourceFile sourceFile, Guid tenantId)
         {
             Argument.AssertNotNull(code, nameof(code));
             Argument.AssertNotNull(name, nameof(name));
+            Argument.AssertNotNull(sourceFile, nameof(sourceFile));
 
             Id = id;
             Code = code;
             Name = name;
             SourceType = sourceType;
+            SourceFile = sourceFile;
             EnvironmentVariables = new ChangeTrackingDictionary<string, string>();
+            TenantId = tenantId;
         }
 
         /// <summary> Initializes a new instance of <see cref="Robot"/>. </summary>
-        /// <param name="objectType"> Audited object Types. </param>
         /// <param name="createdBy"> Who create this model. </param>
         /// <param name="createdAt"> When this model was created. </param>
         /// <param name="lastModifiedBy"> Who was last update this model. </param>
@@ -46,7 +49,7 @@ namespace KuFlow.Rest.Models
         /// <param name="sourceFile"> Robot source type. </param>
         /// <param name="environmentVariables"> Environment variables to load when the robot is executed. </param>
         /// <param name="tenantId"> Tenant ID. </param>
-        internal Robot(AuditedObjectType? objectType, Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid id, string code, string name, string description, RobotSourceType sourceType, RobotSourceFile sourceFile, IDictionary<string, string> environmentVariables, Guid? tenantId) : base(objectType, createdBy, createdAt, lastModifiedBy, lastModifiedAt)
+        internal Robot(Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid id, string code, string name, string description, RobotSourceType sourceType, RobotSourceFile sourceFile, IReadOnlyDictionary<string, string> environmentVariables, Guid tenantId) : base(createdBy, createdAt, lastModifiedBy, lastModifiedAt)
         {
             Id = id;
             Code = code;
@@ -59,20 +62,20 @@ namespace KuFlow.Rest.Models
         }
 
         /// <summary> Robot ID. </summary>
-        public Guid Id { get; set; }
+        public Guid Id { get; }
         /// <summary> Robot Code. </summary>
-        public string Code { get; set; }
+        public string Code { get; }
         /// <summary> Robot name. </summary>
-        public string Name { get; set; }
+        public string Name { get; }
         /// <summary> Robot description. </summary>
-        public string Description { get; set; }
+        public string Description { get; }
         /// <summary> Robot source type. </summary>
-        public RobotSourceType SourceType { get; set; }
+        public RobotSourceType SourceType { get; }
         /// <summary> Robot source type. </summary>
-        public RobotSourceFile SourceFile { get; set; }
+        public RobotSourceFile SourceFile { get; }
         /// <summary> Environment variables to load when the robot is executed. </summary>
-        public IDictionary<string, string> EnvironmentVariables { get; }
+        public IReadOnlyDictionary<string, string> EnvironmentVariables { get; }
         /// <summary> Tenant ID. </summary>
-        public Guid? TenantId { get; set; }
+        public Guid TenantId { get; }
     }
 }

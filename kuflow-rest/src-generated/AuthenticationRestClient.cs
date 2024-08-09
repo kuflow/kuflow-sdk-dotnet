@@ -33,10 +33,10 @@ namespace KuFlow.Rest
         {
             ClientDiagnostics = clientDiagnostics ?? throw new ArgumentNullException(nameof(clientDiagnostics));
             _pipeline = pipeline ?? throw new ArgumentNullException(nameof(pipeline));
-            _endpoint = endpoint ?? new Uri("https://api.kuflow.com/v2022-10-08");
+            _endpoint = endpoint ?? new Uri("https://api.kuflow.com/v2024-06-14");
         }
 
-        internal HttpMessage CreateCreateAuthenticationRequest(Authentication authentication)
+        internal HttpMessage CreateCreateAuthenticationRequest(AuthenticationCreateParams authenticationCreateParams)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -48,23 +48,23 @@ namespace KuFlow.Rest
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(authentication);
+            content.JsonWriter.WriteObjectValue(authenticationCreateParams);
             request.Content = content;
             return message;
         }
 
         /// <summary> Create an authentication for the current principal. </summary>
-        /// <param name="authentication"> Authentication to be created. </param>
+        /// <param name="authenticationCreateParams"> Authentication to be created. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="authentication"/> is null. </exception>
-        public async Task<Response<Authentication>> CreateAuthenticationAsync(Authentication authentication, CancellationToken cancellationToken = default)
+        /// <exception cref="ArgumentNullException"> <paramref name="authenticationCreateParams"/> is null. </exception>
+        public async Task<Response<Authentication>> CreateAuthenticationAsync(AuthenticationCreateParams authenticationCreateParams, CancellationToken cancellationToken = default)
         {
-            if (authentication == null)
+            if (authenticationCreateParams == null)
             {
-                throw new ArgumentNullException(nameof(authentication));
+                throw new ArgumentNullException(nameof(authenticationCreateParams));
             }
 
-            using var message = CreateCreateAuthenticationRequest(authentication);
+            using var message = CreateCreateAuthenticationRequest(authenticationCreateParams);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
@@ -81,17 +81,17 @@ namespace KuFlow.Rest
         }
 
         /// <summary> Create an authentication for the current principal. </summary>
-        /// <param name="authentication"> Authentication to be created. </param>
+        /// <param name="authenticationCreateParams"> Authentication to be created. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="authentication"/> is null. </exception>
-        public Response<Authentication> CreateAuthentication(Authentication authentication, CancellationToken cancellationToken = default)
+        /// <exception cref="ArgumentNullException"> <paramref name="authenticationCreateParams"/> is null. </exception>
+        public Response<Authentication> CreateAuthentication(AuthenticationCreateParams authenticationCreateParams, CancellationToken cancellationToken = default)
         {
-            if (authentication == null)
+            if (authenticationCreateParams == null)
             {
-                throw new ArgumentNullException(nameof(authentication));
+                throw new ArgumentNullException(nameof(authenticationCreateParams));
             }
 
-            using var message = CreateCreateAuthenticationRequest(authentication);
+            using var message = CreateCreateAuthenticationRequest(authenticationCreateParams);
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {
