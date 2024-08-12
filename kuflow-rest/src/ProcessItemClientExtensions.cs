@@ -73,7 +73,17 @@ public partial class ProcessItemClient
     var taskDefinitionCode = options?.GetTaskDefinitionCodes();
     var tenantId = options?.GetTenantIds();
 
-    return FindProcessItemsAsync(size, page, sort, processId, types, taskStates, taskDefinitionCode, tenantId, cancellationToken);
+    return FindProcessItemsAsync(
+      size,
+      page,
+      sort,
+      processId,
+      types,
+      taskStates,
+      taskDefinitionCode,
+      tenantId,
+      cancellationToken
+    );
   }
 
   /// <summary> Find all accessible Process items. </summary>
@@ -85,7 +95,10 @@ public partial class ProcessItemClient
   /// Available sort query values: id, createdAt, lastModifiedAt, claimedAt, completedAt, cancelledAt
   ///
   /// </remarks>
-  public Response<ProcessItemPage> FindProcessItems(ProcessItemFindOptions? options = null, CancellationToken cancellationToken = default)
+  public Response<ProcessItemPage> FindProcessItems(
+    ProcessItemFindOptions? options = null,
+    CancellationToken cancellationToken = default
+  )
   {
     var size = options?.Size;
     var page = options?.Page;
@@ -96,6 +109,16 @@ public partial class ProcessItemClient
     var taskDefinitionCode = options?.GetTaskDefinitionCodes();
     var tenantId = options?.GetTenantIds();
 
-    return FindProcessItems(size, page, sort, processId, types, taskStates, taskDefinitionCode, tenantId, cancellationToken);
+    return FindProcessItems(
+      size,
+      page,
+      sort,
+      processId,
+      types,
+      taskStates,
+      taskDefinitionCode,
+      tenantId,
+      cancellationToken
+    );
   }
 }
