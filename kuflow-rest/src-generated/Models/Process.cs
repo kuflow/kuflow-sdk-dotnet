@@ -6,8 +6,6 @@
 #nullable disable
 
 using System;
-using System.Collections.Generic;
-using Azure.Core;
 
 namespace KuFlow.Rest.Models
 {
@@ -15,67 +13,61 @@ namespace KuFlow.Rest.Models
     public partial class Process : AbstractAudited
     {
         /// <summary> Initializes a new instance of <see cref="Process"/>. </summary>
+        /// <param name="id"> Process ID. </param>
+        /// <param name="state"> Process state. </param>
         /// <param name="processDefinition"></param>
+        /// <param name="tenantId"> Tenant ID. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="processDefinition"/> is null. </exception>
-        public Process(ProcessDefinitionSummary processDefinition)
+        internal Process(Guid id, ProcessState state, ProcessDefinitionSummary processDefinition, Guid tenantId)
         {
             Argument.AssertNotNull(processDefinition, nameof(processDefinition));
 
+            Id = id;
+            State = state;
             ProcessDefinition = processDefinition;
-            ElementValues = new ChangeTrackingDictionary<string, IList<ProcessElementValue>>();
+            TenantId = tenantId;
         }
 
         /// <summary> Initializes a new instance of <see cref="Process"/>. </summary>
-        /// <param name="objectType"> Audited object Types. </param>
         /// <param name="createdBy"> Who create this model. </param>
         /// <param name="createdAt"> When this model was created. </param>
         /// <param name="lastModifiedBy"> Who was last update this model. </param>
         /// <param name="lastModifiedAt"> When this model type was last updated. </param>
         /// <param name="id"> Process ID. </param>
-        /// <param name="subject"> Process subject. </param>
         /// <param name="state"> Process state. </param>
         /// <param name="processDefinition"></param>
-        /// <param name="elementValues"> Process element values, an ElementValueDocument is not allowed. </param>
-        /// <param name="entity">
-        /// Json form values, used when the render type selected is JSON Forms.
-        ///
-        /// </param>
-        /// <param name="initiator"></param>
-        /// <param name="relatedProcess"></param>
+        /// <param name="metadata"> Json value. </param>
+        /// <param name="entity"> Json value. </param>
+        /// <param name="processRelated"></param>
+        /// <param name="initiatorId"> Process initiator id, Principal ID. </param>
         /// <param name="tenantId"> Tenant ID. </param>
-        internal Process(AuditedObjectType? objectType, Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid? id, string subject, ProcessState? state, ProcessDefinitionSummary processDefinition, IDictionary<string, IList<ProcessElementValue>> elementValues, JsonFormsValue entity, Principal initiator, RelatedProcess relatedProcess, Guid? tenantId) : base(objectType, createdBy, createdAt, lastModifiedBy, lastModifiedAt)
+        internal Process(Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid id, ProcessState state, ProcessDefinitionSummary processDefinition, JsonValue metadata, JsonValue entity, ProcessRelated processRelated, Guid? initiatorId, Guid tenantId) : base(createdBy, createdAt, lastModifiedBy, lastModifiedAt)
         {
             Id = id;
-            Subject = subject;
             State = state;
             ProcessDefinition = processDefinition;
-            ElementValues = elementValues;
+            Metadata = metadata;
             Entity = entity;
-            Initiator = initiator;
-            RelatedProcess = relatedProcess;
+            ProcessRelated = processRelated;
+            InitiatorId = initiatorId;
             TenantId = tenantId;
         }
 
         /// <summary> Process ID. </summary>
-        public Guid? Id { get; set; }
-        /// <summary> Process subject. </summary>
-        public string Subject { get; set; }
+        public Guid Id { get; }
         /// <summary> Process state. </summary>
-        public ProcessState? State { get; set; }
-        /// <summary> Gets or sets the process definition. </summary>
-        public ProcessDefinitionSummary ProcessDefinition { get; set; }
-        /// <summary> Process element values, an ElementValueDocument is not allowed. </summary>
-        public IDictionary<string, IList<ProcessElementValue>> ElementValues { get; }
-        /// <summary>
-        /// Json form values, used when the render type selected is JSON Forms.
-        ///
-        /// </summary>
-        public JsonFormsValue Entity { get; set; }
-        /// <summary> Gets or sets the initiator. </summary>
-        public Principal Initiator { get; set; }
-        /// <summary> Gets or sets the related process. </summary>
-        public RelatedProcess RelatedProcess { get; set; }
+        public ProcessState State { get; }
+        /// <summary> Gets the process definition. </summary>
+        public ProcessDefinitionSummary ProcessDefinition { get; }
+        /// <summary> Json value. </summary>
+        public JsonValue Metadata { get; }
+        /// <summary> Json value. </summary>
+        public JsonValue Entity { get; }
+        /// <summary> Gets the process related. </summary>
+        public ProcessRelated ProcessRelated { get; }
+        /// <summary> Process initiator id, Principal ID. </summary>
+        public Guid? InitiatorId { get; }
         /// <summary> Tenant ID. </summary>
-        public Guid? TenantId { get; set; }
+        public Guid TenantId { get; }
     }
 }

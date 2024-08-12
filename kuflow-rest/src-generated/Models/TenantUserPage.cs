@@ -8,7 +8,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Azure.Core;
 
 namespace KuFlow.Rest.Models
 {
@@ -19,7 +18,7 @@ namespace KuFlow.Rest.Models
         /// <param name="metadata"></param>
         /// <param name="content"></param>
         /// <exception cref="ArgumentNullException"> <paramref name="metadata"/> or <paramref name="content"/> is null. </exception>
-        internal TenantUserPage(PageMetadata metadata, IEnumerable<TenantUser> content) : base(metadata)
+        internal TenantUserPage(PageMetadata metadata, IEnumerable<TenantUserPageItem> content) : base(metadata)
         {
             Argument.AssertNotNull(metadata, nameof(metadata));
             Argument.AssertNotNull(content, nameof(content));
@@ -28,15 +27,17 @@ namespace KuFlow.Rest.Models
         }
 
         /// <summary> Initializes a new instance of <see cref="TenantUserPage"/>. </summary>
-        /// <param name="objectType"> Paged Model types. </param>
         /// <param name="metadata"></param>
         /// <param name="content"></param>
-        internal TenantUserPage(PagedObjectType? objectType, PageMetadata metadata, IReadOnlyList<TenantUser> content) : base(objectType, metadata)
+        /// <exception cref="ArgumentNullException"> <paramref name="metadata"/> is null. </exception>
+        internal TenantUserPage(PageMetadata metadata, IReadOnlyList<TenantUserPageItem> content) : base(metadata)
         {
+            Argument.AssertNotNull(metadata, nameof(metadata));
+
             Content = content;
         }
 
         /// <summary> Gets the content. </summary>
-        public IReadOnlyList<TenantUser> Content { get; }
+        public IReadOnlyList<TenantUserPageItem> Content { get; }
     }
 }

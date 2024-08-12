@@ -8,7 +8,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Azure.Core;
 
 namespace KuFlow.Rest.Models
 {
@@ -19,7 +18,7 @@ namespace KuFlow.Rest.Models
         /// <param name="metadata"></param>
         /// <param name="content"></param>
         /// <exception cref="ArgumentNullException"> <paramref name="metadata"/> or <paramref name="content"/> is null. </exception>
-        internal RobotPage(PageMetadata metadata, IEnumerable<Robot> content) : base(metadata)
+        internal RobotPage(PageMetadata metadata, IEnumerable<RobotPageItem> content) : base(metadata)
         {
             Argument.AssertNotNull(metadata, nameof(metadata));
             Argument.AssertNotNull(content, nameof(content));
@@ -28,15 +27,17 @@ namespace KuFlow.Rest.Models
         }
 
         /// <summary> Initializes a new instance of <see cref="RobotPage"/>. </summary>
-        /// <param name="objectType"> Paged Model types. </param>
         /// <param name="metadata"></param>
         /// <param name="content"></param>
-        internal RobotPage(PagedObjectType? objectType, PageMetadata metadata, IReadOnlyList<Robot> content) : base(objectType, metadata)
+        /// <exception cref="ArgumentNullException"> <paramref name="metadata"/> is null. </exception>
+        internal RobotPage(PageMetadata metadata, IReadOnlyList<RobotPageItem> content) : base(metadata)
         {
+            Argument.AssertNotNull(metadata, nameof(metadata));
+
             Content = content;
         }
 
         /// <summary> Gets the content. </summary>
-        public IReadOnlyList<Robot> Content { get; }
+        public IReadOnlyList<RobotPageItem> Content { get; }
     }
 }

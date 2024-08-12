@@ -7,54 +7,23 @@
 
 using System;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class Principal : IUtf8JsonSerializable
+    public partial class Principal
     {
-        void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
-        {
-            writer.WriteStartObject();
-            if (Optional.IsDefined(Id))
-            {
-                writer.WritePropertyName("id"u8);
-                writer.WriteStringValue(Id.Value);
-            }
-            if (Optional.IsDefined(Type))
-            {
-                writer.WritePropertyName("type"u8);
-                writer.WriteStringValue(Type.Value.ToSerialString());
-            }
-            if (Optional.IsDefined(Name))
-            {
-                writer.WritePropertyName("name"u8);
-                writer.WriteStringValue(Name);
-            }
-            if (Optional.IsDefined(User))
-            {
-                writer.WritePropertyName("user"u8);
-                writer.WriteObjectValue(User);
-            }
-            if (Optional.IsDefined(Application))
-            {
-                writer.WritePropertyName("application"u8);
-                writer.WriteObjectValue(Application);
-            }
-            writer.WriteEndObject();
-        }
-
         internal static Principal DeserializePrincipal(JsonElement element)
         {
             if (element.ValueKind == JsonValueKind.Null)
             {
                 return null;
             }
-            Optional<Guid> id = default;
-            Optional<PrincipalType> type = default;
-            Optional<string> name = default;
-            Optional<PrincipalUser> user = default;
-            Optional<PrincipalApplication> application = default;
+            Guid? id = default;
+            PrincipalType? type = default;
+            string name = default;
+            PrincipalUser user = default;
+            PrincipalApplication application = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("id"u8))
@@ -99,7 +68,15 @@ namespace KuFlow.Rest.Models
                     continue;
                 }
             }
-            return new Principal(Optional.ToNullable(id), Optional.ToNullable(type), name.Value, user.Value, application.Value);
+            return new Principal(id, type, name, user, application);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static Principal FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializePrincipal(document.RootElement);
         }
     }
 }

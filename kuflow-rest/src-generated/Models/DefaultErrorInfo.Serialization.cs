@@ -6,7 +6,7 @@
 #nullable disable
 
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace KuFlow.Rest.Models
 {
@@ -20,8 +20,8 @@ namespace KuFlow.Rest.Models
             }
             string code = default;
             string message = default;
-            Optional<string> location = default;
-            Optional<string> locationType = default;
+            string location = default;
+            string locationType = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("code"u8))
@@ -45,7 +45,15 @@ namespace KuFlow.Rest.Models
                     continue;
                 }
             }
-            return new DefaultErrorInfo(code, message, location.Value, locationType.Value);
+            return new DefaultErrorInfo(code, message, location, locationType);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static DefaultErrorInfo FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDefaultErrorInfo(document.RootElement);
         }
     }
 }

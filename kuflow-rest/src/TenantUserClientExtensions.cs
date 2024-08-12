@@ -60,7 +60,7 @@ public partial class TenantUserClient
   ///
   /// </remarks>
   public Task<Response<TenantUserPage>> FindTenantUsersAsync(
-    FindTenantUsersOptions? options = null,
+    TenantUserFindOptions? options = null,
     CancellationToken cancellationToken = default
   )
   {
@@ -84,7 +84,7 @@ public partial class TenantUserClient
   ///
   /// </remarks>
   public Response<TenantUserPage> FindTenantUsers(
-    FindTenantUsersOptions? options = null,
+    TenantUserFindOptions? options = null,
     CancellationToken cancellationToken = default
   )
   {

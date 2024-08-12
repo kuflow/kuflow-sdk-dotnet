@@ -60,7 +60,7 @@ public partial class RobotClient
   ///
   /// </remarks>
   public virtual Task<Response<RobotPage>> FindRobotsAsync(
-    FindRobotsOptions? options = null,
+    RobotFindOptions? options = null,
     CancellationToken cancellationToken = default
   )
   {
@@ -83,7 +83,7 @@ public partial class RobotClient
   ///
   /// </remarks>
   public virtual Response<RobotPage> FindRobots(
-    FindRobotsOptions? options = null,
+    RobotFindOptions? options = null,
     CancellationToken cancellationToken = default
   )
   {

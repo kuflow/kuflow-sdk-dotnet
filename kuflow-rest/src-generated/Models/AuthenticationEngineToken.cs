@@ -6,7 +6,6 @@
 #nullable disable
 
 using System;
-using Azure.Core;
 
 namespace KuFlow.Rest.Models
 {
@@ -17,7 +16,7 @@ namespace KuFlow.Rest.Models
         /// <param name="token"> Engine authentication token. </param>
         /// <param name="expiredAt"></param>
         /// <exception cref="ArgumentNullException"> <paramref name="token"/> is null. </exception>
-        public AuthenticationEngineToken(string token, DateTimeOffset expiredAt)
+        internal AuthenticationEngineToken(string token, DateTimeOffset expiredAt)
         {
             Argument.AssertNotNull(token, nameof(token));
 
@@ -26,8 +25,8 @@ namespace KuFlow.Rest.Models
         }
 
         /// <summary> Engine authentication token. </summary>
-        public string Token { get; set; }
-        /// <summary> Gets or sets the expired at. </summary>
-        public DateTimeOffset ExpiredAt { get; set; }
+        public string Token { get; }
+        /// <summary> Gets the expired at. </summary>
+        public DateTimeOffset ExpiredAt { get; }
     }
 }

@@ -9,34 +9,33 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> In creation task, one of 'id, version or code' is mandatory. </summary>
+    /// <summary> The TaskDefinitionSummary. </summary>
     public partial class TaskDefinitionSummary
     {
-        /// <summary> Initializes a new instance of <see cref="TaskDefinitionSummary"/>. </summary>
-        public TaskDefinitionSummary()
-        {
-        }
-
         /// <summary> Initializes a new instance of <see cref="TaskDefinitionSummary"/>. </summary>
         /// <param name="id"></param>
         /// <param name="version"></param>
         /// <param name="code"></param>
         /// <param name="name"></param>
-        internal TaskDefinitionSummary(Guid? id, Guid? version, string code, string name)
+        /// <exception cref="ArgumentNullException"> <paramref name="code"/> or <paramref name="name"/> is null. </exception>
+        internal TaskDefinitionSummary(Guid id, Guid version, string code, string name)
         {
+            Argument.AssertNotNull(code, nameof(code));
+            Argument.AssertNotNull(name, nameof(name));
+
             Id = id;
             Version = version;
             Code = code;
             Name = name;
         }
 
-        /// <summary> Gets or sets the id. </summary>
-        public Guid? Id { get; set; }
-        /// <summary> Gets or sets the version. </summary>
-        public Guid? Version { get; set; }
-        /// <summary> Gets or sets the code. </summary>
-        public string Code { get; set; }
-        /// <summary> Gets or sets the name. </summary>
-        public string Name { get; set; }
+        /// <summary> Gets the id. </summary>
+        public Guid Id { get; }
+        /// <summary> Gets the version. </summary>
+        public Guid Version { get; }
+        /// <summary> Gets the code. </summary>
+        public string Code { get; }
+        /// <summary> Gets the name. </summary>
+        public string Name { get; }
     }
 }

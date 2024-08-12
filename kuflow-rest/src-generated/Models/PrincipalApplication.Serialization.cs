@@ -7,30 +7,19 @@
 
 using System;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class PrincipalApplication : IUtf8JsonSerializable
+    public partial class PrincipalApplication
     {
-        void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
-        {
-            writer.WriteStartObject();
-            if (Optional.IsDefined(Id))
-            {
-                writer.WritePropertyName("id"u8);
-                writer.WriteStringValue(Id.Value);
-            }
-            writer.WriteEndObject();
-        }
-
         internal static PrincipalApplication DeserializePrincipalApplication(JsonElement element)
         {
             if (element.ValueKind == JsonValueKind.Null)
             {
                 return null;
             }
-            Optional<Guid> id = default;
+            Guid? id = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("id"u8))
@@ -43,7 +32,15 @@ namespace KuFlow.Rest.Models
                     continue;
                 }
             }
-            return new PrincipalApplication(Optional.ToNullable(id));
+            return new PrincipalApplication(id);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static PrincipalApplication FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializePrincipalApplication(document.RootElement);
         }
     }
 }

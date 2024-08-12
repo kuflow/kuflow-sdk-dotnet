@@ -12,32 +12,41 @@ namespace KuFlow.Rest.Models
     /// <summary>
     /// The WebhookEvent.
     /// Please note <see cref="WebhookEvent"/> is the base class. According to the scenario, a derived class of the base class might need to be assigned here, or this property needs to be casted to one of the possible derived classes.
-    /// The available derived classes include <see cref="WebhookEventTaskStateChanged"/> and <see cref="WebhookEventProcessStateChanged"/>.
+    /// The available derived classes include <see cref="WebhookEventProcessItemCreated"/>, <see cref="WebhookEventProcessItemTaskStateChanged"/>, <see cref="WebhookEventProcessCreated"/> and <see cref="WebhookEventProcessStateChanged"/>.
     /// </summary>
     internal abstract partial class WebhookEvent
     {
         /// <summary> Initializes a new instance of <see cref="WebhookEvent"/>. </summary>
         /// <param name="id"></param>
+        /// <param name="version"></param>
         /// <param name="timestamp"></param>
-        protected WebhookEvent(Guid id, DateTimeOffset timestamp)
+        /// <exception cref="ArgumentNullException"> <paramref name="version"/> is null. </exception>
+        protected WebhookEvent(Guid id, string version, DateTimeOffset timestamp)
         {
+            Argument.AssertNotNull(version, nameof(version));
+
             Id = id;
+            Version = version;
             Timestamp = timestamp;
         }
 
         /// <summary> Initializes a new instance of <see cref="WebhookEvent"/>. </summary>
         /// <param name="id"></param>
+        /// <param name="version"></param>
         /// <param name="type"> Type of the Event. </param>
         /// <param name="timestamp"></param>
-        internal WebhookEvent(Guid id, WebhookType type, DateTimeOffset timestamp)
+        internal WebhookEvent(Guid id, string version, WebhookType type, DateTimeOffset timestamp)
         {
             Id = id;
+            Version = version;
             Type = type;
             Timestamp = timestamp;
         }
 
         /// <summary> Gets the id. </summary>
         public Guid Id { get; }
+        /// <summary> Gets the version. </summary>
+        public string Version { get; }
         /// <summary> Type of the Event. </summary>
         internal WebhookType Type { get; set; }
         /// <summary> Gets the timestamp. </summary>

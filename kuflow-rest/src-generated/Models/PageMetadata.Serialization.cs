@@ -6,6 +6,7 @@
 #nullable disable
 
 using System.Text.Json;
+using Azure;
 
 namespace KuFlow.Rest.Models
 {
@@ -45,6 +46,14 @@ namespace KuFlow.Rest.Models
                 }
             }
             return new PageMetadata(size, page, totalElements, totalPages);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static PageMetadata FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializePageMetadata(document.RootElement);
         }
     }
 }

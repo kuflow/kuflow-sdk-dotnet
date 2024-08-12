@@ -8,7 +8,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Azure.Core;
 
 namespace KuFlow.Rest.Models
 {
@@ -28,11 +27,13 @@ namespace KuFlow.Rest.Models
         }
 
         /// <summary> Initializes a new instance of <see cref="ProcessPage"/>. </summary>
-        /// <param name="objectType"> Paged Model types. </param>
         /// <param name="metadata"></param>
         /// <param name="content"></param>
-        internal ProcessPage(PagedObjectType? objectType, PageMetadata metadata, IReadOnlyList<ProcessPageItem> content) : base(objectType, metadata)
+        /// <exception cref="ArgumentNullException"> <paramref name="metadata"/> is null. </exception>
+        internal ProcessPage(PageMetadata metadata, IReadOnlyList<ProcessPageItem> content) : base(metadata)
         {
+            Argument.AssertNotNull(metadata, nameof(metadata));
+
             Content = content;
         }
 

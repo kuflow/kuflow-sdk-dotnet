@@ -13,7 +13,7 @@ namespace KuFlow.Rest.Models
     public partial class PrincipalApplication
     {
         /// <summary> Initializes a new instance of <see cref="PrincipalApplication"/>. </summary>
-        public PrincipalApplication()
+        internal PrincipalApplication()
         {
         }
 
@@ -24,7 +24,7 @@ namespace KuFlow.Rest.Models
             Id = id;
         }
 
-        /// <summary> Gets or sets the id. </summary>
-        public Guid? Id { get; set; }
+        /// <summary> Gets the id. </summary>
+        public Guid? Id { get; }
     }
 }

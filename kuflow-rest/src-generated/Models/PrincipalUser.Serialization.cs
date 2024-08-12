@@ -7,36 +7,20 @@
 
 using System;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class PrincipalUser : IUtf8JsonSerializable
+    public partial class PrincipalUser
     {
-        void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
-        {
-            writer.WriteStartObject();
-            if (Optional.IsDefined(Id))
-            {
-                writer.WritePropertyName("id"u8);
-                writer.WriteStringValue(Id.Value);
-            }
-            if (Optional.IsDefined(Email))
-            {
-                writer.WritePropertyName("email"u8);
-                writer.WriteStringValue(Email);
-            }
-            writer.WriteEndObject();
-        }
-
         internal static PrincipalUser DeserializePrincipalUser(JsonElement element)
         {
             if (element.ValueKind == JsonValueKind.Null)
             {
                 return null;
             }
-            Optional<Guid> id = default;
-            Optional<string> email = default;
+            Guid? id = default;
+            string email = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("id"u8))
@@ -54,7 +38,15 @@ namespace KuFlow.Rest.Models
                     continue;
                 }
             }
-            return new PrincipalUser(Optional.ToNullable(id), email.Value);
+            return new PrincipalUser(id, email);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static PrincipalUser FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializePrincipalUser(document.RootElement);
         }
     }
 }

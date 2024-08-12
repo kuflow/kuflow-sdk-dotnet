@@ -8,117 +8,32 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class Worker : IUtf8JsonSerializable
+    public partial class Worker
     {
-        void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
-        {
-            writer.WriteStartObject();
-            if (Optional.IsDefined(Id))
-            {
-                writer.WritePropertyName("id"u8);
-                writer.WriteStringValue(Id.Value);
-            }
-            writer.WritePropertyName("identity"u8);
-            writer.WriteStringValue(Identity);
-            writer.WritePropertyName("taskQueue"u8);
-            writer.WriteStringValue(TaskQueue);
-            if (Optional.IsCollectionDefined(WorkflowTypes))
-            {
-                writer.WritePropertyName("workflowTypes"u8);
-                writer.WriteStartArray();
-                foreach (var item in WorkflowTypes)
-                {
-                    writer.WriteStringValue(item);
-                }
-                writer.WriteEndArray();
-            }
-            if (Optional.IsCollectionDefined(ActivityTypes))
-            {
-                writer.WritePropertyName("activityTypes"u8);
-                writer.WriteStartArray();
-                foreach (var item in ActivityTypes)
-                {
-                    writer.WriteStringValue(item);
-                }
-                writer.WriteEndArray();
-            }
-            writer.WritePropertyName("hostname"u8);
-            writer.WriteStringValue(Hostname);
-            writer.WritePropertyName("ip"u8);
-            writer.WriteStringValue(Ip);
-            if (Optional.IsDefined(InstallationId))
-            {
-                writer.WritePropertyName("installationId"u8);
-                writer.WriteStringValue(InstallationId.Value);
-            }
-            if (Optional.IsCollectionDefined(RobotIds))
-            {
-                writer.WritePropertyName("robotIds"u8);
-                writer.WriteStartArray();
-                foreach (var item in RobotIds)
-                {
-                    writer.WriteStringValue(item);
-                }
-                writer.WriteEndArray();
-            }
-            if (Optional.IsDefined(TenantId))
-            {
-                writer.WritePropertyName("tenantId"u8);
-                writer.WriteStringValue(TenantId.Value);
-            }
-            if (Optional.IsDefined(ObjectType))
-            {
-                writer.WritePropertyName("objectType"u8);
-                writer.WriteStringValue(ObjectType.Value.ToSerialString());
-            }
-            if (Optional.IsDefined(CreatedBy))
-            {
-                writer.WritePropertyName("createdBy"u8);
-                writer.WriteStringValue(CreatedBy.Value);
-            }
-            if (Optional.IsDefined(CreatedAt))
-            {
-                writer.WritePropertyName("createdAt"u8);
-                writer.WriteStringValue(CreatedAt.Value, "O");
-            }
-            if (Optional.IsDefined(LastModifiedBy))
-            {
-                writer.WritePropertyName("lastModifiedBy"u8);
-                writer.WriteStringValue(LastModifiedBy.Value);
-            }
-            if (Optional.IsDefined(LastModifiedAt))
-            {
-                writer.WritePropertyName("lastModifiedAt"u8);
-                writer.WriteStringValue(LastModifiedAt.Value, "O");
-            }
-            writer.WriteEndObject();
-        }
-
         internal static Worker DeserializeWorker(JsonElement element)
         {
             if (element.ValueKind == JsonValueKind.Null)
             {
                 return null;
             }
-            Optional<Guid> id = default;
+            Guid? id = default;
             string identity = default;
             string taskQueue = default;
-            Optional<IList<string>> workflowTypes = default;
-            Optional<IList<string>> activityTypes = default;
+            IReadOnlyList<string> workflowTypes = default;
+            IReadOnlyList<string> activityTypes = default;
             string hostname = default;
             string ip = default;
-            Optional<Guid> installationId = default;
-            Optional<IList<Guid>> robotIds = default;
-            Optional<Guid> tenantId = default;
-            Optional<AuditedObjectType> objectType = default;
-            Optional<Guid> createdBy = default;
-            Optional<DateTimeOffset> createdAt = default;
-            Optional<Guid> lastModifiedBy = default;
-            Optional<DateTimeOffset> lastModifiedAt = default;
+            Guid? installationId = default;
+            IReadOnlyList<Guid> robotIds = default;
+            Guid? tenantId = default;
+            Guid? createdBy = default;
+            DateTimeOffset? createdAt = default;
+            Guid? lastModifiedBy = default;
+            DateTimeOffset? lastModifiedAt = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("id"u8))
@@ -210,15 +125,6 @@ namespace KuFlow.Rest.Models
                     tenantId = property.Value.GetGuid();
                     continue;
                 }
-                if (property.NameEquals("objectType"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    objectType = property.Value.GetString().ToAuditedObjectType();
-                    continue;
-                }
                 if (property.NameEquals("createdBy"u8))
                 {
                     if (property.Value.ValueKind == JsonValueKind.Null)
@@ -256,7 +162,29 @@ namespace KuFlow.Rest.Models
                     continue;
                 }
             }
-            return new Worker(Optional.ToNullable(objectType), Optional.ToNullable(createdBy), Optional.ToNullable(createdAt), Optional.ToNullable(lastModifiedBy), Optional.ToNullable(lastModifiedAt), Optional.ToNullable(id), identity, taskQueue, Optional.ToList(workflowTypes), Optional.ToList(activityTypes), hostname, ip, Optional.ToNullable(installationId), Optional.ToList(robotIds), Optional.ToNullable(tenantId));
+            return new Worker(
+                createdBy,
+                createdAt,
+                lastModifiedBy,
+                lastModifiedAt,
+                id,
+                identity,
+                taskQueue,
+                workflowTypes ?? new ChangeTrackingList<string>(),
+                activityTypes ?? new ChangeTrackingList<string>(),
+                hostname,
+                ip,
+                installationId,
+                robotIds ?? new ChangeTrackingList<Guid>(),
+                tenantId);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static new Worker FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeWorker(document.RootElement);
         }
     }
 }

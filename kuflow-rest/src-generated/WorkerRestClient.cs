@@ -33,10 +33,10 @@ namespace KuFlow.Rest
         {
             ClientDiagnostics = clientDiagnostics ?? throw new ArgumentNullException(nameof(clientDiagnostics));
             _pipeline = pipeline ?? throw new ArgumentNullException(nameof(pipeline));
-            _endpoint = endpoint ?? new Uri("https://api.kuflow.com/v2022-10-08");
+            _endpoint = endpoint ?? new Uri("https://api.kuflow.com/v2024-06-14");
         }
 
-        internal HttpMessage CreateCreateWorkerRequest(Worker worker)
+        internal HttpMessage CreateCreateWorkerRequest(WorkerCreateParams workerCreateParams)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -48,29 +48,29 @@ namespace KuFlow.Rest
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(worker);
+            content.JsonWriter.WriteObjectValue(workerCreateParams);
             request.Content = content;
             return message;
         }
 
         /// <summary> Create or update a worker. </summary>
-        /// <param name="worker"> Worker to create or update. </param>
+        /// <param name="workerCreateParams"> Worker to create or update. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="worker"/> is null. </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="workerCreateParams"/> is null. </exception>
         /// <remarks>
         /// Register a worker in KuFlow, this allows the platform to have a catalogue of all registered workers.
         ///
         /// If already exist a worker for the same identity, the worker will be updated.
         ///
         /// </remarks>
-        public async Task<Response<Worker>> CreateWorkerAsync(Worker worker, CancellationToken cancellationToken = default)
+        public async Task<Response<Worker>> CreateWorkerAsync(WorkerCreateParams workerCreateParams, CancellationToken cancellationToken = default)
         {
-            if (worker == null)
+            if (workerCreateParams == null)
             {
-                throw new ArgumentNullException(nameof(worker));
+                throw new ArgumentNullException(nameof(workerCreateParams));
             }
 
-            using var message = CreateCreateWorkerRequest(worker);
+            using var message = CreateCreateWorkerRequest(workerCreateParams);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
@@ -88,23 +88,23 @@ namespace KuFlow.Rest
         }
 
         /// <summary> Create or update a worker. </summary>
-        /// <param name="worker"> Worker to create or update. </param>
+        /// <param name="workerCreateParams"> Worker to create or update. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="worker"/> is null. </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="workerCreateParams"/> is null. </exception>
         /// <remarks>
         /// Register a worker in KuFlow, this allows the platform to have a catalogue of all registered workers.
         ///
         /// If already exist a worker for the same identity, the worker will be updated.
         ///
         /// </remarks>
-        public Response<Worker> CreateWorker(Worker worker, CancellationToken cancellationToken = default)
+        public Response<Worker> CreateWorker(WorkerCreateParams workerCreateParams, CancellationToken cancellationToken = default)
         {
-            if (worker == null)
+            if (workerCreateParams == null)
             {
-                throw new ArgumentNullException(nameof(worker));
+                throw new ArgumentNullException(nameof(workerCreateParams));
             }
 
-            using var message = CreateCreateWorkerRequest(worker);
+            using var message = CreateCreateWorkerRequest(workerCreateParams);
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {

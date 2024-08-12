@@ -26,90 +26,93 @@ namespace KuFlow.Samples;
 
 class Program
 {
-  static void Main(string[] args)
+  public static void Main(string[] args)
   {
     Console.WriteLine("Hello, World!");
 
     // const string clientId = "";
     // const string clientSecret = "";
     const string clientToken = "";
-    // const string taskIdentifier = "FILL_ME";
+    // const string processItemIdentifier = "FILL_ME";
     const string endpoint = "http://localhost:8080/apis/external";
 
     // {
     //   var client = new KuFlowRestClient(clientId: clientId, clientSecret: clientSecret, endpoint: endpoint);
     //
-    //   var authenticationRequest = new Authentication { Type = AuthenticationType.Engine };
-    //   var authenticationResponse = client.AuthenticationClient.CreateAuthentication(authenticationRequest);
+    //   var authenticationCreateParams = new AuthenticationCreateParams(type: AuthenticationType.EngineToken);
+    //   var authentication = client.AuthenticationClient.CreateAuthentication(authenticationCreateParams);
     //
-    //   Console.WriteLine("Authentication " + authenticationResponse);
+    //   Console.WriteLine("Authentication " + authentication);
     // }
 
     {
       // var credential = DelegatedTokenCredential.Create((_, _) => new AccessToken(oauth2Token, DateTimeOffset.MaxValue));
       var client = new KuFlowRestClient(clientToken: clientToken, endpoint: endpoint);
 
-      var authenticationRequest = new Authentication { Type = AuthenticationType.Engine };
-      var authenticationResponse = client.AuthenticationClient.CreateAuthentication(authenticationRequest);
+      var authenticationCreateParams = new AuthenticationCreateParams(type: AuthenticationType.EngineToken);
+      var authentication = client.AuthenticationClient.CreateAuthentication(authenticationCreateParams);
 
-      Console.WriteLine("Authentication " + authenticationResponse);
+      Console.WriteLine("Authentication " + authentication);
     }
 
     // {
-    // var taskId = new Guid(taskIdentifier);
-    // var taskResponse = client.TaskClient.RetrieveTask(taskId);
-    // var task = taskResponse.Value;
+    //   var client = new KuFlowRestClient(clientToken: clientToken, endpoint: endpoint);
     //
-    // Console.WriteLine("[TaskClient] ProcessId: " + task.ProcessId);
+    //   var processItemId = new Guid(processItemIdentifier);
+    //   var processItemResponse = client.ProcessItemClient.RetrieveProcessItem(processItemId);
+    //   var processItem = processItemResponse.Value;
     //
-    // taskResponse = client.TaskClient.ActionsTaskAppendLog(
-    //   taskId,
-    //   new KuFlow.Rest.Models.Log("Mensaje de prueba", KuFlow.Rest.Models.LogLevel.Info)
-    // );
+    //   Console.WriteLine("[ProcessItemClient] ProcessId: " + processItem.ProcessId);
+    //
+    //   processItem = client.ProcessItemClient.AppendProcessItemTaskLog(
+    //     processItemId,
+    //     new KuFlow.Rest.Models.ProcessItemTaskAppendLogParams(
+    //       "Test message",
+    //       KuFlow.Rest.Models.ProcessItemTaskLogLevel.Info
+    //     )
+    //   );
     // }
 
     // {
-    //   var client = new KuFlowRestClient(clientId, clientSecret);
+    //   var client = new KuFlowRestClient(clientId: clientId, clientSecret: clientSecret, endpoint: endpoint);
     //
-    //   var taskId = new Guid(taskIdentifier);
-    //   var taskResponse = client.TaskClient.RetrieveTask(taskId);
-    //   var task = taskResponse.Value;
+    //   var processItemId = new Guid(processItemIdentifier);
+    //   var processItemResponse = client.ProcessItemClient.RetrieveProcessItem(processItemId);
+    //   var processItem = processItemResponse.Value;
     //
-    //   Console.WriteLine("[KuFlowRestClient] ProcessId: " + task.ProcessId);
+    //   Console.WriteLine("[KuFlowRestClient] ProcessId: " + processItem.ProcessId);
     // }
-    //
-    // {
-    //   var client = new KuFlowRestClient(clientId, clientSecret);
-    //
-    //   var taskId = new Guid(taskIdentifier);
-    //
-    //   var filePath = "/home/user/file.jpg";
-    //
-    //   try
-    //   {
-    //     using Stream fileStream = File.Open(filePath, FileMode.Open, FileAccess.Read);
-    //     // Guess mime
-    //     var fileContentType = "image/jpeg";
-    //     var fileName = Path.GetFileName(filePath);
-    //
-    //     var taskResponse = client.TaskClient.ActionsTaskSaveElementValueDocument(
-    //       taskId,
-    //       fileContentType,
-    //       fileName,
-    //       "DOC",
-    //       fileStream,
-    //       null,
-    //       false
-    //     );
-    //     var task = taskResponse.Value;
-    //
-    //     Console.WriteLine("[KuFlowRestClient] ProcessId: " + task.ProcessId);
-    //   }
-    //   catch (Exception ex)
-    //   {
-    //     throw new Exception("Unable to upload file", ex);
-    //   }
-    // }
-    Console.WriteLine("Bye");
+
+  //   {
+  //     var client = new KuFlowRestClient(clientId: clientId, clientSecret: clientSecret, endpoint: endpoint);
+  //
+  //     var processItemId = new Guid(processItemIdentifier);
+  //
+  //     var filePath = "/home/user/file.jpg";
+  //
+  //     try
+  //     {
+  //       using Stream fileStream = File.Open(filePath, FileMode.Open, FileAccess.Read);
+  //       // Guess mime
+  //       var fileContentType = "image/jpeg";
+  //       var fileName = Path.GetFileName(filePath);
+  //
+  //       var processItemResponse = client.ProcessItemClient.UploadProcessItemTaskDataDocument(
+  //         processItemId,
+  //         fileContentType,
+  //         fileName,
+  //         "#/properties/DOC",
+  //         fileStream
+  //       );
+  //       var processItem = processItemResponse.Value;
+  //
+  //       Console.WriteLine("[KuFlowRestClient] DocumentUri: " + processItem.DocumentUri);
+  //     }
+  //     catch (Exception ex)
+  //     {
+  //       throw new Exception("Unable to upload file", ex);
+  //     }
+  //   }
+  //   Console.WriteLine("Bye");
   }
 }

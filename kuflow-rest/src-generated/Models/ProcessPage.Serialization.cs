@@ -7,7 +7,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace KuFlow.Rest.Models
 {
@@ -20,7 +20,6 @@ namespace KuFlow.Rest.Models
                 return null;
             }
             IReadOnlyList<ProcessPageItem> content = default;
-            Optional<PagedObjectType> objectType = default;
             PageMetadata metadata = default;
             foreach (var property in element.EnumerateObject())
             {
@@ -34,22 +33,21 @@ namespace KuFlow.Rest.Models
                     content = array;
                     continue;
                 }
-                if (property.NameEquals("objectType"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    objectType = property.Value.GetString().ToPagedObjectType();
-                    continue;
-                }
                 if (property.NameEquals("metadata"u8))
                 {
                     metadata = PageMetadata.DeserializePageMetadata(property.Value);
                     continue;
                 }
             }
-            return new ProcessPage(Optional.ToNullable(objectType), metadata, content);
+            return new ProcessPage(metadata, content);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static new ProcessPage FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeProcessPage(document.RootElement);
         }
     }
 }

@@ -35,7 +35,7 @@ namespace KuFlow.Rest
         {
             ClientDiagnostics = clientDiagnostics ?? throw new ArgumentNullException(nameof(clientDiagnostics));
             _pipeline = pipeline ?? throw new ArgumentNullException(nameof(pipeline));
-            _endpoint = endpoint ?? new Uri("https://api.kuflow.com/v2022-10-08");
+            _endpoint = endpoint ?? new Uri("https://api.kuflow.com/v2024-06-14");
         }
 
         internal HttpMessage CreateFindProcessesRequest(int? size, int? page, IEnumerable<string> sort, IEnumerable<Guid> tenantId)
@@ -54,14 +54,14 @@ namespace KuFlow.Rest
             {
                 uri.AppendQuery("page", page.Value, true);
             }
-            if (sort != null && Optional.IsCollectionDefined(sort))
+            if (sort != null && !(sort is ChangeTrackingList<string> changeTrackingList && changeTrackingList.IsUndefined))
             {
                 foreach (var param in sort)
                 {
                     uri.AppendQuery("sort", param, true);
                 }
             }
-            if (tenantId != null && Optional.IsCollectionDefined(tenantId))
+            if (tenantId != null && !(tenantId is ChangeTrackingList<Guid> changeTrackingList0 && changeTrackingList0.IsUndefined))
             {
                 foreach (var param in tenantId)
                 {
@@ -147,7 +147,7 @@ namespace KuFlow.Rest
             }
         }
 
-        internal HttpMessage CreateCreateProcessRequest(Process process)
+        internal HttpMessage CreateCreateProcessRequest(ProcessCreateParams processCreateParams)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -159,36 +159,29 @@ namespace KuFlow.Rest
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(process);
+            content.JsonWriter.WriteObjectValue(processCreateParams);
             request.Content = content;
             return message;
         }
 
         /// <summary> Create a new process. </summary>
-        /// <param name="process"> Process to create. </param>
+        /// <param name="processCreateParams"> Process to create. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="process"/> is null. </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="processCreateParams"/> is null. </exception>
         /// <remarks>
         /// Creates a process. This option has direct correspondence to the action of starting a process in the Kuflow GUI.
-        ///
-        /// When a process is created, the current user is assigned as the process initiator, if you want to change it, you can pass a valid initiator using the following options:
-        ///
-        /// * If you know the `principal ID` you can assign it to `initiator.id`
-        /// * If you know the `user ID` you can assign it to `initiator.user.id`
-        /// * If you know the `user email` you can assign it to `initiator.user.email`
-        /// * If you know the `application ID` you can assign it to `initiator.application.id`
         ///
         /// If you want the method to be idempotent, please specify the `id` field in the request body.
         ///
         /// </remarks>
-        public async Task<Response<Process>> CreateProcessAsync(Process process, CancellationToken cancellationToken = default)
+        public async Task<Response<Process>> CreateProcessAsync(ProcessCreateParams processCreateParams, CancellationToken cancellationToken = default)
         {
-            if (process == null)
+            if (processCreateParams == null)
             {
-                throw new ArgumentNullException(nameof(process));
+                throw new ArgumentNullException(nameof(processCreateParams));
             }
 
-            using var message = CreateCreateProcessRequest(process);
+            using var message = CreateCreateProcessRequest(processCreateParams);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
@@ -206,30 +199,23 @@ namespace KuFlow.Rest
         }
 
         /// <summary> Create a new process. </summary>
-        /// <param name="process"> Process to create. </param>
+        /// <param name="processCreateParams"> Process to create. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="process"/> is null. </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="processCreateParams"/> is null. </exception>
         /// <remarks>
         /// Creates a process. This option has direct correspondence to the action of starting a process in the Kuflow GUI.
-        ///
-        /// When a process is created, the current user is assigned as the process initiator, if you want to change it, you can pass a valid initiator using the following options:
-        ///
-        /// * If you know the `principal ID` you can assign it to `initiator.id`
-        /// * If you know the `user ID` you can assign it to `initiator.user.id`
-        /// * If you know the `user email` you can assign it to `initiator.user.email`
-        /// * If you know the `application ID` you can assign it to `initiator.application.id`
         ///
         /// If you want the method to be idempotent, please specify the `id` field in the request body.
         ///
         /// </remarks>
-        public Response<Process> CreateProcess(Process process, CancellationToken cancellationToken = default)
+        public Response<Process> CreateProcess(ProcessCreateParams processCreateParams, CancellationToken cancellationToken = default)
         {
-            if (process == null)
+            if (processCreateParams == null)
             {
-                throw new ArgumentNullException(nameof(process));
+                throw new ArgumentNullException(nameof(processCreateParams));
             }
 
-            using var message = CreateCreateProcessRequest(process);
+            using var message = CreateCreateProcessRequest(processCreateParams);
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {
@@ -304,274 +290,7 @@ namespace KuFlow.Rest
             }
         }
 
-        internal HttpMessage CreateActionsProcessChangeInitiatorRequest(Guid id, ProcessChangeInitiatorCommand command)
-        {
-            var message = _pipeline.CreateMessage();
-            var request = message.Request;
-            request.Method = RequestMethod.Post;
-            var uri = new RawRequestUriBuilder();
-            uri.Reset(_endpoint);
-            uri.AppendPath("/processes/", false);
-            uri.AppendPath(id, true);
-            uri.AppendPath("/~actions/change-initiator", false);
-            request.Uri = uri;
-            request.Headers.Add("Accept", "application/json");
-            request.Headers.Add("Content-Type", "application/json");
-            var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(command);
-            request.Content = content;
-            return message;
-        }
-
-        /// <summary> Change process initiator. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="command"> Command to change the process initiator. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="command"/> is null. </exception>
-        /// <remarks>
-        /// Change the current initiator of a process.
-        ///
-        /// Allows you to choose a user (by email or principal identifier) or an application (principal identifier).
-        /// Only one option will be necessary.
-        ///
-        /// </remarks>
-        public async Task<Response<Process>> ActionsProcessChangeInitiatorAsync(Guid id, ProcessChangeInitiatorCommand command, CancellationToken cancellationToken = default)
-        {
-            if (command == null)
-            {
-                throw new ArgumentNullException(nameof(command));
-            }
-
-            using var message = CreateActionsProcessChangeInitiatorRequest(id, command);
-            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
-            switch (message.Response.Status)
-            {
-                case 200:
-                    {
-                        Process value = default;
-                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, default, cancellationToken).ConfigureAwait(false);
-                        value = Process.DeserializeProcess(document.RootElement);
-                        return Response.FromValue(value, message.Response);
-                    }
-                default:
-                    throw new RequestFailedException(message.Response);
-            }
-        }
-
-        /// <summary> Change process initiator. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="command"> Command to change the process initiator. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="command"/> is null. </exception>
-        /// <remarks>
-        /// Change the current initiator of a process.
-        ///
-        /// Allows you to choose a user (by email or principal identifier) or an application (principal identifier).
-        /// Only one option will be necessary.
-        ///
-        /// </remarks>
-        public Response<Process> ActionsProcessChangeInitiator(Guid id, ProcessChangeInitiatorCommand command, CancellationToken cancellationToken = default)
-        {
-            if (command == null)
-            {
-                throw new ArgumentNullException(nameof(command));
-            }
-
-            using var message = CreateActionsProcessChangeInitiatorRequest(id, command);
-            _pipeline.Send(message, cancellationToken);
-            switch (message.Response.Status)
-            {
-                case 200:
-                    {
-                        Process value = default;
-                        using var document = JsonDocument.Parse(message.Response.ContentStream);
-                        value = Process.DeserializeProcess(document.RootElement);
-                        return Response.FromValue(value, message.Response);
-                    }
-                default:
-                    throw new RequestFailedException(message.Response);
-            }
-        }
-
-        internal HttpMessage CreateActionsProcessSaveElementRequest(Guid id, ProcessSaveElementCommand command)
-        {
-            var message = _pipeline.CreateMessage();
-            var request = message.Request;
-            request.Method = RequestMethod.Post;
-            var uri = new RawRequestUriBuilder();
-            uri.Reset(_endpoint);
-            uri.AppendPath("/processes/", false);
-            uri.AppendPath(id, true);
-            uri.AppendPath("/~actions/save-element", false);
-            request.Uri = uri;
-            request.Headers.Add("Accept", "application/json");
-            request.Headers.Add("Content-Type", "application/json");
-            var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(command);
-            request.Content = content;
-            return message;
-        }
-
-        /// <summary> Save a process element, aka: metadata. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="command"> Command to save an element. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="command"/> is null. </exception>
-        /// <remarks>
-        /// Allow to save an element.
-        ///
-        /// If values already exist for the provided element code, it replaces them with the new ones, otherwise it creates them. The values of the previous elements that no longer exist will be deleted.
-        ///
-        /// If the process is already finished the invocations fails with an error.
-        ///
-        /// </remarks>
-        public async Task<Response<Process>> ActionsProcessSaveElementAsync(Guid id, ProcessSaveElementCommand command, CancellationToken cancellationToken = default)
-        {
-            if (command == null)
-            {
-                throw new ArgumentNullException(nameof(command));
-            }
-
-            using var message = CreateActionsProcessSaveElementRequest(id, command);
-            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
-            switch (message.Response.Status)
-            {
-                case 200:
-                    {
-                        Process value = default;
-                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, default, cancellationToken).ConfigureAwait(false);
-                        value = Process.DeserializeProcess(document.RootElement);
-                        return Response.FromValue(value, message.Response);
-                    }
-                default:
-                    throw new RequestFailedException(message.Response);
-            }
-        }
-
-        /// <summary> Save a process element, aka: metadata. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="command"> Command to save an element. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="command"/> is null. </exception>
-        /// <remarks>
-        /// Allow to save an element.
-        ///
-        /// If values already exist for the provided element code, it replaces them with the new ones, otherwise it creates them. The values of the previous elements that no longer exist will be deleted.
-        ///
-        /// If the process is already finished the invocations fails with an error.
-        ///
-        /// </remarks>
-        public Response<Process> ActionsProcessSaveElement(Guid id, ProcessSaveElementCommand command, CancellationToken cancellationToken = default)
-        {
-            if (command == null)
-            {
-                throw new ArgumentNullException(nameof(command));
-            }
-
-            using var message = CreateActionsProcessSaveElementRequest(id, command);
-            _pipeline.Send(message, cancellationToken);
-            switch (message.Response.Status)
-            {
-                case 200:
-                    {
-                        Process value = default;
-                        using var document = JsonDocument.Parse(message.Response.ContentStream);
-                        value = Process.DeserializeProcess(document.RootElement);
-                        return Response.FromValue(value, message.Response);
-                    }
-                default:
-                    throw new RequestFailedException(message.Response);
-            }
-        }
-
-        internal HttpMessage CreateActionsProcessDeleteElementRequest(Guid id, ProcessDeleteElementCommand command)
-        {
-            var message = _pipeline.CreateMessage();
-            var request = message.Request;
-            request.Method = RequestMethod.Post;
-            var uri = new RawRequestUriBuilder();
-            uri.Reset(_endpoint);
-            uri.AppendPath("/processes/", false);
-            uri.AppendPath(id, true);
-            uri.AppendPath("/~actions/delete-element", false);
-            request.Uri = uri;
-            request.Headers.Add("Accept", "application/json");
-            request.Headers.Add("Content-Type", "application/json");
-            var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(command);
-            request.Content = content;
-            return message;
-        }
-
-        /// <summary> Delete an element by code. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="command"> Command to delete an element. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="command"/> is null. </exception>
-        /// <remarks>
-        /// Allow to delete a process element by specifying the item definition code.
-        ///
-        /// Remove all the element values.
-        ///
-        /// </remarks>
-        public async Task<Response<Process>> ActionsProcessDeleteElementAsync(Guid id, ProcessDeleteElementCommand command, CancellationToken cancellationToken = default)
-        {
-            if (command == null)
-            {
-                throw new ArgumentNullException(nameof(command));
-            }
-
-            using var message = CreateActionsProcessDeleteElementRequest(id, command);
-            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
-            switch (message.Response.Status)
-            {
-                case 200:
-                    {
-                        Process value = default;
-                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, default, cancellationToken).ConfigureAwait(false);
-                        value = Process.DeserializeProcess(document.RootElement);
-                        return Response.FromValue(value, message.Response);
-                    }
-                default:
-                    throw new RequestFailedException(message.Response);
-            }
-        }
-
-        /// <summary> Delete an element by code. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="command"> Command to delete an element. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="command"/> is null. </exception>
-        /// <remarks>
-        /// Allow to delete a process element by specifying the item definition code.
-        ///
-        /// Remove all the element values.
-        ///
-        /// </remarks>
-        public Response<Process> ActionsProcessDeleteElement(Guid id, ProcessDeleteElementCommand command, CancellationToken cancellationToken = default)
-        {
-            if (command == null)
-            {
-                throw new ArgumentNullException(nameof(command));
-            }
-
-            using var message = CreateActionsProcessDeleteElementRequest(id, command);
-            _pipeline.Send(message, cancellationToken);
-            switch (message.Response.Status)
-            {
-                case 200:
-                    {
-                        Process value = default;
-                        using var document = JsonDocument.Parse(message.Response.ContentStream);
-                        value = Process.DeserializeProcess(document.RootElement);
-                        return Response.FromValue(value, message.Response);
-                    }
-                default:
-                    throw new RequestFailedException(message.Response);
-            }
-        }
-
-        internal HttpMessage CreateActionsProcessCompleteRequest(Guid id)
+        internal HttpMessage CreateCompleteProcessRequest(Guid id)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -595,9 +314,9 @@ namespace KuFlow.Rest
         /// If you are already in this state, no action is taken.
         ///
         /// </remarks>
-        public async Task<Response<Process>> ActionsProcessCompleteAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<Response<Process>> CompleteProcessAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            using var message = CreateActionsProcessCompleteRequest(id);
+            using var message = CreateCompleteProcessRequest(id);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
@@ -622,9 +341,9 @@ namespace KuFlow.Rest
         /// If you are already in this state, no action is taken.
         ///
         /// </remarks>
-        public Response<Process> ActionsProcessComplete(Guid id, CancellationToken cancellationToken = default)
+        public Response<Process> CompleteProcess(Guid id, CancellationToken cancellationToken = default)
         {
-            using var message = CreateActionsProcessCompleteRequest(id);
+            using var message = CreateCompleteProcessRequest(id);
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {
@@ -640,7 +359,7 @@ namespace KuFlow.Rest
             }
         }
 
-        internal HttpMessage CreateActionsProcessCancelRequest(Guid id)
+        internal HttpMessage CreateCancelProcessRequest(Guid id)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -661,14 +380,14 @@ namespace KuFlow.Rest
         /// <remarks>
         /// Cancel a Process. The Process state is set to 'cancelled'.
         ///
-        /// All the active tasks will be marked as cancelled too.
+        /// All the active process items will be marked as cancelled too.
         ///
         /// If you are already in this state, no action is taken.
         ///
         /// </remarks>
-        public async Task<Response<Process>> ActionsProcessCancelAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<Response<Process>> CancelProcessAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            using var message = CreateActionsProcessCancelRequest(id);
+            using var message = CreateCancelProcessRequest(id);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
@@ -690,14 +409,14 @@ namespace KuFlow.Rest
         /// <remarks>
         /// Cancel a Process. The Process state is set to 'cancelled'.
         ///
-        /// All the active tasks will be marked as cancelled too.
+        /// All the active process items will be marked as cancelled too.
         ///
         /// If you are already in this state, no action is taken.
         ///
         /// </remarks>
-        public Response<Process> ActionsProcessCancel(Guid id, CancellationToken cancellationToken = default)
+        public Response<Process> CancelProcess(Guid id, CancellationToken cancellationToken = default)
         {
-            using var message = CreateActionsProcessCancelRequest(id);
+            using var message = CreateCancelProcessRequest(id);
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {
@@ -713,7 +432,7 @@ namespace KuFlow.Rest
             }
         }
 
-        internal HttpMessage CreateActionsProcessSaveUserActionValueDocumentRequest(Guid id, string fileContentType, string fileName, Guid userActionValueId, Stream file)
+        internal HttpMessage CreateChangeProcessInitiatorRequest(Guid id, ProcessChangeInitiatorParams processChangeInitiatorParams)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -722,7 +441,96 @@ namespace KuFlow.Rest
             uri.Reset(_endpoint);
             uri.AppendPath("/processes/", false);
             uri.AppendPath(id, true);
-            uri.AppendPath("/~actions/save-user-action-value-document", false);
+            uri.AppendPath("/~actions/change-initiator", false);
+            request.Uri = uri;
+            request.Headers.Add("Accept", "application/json");
+            request.Headers.Add("Content-Type", "application/json");
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue(processChangeInitiatorParams);
+            request.Content = content;
+            return message;
+        }
+
+        /// <summary> Change process initiator. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="processChangeInitiatorParams"> Params to change the process initiator. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="processChangeInitiatorParams"/> is null. </exception>
+        /// <remarks>
+        /// Change the current initiator of a process.
+        ///
+        /// Allows you to choose a user (by email or principal identifier) or an application (principal identifier).
+        /// Only one option will be necessary.
+        ///
+        /// </remarks>
+        public async Task<Response<Process>> ChangeProcessInitiatorAsync(Guid id, ProcessChangeInitiatorParams processChangeInitiatorParams, CancellationToken cancellationToken = default)
+        {
+            if (processChangeInitiatorParams == null)
+            {
+                throw new ArgumentNullException(nameof(processChangeInitiatorParams));
+            }
+
+            using var message = CreateChangeProcessInitiatorRequest(id, processChangeInitiatorParams);
+            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        Process value = default;
+                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, default, cancellationToken).ConfigureAwait(false);
+                        value = Process.DeserializeProcess(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        /// <summary> Change process initiator. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="processChangeInitiatorParams"> Params to change the process initiator. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="processChangeInitiatorParams"/> is null. </exception>
+        /// <remarks>
+        /// Change the current initiator of a process.
+        ///
+        /// Allows you to choose a user (by email or principal identifier) or an application (principal identifier).
+        /// Only one option will be necessary.
+        ///
+        /// </remarks>
+        public Response<Process> ChangeProcessInitiator(Guid id, ProcessChangeInitiatorParams processChangeInitiatorParams, CancellationToken cancellationToken = default)
+        {
+            if (processChangeInitiatorParams == null)
+            {
+                throw new ArgumentNullException(nameof(processChangeInitiatorParams));
+            }
+
+            using var message = CreateChangeProcessInitiatorRequest(id, processChangeInitiatorParams);
+            _pipeline.Send(message, cancellationToken);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        Process value = default;
+                        using var document = JsonDocument.Parse(message.Response.ContentStream);
+                        value = Process.DeserializeProcess(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        internal HttpMessage CreateUploadProcessUserActionDocumentRequest(Guid id, string fileContentType, string fileName, Guid userActionValueId, Stream file)
+        {
+            var message = _pipeline.CreateMessage();
+            var request = message.Request;
+            request.Method = RequestMethod.Post;
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/processes/", false);
+            uri.AppendPath(id, true);
+            uri.AppendPath("/~actions/upload-user-action-document", false);
             uri.AppendQuery("fileContentType", fileContentType, true);
             uri.AppendQuery("fileName", fileName, true);
             uri.AppendQuery("userActionValueId", userActionValueId, true);
@@ -745,7 +553,7 @@ namespace KuFlow.Rest
         /// Allow saving a user action document uploading the content.
         ///
         /// </remarks>
-        public async Task<Response<Process>> ActionsProcessSaveUserActionValueDocumentAsync(Guid id, string fileContentType, string fileName, Guid userActionValueId, Stream file, CancellationToken cancellationToken = default)
+        public async Task<Response<Process>> UploadProcessUserActionDocumentAsync(Guid id, string fileContentType, string fileName, Guid userActionValueId, Stream file, CancellationToken cancellationToken = default)
         {
             if (fileContentType == null)
             {
@@ -760,7 +568,7 @@ namespace KuFlow.Rest
                 throw new ArgumentNullException(nameof(file));
             }
 
-            using var message = CreateActionsProcessSaveUserActionValueDocumentRequest(id, fileContentType, fileName, userActionValueId, file);
+            using var message = CreateUploadProcessUserActionDocumentRequest(id, fileContentType, fileName, userActionValueId, file);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
@@ -790,7 +598,7 @@ namespace KuFlow.Rest
         /// Allow saving a user action document uploading the content.
         ///
         /// </remarks>
-        public Response<Process> ActionsProcessSaveUserActionValueDocument(Guid id, string fileContentType, string fileName, Guid userActionValueId, Stream file, CancellationToken cancellationToken = default)
+        public Response<Process> UploadProcessUserActionDocument(Guid id, string fileContentType, string fileName, Guid userActionValueId, Stream file, CancellationToken cancellationToken = default)
         {
             if (fileContentType == null)
             {
@@ -805,7 +613,7 @@ namespace KuFlow.Rest
                 throw new ArgumentNullException(nameof(file));
             }
 
-            using var message = CreateActionsProcessSaveUserActionValueDocumentRequest(id, fileContentType, fileName, userActionValueId, file);
+            using var message = CreateUploadProcessUserActionDocumentRequest(id, fileContentType, fileName, userActionValueId, file);
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {
@@ -823,43 +631,208 @@ namespace KuFlow.Rest
             }
         }
 
-        internal HttpMessage CreateActionsProcessSaveEntityDataRequest(Guid id, ProcessSaveEntityDataCommand command)
+        internal HttpMessage CreateUpdateProcessMetadataRequest(Guid id, ProcessMetadataUpdateParams processMetadataUpdateParams)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
-            request.Method = RequestMethod.Post;
+            request.Method = RequestMethod.Put;
             var uri = new RawRequestUriBuilder();
             uri.Reset(_endpoint);
             uri.AppendPath("/processes/", false);
             uri.AppendPath(id, true);
-            uri.AppendPath("/~actions/save-entity-data", false);
+            uri.AppendPath("/metadata", false);
             request.Uri = uri;
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/json");
             var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(command);
+            content.JsonWriter.WriteObjectValue(processMetadataUpdateParams);
+            request.Content = content;
+            return message;
+        }
+
+        /// <summary> Save process metadata. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="processMetadataUpdateParams"> Params to save the metadata data. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="processMetadataUpdateParams"/> is null. </exception>
+        public async Task<Response<Process>> UpdateProcessMetadataAsync(Guid id, ProcessMetadataUpdateParams processMetadataUpdateParams, CancellationToken cancellationToken = default)
+        {
+            if (processMetadataUpdateParams == null)
+            {
+                throw new ArgumentNullException(nameof(processMetadataUpdateParams));
+            }
+
+            using var message = CreateUpdateProcessMetadataRequest(id, processMetadataUpdateParams);
+            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        Process value = default;
+                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, default, cancellationToken).ConfigureAwait(false);
+                        value = Process.DeserializeProcess(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        /// <summary> Save process metadata. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="processMetadataUpdateParams"> Params to save the metadata data. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="processMetadataUpdateParams"/> is null. </exception>
+        public Response<Process> UpdateProcessMetadata(Guid id, ProcessMetadataUpdateParams processMetadataUpdateParams, CancellationToken cancellationToken = default)
+        {
+            if (processMetadataUpdateParams == null)
+            {
+                throw new ArgumentNullException(nameof(processMetadataUpdateParams));
+            }
+
+            using var message = CreateUpdateProcessMetadataRequest(id, processMetadataUpdateParams);
+            _pipeline.Send(message, cancellationToken);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        Process value = default;
+                        using var document = JsonDocument.Parse(message.Response.ContentStream);
+                        value = Process.DeserializeProcess(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        internal HttpMessage CreatePatchProcessMetadataRequest(Guid id, IEnumerable<JsonPatchOperation> jsonPatch)
+        {
+            var message = _pipeline.CreateMessage();
+            var request = message.Request;
+            request.Method = RequestMethod.Patch;
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/processes/", false);
+            uri.AppendPath(id, true);
+            uri.AppendPath("/metadata", false);
+            request.Uri = uri;
+            request.Headers.Add("Accept", "application/json");
+            request.Headers.Add("Content-Type", "application/json-patch+json");
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteStartArray();
+            foreach (var item in jsonPatch)
+            {
+                content.JsonWriter.WriteObjectValue(item);
+            }
+            content.JsonWriter.WriteEndArray();
+            request.Content = content;
+            return message;
+        }
+
+        /// <summary> Patch JSON data. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="jsonPatch"> Params to save the JSON value. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="jsonPatch"/> is null. </exception>
+        /// <remarks>
+        /// Allow to patch a JSON data validating that the data follow the related schema. If the data is invalid, then
+        /// the json is marked as invalid.
+        ///
+        /// </remarks>
+        public async Task<Response<Process>> PatchProcessMetadataAsync(Guid id, IEnumerable<JsonPatchOperation> jsonPatch, CancellationToken cancellationToken = default)
+        {
+            if (jsonPatch == null)
+            {
+                throw new ArgumentNullException(nameof(jsonPatch));
+            }
+
+            using var message = CreatePatchProcessMetadataRequest(id, jsonPatch);
+            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        Process value = default;
+                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, default, cancellationToken).ConfigureAwait(false);
+                        value = Process.DeserializeProcess(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        /// <summary> Patch JSON data. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="jsonPatch"> Params to save the JSON value. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="jsonPatch"/> is null. </exception>
+        /// <remarks>
+        /// Allow to patch a JSON data validating that the data follow the related schema. If the data is invalid, then
+        /// the json is marked as invalid.
+        ///
+        /// </remarks>
+        public Response<Process> PatchProcessMetadata(Guid id, IEnumerable<JsonPatchOperation> jsonPatch, CancellationToken cancellationToken = default)
+        {
+            if (jsonPatch == null)
+            {
+                throw new ArgumentNullException(nameof(jsonPatch));
+            }
+
+            using var message = CreatePatchProcessMetadataRequest(id, jsonPatch);
+            _pipeline.Send(message, cancellationToken);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        Process value = default;
+                        using var document = JsonDocument.Parse(message.Response.ContentStream);
+                        value = Process.DeserializeProcess(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        internal HttpMessage CreateUpdateProcessEntityRequest(Guid id, ProcessEntityUpdateParams processEntityUpdateParams)
+        {
+            var message = _pipeline.CreateMessage();
+            var request = message.Request;
+            request.Method = RequestMethod.Put;
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/processes/", false);
+            uri.AppendPath(id, true);
+            uri.AppendPath("/entity", false);
+            request.Uri = uri;
+            request.Headers.Add("Accept", "application/json");
+            request.Headers.Add("Content-Type", "application/json");
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteObjectValue(processEntityUpdateParams);
             request.Content = content;
             return message;
         }
 
         /// <summary> Save JSON data. </summary>
         /// <param name="id"> The resource ID. </param>
-        /// <param name="command"> Command to save the JSON value. </param>
+        /// <param name="processEntityUpdateParams"> Params to save the JSON value. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="command"/> is null. </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="processEntityUpdateParams"/> is null. </exception>
         /// <remarks>
         /// Allow to save a JSON validating that the data follow the related schema. If the data is invalid, then
         /// the json form is marked as invalid.
         ///
         /// </remarks>
-        public async Task<Response<Process>> ActionsProcessSaveEntityDataAsync(Guid id, ProcessSaveEntityDataCommand command, CancellationToken cancellationToken = default)
+        public async Task<Response<Process>> UpdateProcessEntityAsync(Guid id, ProcessEntityUpdateParams processEntityUpdateParams, CancellationToken cancellationToken = default)
         {
-            if (command == null)
+            if (processEntityUpdateParams == null)
             {
-                throw new ArgumentNullException(nameof(command));
+                throw new ArgumentNullException(nameof(processEntityUpdateParams));
             }
 
-            using var message = CreateActionsProcessSaveEntityDataRequest(id, command);
+            using var message = CreateUpdateProcessEntityRequest(id, processEntityUpdateParams);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
@@ -877,22 +850,22 @@ namespace KuFlow.Rest
 
         /// <summary> Save JSON data. </summary>
         /// <param name="id"> The resource ID. </param>
-        /// <param name="command"> Command to save the JSON value. </param>
+        /// <param name="processEntityUpdateParams"> Params to save the JSON value. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="command"/> is null. </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="processEntityUpdateParams"/> is null. </exception>
         /// <remarks>
         /// Allow to save a JSON validating that the data follow the related schema. If the data is invalid, then
         /// the json form is marked as invalid.
         ///
         /// </remarks>
-        public Response<Process> ActionsProcessSaveEntityData(Guid id, ProcessSaveEntityDataCommand command, CancellationToken cancellationToken = default)
+        public Response<Process> UpdateProcessEntity(Guid id, ProcessEntityUpdateParams processEntityUpdateParams, CancellationToken cancellationToken = default)
         {
-            if (command == null)
+            if (processEntityUpdateParams == null)
             {
-                throw new ArgumentNullException(nameof(command));
+                throw new ArgumentNullException(nameof(processEntityUpdateParams));
             }
 
-            using var message = CreateActionsProcessSaveEntityDataRequest(id, command);
+            using var message = CreateUpdateProcessEntityRequest(id, processEntityUpdateParams);
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {
@@ -908,7 +881,97 @@ namespace KuFlow.Rest
             }
         }
 
-        internal HttpMessage CreateActionsProcessSaveEntityDocumentRequest(Guid id, string fileContentType, string fileName, string schemaPath, Stream file)
+        internal HttpMessage CreatePatchProcessEntityRequest(Guid id, IEnumerable<JsonPatchOperation> jsonPatch)
+        {
+            var message = _pipeline.CreateMessage();
+            var request = message.Request;
+            request.Method = RequestMethod.Patch;
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/processes/", false);
+            uri.AppendPath(id, true);
+            uri.AppendPath("/entity", false);
+            request.Uri = uri;
+            request.Headers.Add("Accept", "application/json");
+            request.Headers.Add("Content-Type", "application/json-patch+json");
+            var content = new Utf8JsonRequestContent();
+            content.JsonWriter.WriteStartArray();
+            foreach (var item in jsonPatch)
+            {
+                content.JsonWriter.WriteObjectValue(item);
+            }
+            content.JsonWriter.WriteEndArray();
+            request.Content = content;
+            return message;
+        }
+
+        /// <summary> Patch JSON data. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="jsonPatch"> Params to save the JSON value. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="jsonPatch"/> is null. </exception>
+        /// <remarks>
+        /// Allow to patch a JSON data validating that the data follow the related schema. If the data is invalid, then
+        /// the json is marked as invalid.
+        ///
+        /// </remarks>
+        public async Task<Response<Process>> PatchProcessEntityAsync(Guid id, IEnumerable<JsonPatchOperation> jsonPatch, CancellationToken cancellationToken = default)
+        {
+            if (jsonPatch == null)
+            {
+                throw new ArgumentNullException(nameof(jsonPatch));
+            }
+
+            using var message = CreatePatchProcessEntityRequest(id, jsonPatch);
+            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        Process value = default;
+                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, default, cancellationToken).ConfigureAwait(false);
+                        value = Process.DeserializeProcess(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        /// <summary> Patch JSON data. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="jsonPatch"> Params to save the JSON value. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="jsonPatch"/> is null. </exception>
+        /// <remarks>
+        /// Allow to patch a JSON data validating that the data follow the related schema. If the data is invalid, then
+        /// the json is marked as invalid.
+        ///
+        /// </remarks>
+        public Response<Process> PatchProcessEntity(Guid id, IEnumerable<JsonPatchOperation> jsonPatch, CancellationToken cancellationToken = default)
+        {
+            if (jsonPatch == null)
+            {
+                throw new ArgumentNullException(nameof(jsonPatch));
+            }
+
+            using var message = CreatePatchProcessEntityRequest(id, jsonPatch);
+            _pipeline.Send(message, cancellationToken);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        Process value = default;
+                        using var document = JsonDocument.Parse(message.Response.ContentStream);
+                        value = Process.DeserializeProcess(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        internal HttpMessage CreateUploadProcessEntityDocumentRequest(Guid id, string fileContentType, string fileName, string schemaPath, Stream file)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -917,7 +980,7 @@ namespace KuFlow.Rest
             uri.Reset(_endpoint);
             uri.AppendPath("/processes/", false);
             uri.AppendPath(id, true);
-            uri.AppendPath("/~actions/save-entity-document", false);
+            uri.AppendPath("/entity/~actions/upload-document", false);
             uri.AppendQuery("fileContentType", fileContentType, true);
             uri.AppendQuery("fileName", fileName, true);
             uri.AppendQuery("schemaPath", schemaPath, true);
@@ -928,12 +991,14 @@ namespace KuFlow.Rest
             return message;
         }
 
-        /// <summary> Save an entity value document. </summary>
+        /// <summary> Upload an entity document. </summary>
         /// <param name="id"> The resource ID. </param>
         /// <param name="fileContentType"> Document content type. </param>
         /// <param name="fileName"> Document name. </param>
         /// <param name="schemaPath">
         /// JSON Schema path related to the document. The uploaded document will be validated by the passed schema path.
+        ///
+        /// ie: "#/properties/file", "#/definitions/UserType/name"
         ///
         /// </param>
         /// <param name="file"> Document to save. </param>
@@ -943,7 +1008,7 @@ namespace KuFlow.Rest
         /// Save a document in the process to later be linked into the JSON data.
         ///
         /// </remarks>
-        public async Task<Response<ProcessSaveEntityDocumentResponseCommand>> ActionsProcessSaveEntityDocumentAsync(Guid id, string fileContentType, string fileName, string schemaPath, Stream file, CancellationToken cancellationToken = default)
+        public async Task<Response<DocumentReference>> UploadProcessEntityDocumentAsync(Guid id, string fileContentType, string fileName, string schemaPath, Stream file, CancellationToken cancellationToken = default)
         {
             if (fileContentType == null)
             {
@@ -962,15 +1027,15 @@ namespace KuFlow.Rest
                 throw new ArgumentNullException(nameof(file));
             }
 
-            using var message = CreateActionsProcessSaveEntityDocumentRequest(id, fileContentType, fileName, schemaPath, file);
+            using var message = CreateUploadProcessEntityDocumentRequest(id, fileContentType, fileName, schemaPath, file);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
                 case 200:
                     {
-                        ProcessSaveEntityDocumentResponseCommand value = default;
+                        DocumentReference value = default;
                         using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, default, cancellationToken).ConfigureAwait(false);
-                        value = ProcessSaveEntityDocumentResponseCommand.DeserializeProcessSaveEntityDocumentResponseCommand(document.RootElement);
+                        value = DocumentReference.DeserializeDocumentReference(document.RootElement);
                         return Response.FromValue(value, message.Response);
                     }
                 default:
@@ -978,12 +1043,14 @@ namespace KuFlow.Rest
             }
         }
 
-        /// <summary> Save an entity value document. </summary>
+        /// <summary> Upload an entity document. </summary>
         /// <param name="id"> The resource ID. </param>
         /// <param name="fileContentType"> Document content type. </param>
         /// <param name="fileName"> Document name. </param>
         /// <param name="schemaPath">
         /// JSON Schema path related to the document. The uploaded document will be validated by the passed schema path.
+        ///
+        /// ie: "#/properties/file", "#/definitions/UserType/name"
         ///
         /// </param>
         /// <param name="file"> Document to save. </param>
@@ -993,7 +1060,7 @@ namespace KuFlow.Rest
         /// Save a document in the process to later be linked into the JSON data.
         ///
         /// </remarks>
-        public Response<ProcessSaveEntityDocumentResponseCommand> ActionsProcessSaveEntityDocument(Guid id, string fileContentType, string fileName, string schemaPath, Stream file, CancellationToken cancellationToken = default)
+        public Response<DocumentReference> UploadProcessEntityDocument(Guid id, string fileContentType, string fileName, string schemaPath, Stream file, CancellationToken cancellationToken = default)
         {
             if (fileContentType == null)
             {
@@ -1012,15 +1079,15 @@ namespace KuFlow.Rest
                 throw new ArgumentNullException(nameof(file));
             }
 
-            using var message = CreateActionsProcessSaveEntityDocumentRequest(id, fileContentType, fileName, schemaPath, file);
+            using var message = CreateUploadProcessEntityDocumentRequest(id, fileContentType, fileName, schemaPath, file);
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {
                 case 200:
                     {
-                        ProcessSaveEntityDocumentResponseCommand value = default;
+                        DocumentReference value = default;
                         using var document = JsonDocument.Parse(message.Response.ContentStream);
-                        value = ProcessSaveEntityDocumentResponseCommand.DeserializeProcessSaveEntityDocumentResponseCommand(document.RootElement);
+                        value = DocumentReference.DeserializeDocumentReference(document.RootElement);
                         return Response.FromValue(value, message.Response);
                     }
                 default:
@@ -1028,7 +1095,7 @@ namespace KuFlow.Rest
             }
         }
 
-        internal HttpMessage CreateActionsProcessDownloadEntityDocumentRequest(Guid id, string documentUri)
+        internal HttpMessage CreateDownloadProcessEntityDocumentRequest(Guid id, string documentUri)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -1037,27 +1104,27 @@ namespace KuFlow.Rest
             uri.Reset(_endpoint);
             uri.AppendPath("/processes/", false);
             uri.AppendPath(id, true);
-            uri.AppendPath("/~actions/download-entity-document", false);
+            uri.AppendPath("/entity/~actions/download-document", false);
             uri.AppendQuery("documentUri", documentUri, true);
             request.Uri = uri;
             request.Headers.Add("Accept", "application/octet-stream, application/json");
             return message;
         }
 
-        /// <summary> Download document. </summary>
+        /// <summary> Download entity document. </summary>
         /// <param name="id"> The resource ID. </param>
         /// <param name="documentUri"> Document URI to download. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="documentUri"/> is null. </exception>
         /// <remarks> Given a process and a documentUri, download a document. </remarks>
-        public async Task<Response<Stream>> ActionsProcessDownloadEntityDocumentAsync(Guid id, string documentUri, CancellationToken cancellationToken = default)
+        public async Task<Response<Stream>> DownloadProcessEntityDocumentAsync(Guid id, string documentUri, CancellationToken cancellationToken = default)
         {
             if (documentUri == null)
             {
                 throw new ArgumentNullException(nameof(documentUri));
             }
 
-            using var message = CreateActionsProcessDownloadEntityDocumentRequest(id, documentUri);
+            using var message = CreateDownloadProcessEntityDocumentRequest(id, documentUri);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
@@ -1071,20 +1138,20 @@ namespace KuFlow.Rest
             }
         }
 
-        /// <summary> Download document. </summary>
+        /// <summary> Download entity document. </summary>
         /// <param name="id"> The resource ID. </param>
         /// <param name="documentUri"> Document URI to download. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="documentUri"/> is null. </exception>
         /// <remarks> Given a process and a documentUri, download a document. </remarks>
-        public Response<Stream> ActionsProcessDownloadEntityDocument(Guid id, string documentUri, CancellationToken cancellationToken = default)
+        public Response<Stream> DownloadProcessEntityDocument(Guid id, string documentUri, CancellationToken cancellationToken = default)
         {
             if (documentUri == null)
             {
                 throw new ArgumentNullException(nameof(documentUri));
             }
 
-            using var message = CreateActionsProcessDownloadEntityDocumentRequest(id, documentUri);
+            using var message = CreateDownloadProcessEntityDocumentRequest(id, documentUri);
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {

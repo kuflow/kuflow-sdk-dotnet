@@ -7,65 +7,24 @@
 
 using System;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class AbstractAudited : IUtf8JsonSerializable
+    public partial class AbstractAudited
     {
-        void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
-        {
-            writer.WriteStartObject();
-            if (Optional.IsDefined(ObjectType))
-            {
-                writer.WritePropertyName("objectType"u8);
-                writer.WriteStringValue(ObjectType.Value.ToSerialString());
-            }
-            if (Optional.IsDefined(CreatedBy))
-            {
-                writer.WritePropertyName("createdBy"u8);
-                writer.WriteStringValue(CreatedBy.Value);
-            }
-            if (Optional.IsDefined(CreatedAt))
-            {
-                writer.WritePropertyName("createdAt"u8);
-                writer.WriteStringValue(CreatedAt.Value, "O");
-            }
-            if (Optional.IsDefined(LastModifiedBy))
-            {
-                writer.WritePropertyName("lastModifiedBy"u8);
-                writer.WriteStringValue(LastModifiedBy.Value);
-            }
-            if (Optional.IsDefined(LastModifiedAt))
-            {
-                writer.WritePropertyName("lastModifiedAt"u8);
-                writer.WriteStringValue(LastModifiedAt.Value, "O");
-            }
-            writer.WriteEndObject();
-        }
-
         internal static AbstractAudited DeserializeAbstractAudited(JsonElement element)
         {
             if (element.ValueKind == JsonValueKind.Null)
             {
                 return null;
             }
-            Optional<AuditedObjectType> objectType = default;
-            Optional<Guid> createdBy = default;
-            Optional<DateTimeOffset> createdAt = default;
-            Optional<Guid> lastModifiedBy = default;
-            Optional<DateTimeOffset> lastModifiedAt = default;
+            Guid? createdBy = default;
+            DateTimeOffset? createdAt = default;
+            Guid? lastModifiedBy = default;
+            DateTimeOffset? lastModifiedAt = default;
             foreach (var property in element.EnumerateObject())
             {
-                if (property.NameEquals("objectType"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    objectType = property.Value.GetString().ToAuditedObjectType();
-                    continue;
-                }
                 if (property.NameEquals("createdBy"u8))
                 {
                     if (property.Value.ValueKind == JsonValueKind.Null)
@@ -103,7 +62,15 @@ namespace KuFlow.Rest.Models
                     continue;
                 }
             }
-            return new AbstractAudited(Optional.ToNullable(objectType), Optional.ToNullable(createdBy), Optional.ToNullable(createdAt), Optional.ToNullable(lastModifiedBy), Optional.ToNullable(lastModifiedAt));
+            return new AbstractAudited(createdBy, createdAt, lastModifiedBy, lastModifiedAt);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static AbstractAudited FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeAbstractAudited(document.RootElement);
         }
     }
 }

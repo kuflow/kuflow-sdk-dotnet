@@ -14,27 +14,23 @@ namespace KuFlow.Rest.Models
     {
         /// <summary> Initializes a new instance of <see cref="ProcessDefinitionSummary"/>. </summary>
         /// <param name="id"></param>
-        public ProcessDefinitionSummary(Guid id)
-        {
-            Id = id;
-        }
-
-        /// <summary> Initializes a new instance of <see cref="ProcessDefinitionSummary"/>. </summary>
-        /// <param name="id"></param>
         /// <param name="version"></param>
         /// <param name="name"></param>
-        internal ProcessDefinitionSummary(Guid id, Guid? version, string name)
+        /// <exception cref="ArgumentNullException"> <paramref name="name"/> is null. </exception>
+        internal ProcessDefinitionSummary(Guid id, Guid version, string name)
         {
+            Argument.AssertNotNull(name, nameof(name));
+
             Id = id;
             Version = version;
             Name = name;
         }
 
-        /// <summary> Gets or sets the id. </summary>
-        public Guid Id { get; set; }
-        /// <summary> Gets or sets the version. </summary>
-        public Guid? Version { get; set; }
-        /// <summary> Gets or sets the name. </summary>
-        public string Name { get; set; }
+        /// <summary> Gets the id. </summary>
+        public Guid Id { get; }
+        /// <summary> Gets the version. </summary>
+        public Guid Version { get; }
+        /// <summary> Gets the name. </summary>
+        public string Name { get; }
     }
 }

@@ -6,7 +6,6 @@
 #nullable disable
 
 using System;
-using Azure.Core;
 
 namespace KuFlow.Rest.Models
 {
@@ -18,7 +17,7 @@ namespace KuFlow.Rest.Models
         /// <param name="clientCertificate"></param>
         /// <param name="clientPrivateKey"></param>
         /// <exception cref="ArgumentNullException"> <paramref name="serverRootCaCertificate"/>, <paramref name="clientCertificate"/> or <paramref name="clientPrivateKey"/> is null. </exception>
-        public AuthenticationEngineCertificateTls(string serverRootCaCertificate, string clientCertificate, string clientPrivateKey)
+        internal AuthenticationEngineCertificateTls(string serverRootCaCertificate, string clientCertificate, string clientPrivateKey)
         {
             Argument.AssertNotNull(serverRootCaCertificate, nameof(serverRootCaCertificate));
             Argument.AssertNotNull(clientCertificate, nameof(clientCertificate));
@@ -29,11 +28,11 @@ namespace KuFlow.Rest.Models
             ClientPrivateKey = clientPrivateKey;
         }
 
-        /// <summary> Gets or sets the server root ca certificate. </summary>
-        public string ServerRootCaCertificate { get; set; }
-        /// <summary> Gets or sets the client certificate. </summary>
-        public string ClientCertificate { get; set; }
-        /// <summary> Gets or sets the client private key. </summary>
-        public string ClientPrivateKey { get; set; }
+        /// <summary> Gets the server root ca certificate. </summary>
+        public string ServerRootCaCertificate { get; }
+        /// <summary> Gets the client certificate. </summary>
+        public string ClientCertificate { get; }
+        /// <summary> Gets the client private key. </summary>
+        public string ClientPrivateKey { get; }
     }
 }

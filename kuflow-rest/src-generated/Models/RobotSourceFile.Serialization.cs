@@ -7,28 +7,12 @@
 
 using System;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class RobotSourceFile : IUtf8JsonSerializable
+    public partial class RobotSourceFile
     {
-        void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
-        {
-            writer.WriteStartObject();
-            writer.WritePropertyName("id"u8);
-            writer.WriteStringValue(Id);
-            writer.WritePropertyName("name"u8);
-            writer.WriteStringValue(Name);
-            writer.WritePropertyName("contentType"u8);
-            writer.WriteStringValue(ContentType);
-            writer.WritePropertyName("contentLength"u8);
-            writer.WriteNumberValue(ContentLength);
-            writer.WritePropertyName("contentHash"u8);
-            writer.WriteStringValue(ContentHash);
-            writer.WriteEndObject();
-        }
-
         internal static RobotSourceFile DeserializeRobotSourceFile(JsonElement element)
         {
             if (element.ValueKind == JsonValueKind.Null)
@@ -69,6 +53,14 @@ namespace KuFlow.Rest.Models
                 }
             }
             return new RobotSourceFile(id, name, contentType, contentLength, contentHash);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static RobotSourceFile FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeRobotSourceFile(document.RootElement);
         }
     }
 }

@@ -60,7 +60,7 @@ public partial class PrincipalClient
   ///
   /// </remarks>
   public virtual Task<Response<PrincipalPage>> FindPrincipalsAsync(
-    FindPrincipalsOptions? options,
+    PrincipalFindOptions? options,
     CancellationToken cancellationToken = default
   )
   {
@@ -84,7 +84,7 @@ public partial class PrincipalClient
   ///
   /// </remarks>
   public virtual Response<PrincipalPage> FindPrincipals(
-    FindPrincipalsOptions? options,
+    PrincipalFindOptions? options,
     CancellationToken cancellationToken = default
   )
   {

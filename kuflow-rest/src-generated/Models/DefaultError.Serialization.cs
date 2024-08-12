@@ -8,7 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace KuFlow.Rest.Models
 {
@@ -23,7 +23,7 @@ namespace KuFlow.Rest.Models
             DateTimeOffset timestamp = default;
             int status = default;
             string message = default;
-            Optional<IReadOnlyList<DefaultErrorInfo>> errors = default;
+            IReadOnlyList<DefaultErrorInfo> errors = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("timestamp"u8))
@@ -56,7 +56,15 @@ namespace KuFlow.Rest.Models
                     continue;
                 }
             }
-            return new DefaultError(timestamp, status, message, Optional.ToList(errors));
+            return new DefaultError(timestamp, status, message, errors ?? new ChangeTrackingList<DefaultErrorInfo>());
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static DefaultError FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeDefaultError(document.RootElement);
         }
     }
 }

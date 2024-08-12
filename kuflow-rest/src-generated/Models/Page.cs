@@ -6,7 +6,6 @@
 #nullable disable
 
 using System;
-using Azure.Core;
 
 namespace KuFlow.Rest.Models
 {
@@ -23,17 +22,6 @@ namespace KuFlow.Rest.Models
             Metadata = metadata;
         }
 
-        /// <summary> Initializes a new instance of <see cref="Page"/>. </summary>
-        /// <param name="objectType"> Paged Model types. </param>
-        /// <param name="metadata"></param>
-        internal Page(PagedObjectType? objectType, PageMetadata metadata)
-        {
-            ObjectType = objectType;
-            Metadata = metadata;
-        }
-
-        /// <summary> Paged Model types. </summary>
-        public PagedObjectType? ObjectType { get; }
         /// <summary> Gets the metadata. </summary>
         public PageMetadata Metadata { get; }
     }

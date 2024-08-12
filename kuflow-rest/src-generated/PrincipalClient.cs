@@ -38,7 +38,7 @@ namespace KuFlow.Rest
             {
                 throw new ArgumentNullException(nameof(credential));
             }
-            endpoint ??= new Uri("https://api.kuflow.com/v2022-10-08");
+            endpoint ??= new Uri("https://api.kuflow.com/v2024-06-14");
 
             options ??= new KuFlowRestClientOptions();
             _clientDiagnostics = new ClientDiagnostics(options);

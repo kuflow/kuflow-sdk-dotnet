@@ -7,22 +7,12 @@
 
 using System;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class AuthenticationEngineToken : IUtf8JsonSerializable
+    public partial class AuthenticationEngineToken
     {
-        void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
-        {
-            writer.WriteStartObject();
-            writer.WritePropertyName("token"u8);
-            writer.WriteStringValue(Token);
-            writer.WritePropertyName("expiredAt"u8);
-            writer.WriteStringValue(ExpiredAt, "O");
-            writer.WriteEndObject();
-        }
-
         internal static AuthenticationEngineToken DeserializeAuthenticationEngineToken(JsonElement element)
         {
             if (element.ValueKind == JsonValueKind.Null)
@@ -45,6 +35,14 @@ namespace KuFlow.Rest.Models
                 }
             }
             return new AuthenticationEngineToken(token, expiredAt);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static AuthenticationEngineToken FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializeAuthenticationEngineToken(document.RootElement);
         }
     }
 }

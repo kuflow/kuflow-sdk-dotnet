@@ -7,7 +7,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json;
-using Azure.Core;
+using Azure;
 
 namespace KuFlow.Rest.Models
 {
@@ -19,28 +19,18 @@ namespace KuFlow.Rest.Models
             {
                 return null;
             }
-            IReadOnlyList<Principal> content = default;
-            Optional<PagedObjectType> objectType = default;
+            IReadOnlyList<PrincipalPageItem> content = default;
             PageMetadata metadata = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("content"u8))
                 {
-                    List<Principal> array = new List<Principal>();
+                    List<PrincipalPageItem> array = new List<PrincipalPageItem>();
                     foreach (var item in property.Value.EnumerateArray())
                     {
-                        array.Add(Principal.DeserializePrincipal(item));
+                        array.Add(PrincipalPageItem.DeserializePrincipalPageItem(item));
                     }
                     content = array;
-                    continue;
-                }
-                if (property.NameEquals("objectType"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    objectType = property.Value.GetString().ToPagedObjectType();
                     continue;
                 }
                 if (property.NameEquals("metadata"u8))
@@ -49,7 +39,15 @@ namespace KuFlow.Rest.Models
                     continue;
                 }
             }
-            return new PrincipalPage(Optional.ToNullable(objectType), metadata, content);
+            return new PrincipalPage(metadata, content);
+        }
+
+        /// <summary> Deserializes the model from a raw response. </summary>
+        /// <param name="response"> The response to deserialize the model from. </param>
+        internal static new PrincipalPage FromResponse(Response response)
+        {
+            using var document = JsonDocument.Parse(response.Content);
+            return DeserializePrincipalPage(document.RootElement);
         }
     }
 }

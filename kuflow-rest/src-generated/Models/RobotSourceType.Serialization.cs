@@ -14,14 +14,14 @@ namespace KuFlow.Rest.Models
         public static string ToSerialString(this RobotSourceType value) => value switch
         {
             RobotSourceType.Package => "PACKAGE",
-            RobotSourceType.RobotFrameworkPythonWheel => "ROBOT_FRAMEWORK_PYTHON_WHEEL",
+            RobotSourceType.Unknown => "UNKNOWN",
             _ => throw new ArgumentOutOfRangeException(nameof(value), value, "Unknown RobotSourceType value.")
         };
 
         public static RobotSourceType ToRobotSourceType(this string value)
         {
             if (StringComparer.OrdinalIgnoreCase.Equals(value, "PACKAGE")) return RobotSourceType.Package;
-            if (StringComparer.OrdinalIgnoreCase.Equals(value, "ROBOT_FRAMEWORK_PYTHON_WHEEL")) return RobotSourceType.RobotFrameworkPythonWheel;
+            if (StringComparer.OrdinalIgnoreCase.Equals(value, "UNKNOWN")) return RobotSourceType.Unknown;
             throw new ArgumentOutOfRangeException(nameof(value), value, "Unknown RobotSourceType value.");
         }
     }

@@ -39,7 +39,7 @@ namespace KuFlow.Rest
             {
                 throw new ArgumentNullException(nameof(credential));
             }
-            endpoint ??= new Uri("https://api.kuflow.com/v2022-10-08");
+            endpoint ??= new Uri("https://api.kuflow.com/v2024-06-14");
 
             options ??= new KuFlowRestClientOptions();
             _clientDiagnostics = new ClientDiagnostics(options);
@@ -172,13 +172,13 @@ namespace KuFlow.Rest
         /// <param name="id"> The resource ID. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks> Given a robot, download the source code. </remarks>
-        public virtual async Task<Response<Stream>> ActionsRobotDownloadSourceCodeAsync(Guid id, CancellationToken cancellationToken = default)
+        public virtual async Task<Response<Stream>> DownloadRobotSourceCodeAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            using var scope = _clientDiagnostics.CreateScope("RobotClient.ActionsRobotDownloadSourceCode");
+            using var scope = _clientDiagnostics.CreateScope("RobotClient.DownloadRobotSourceCode");
             scope.Start();
             try
             {
-                return await RestClient.ActionsRobotDownloadSourceCodeAsync(id, cancellationToken).ConfigureAwait(false);
+                return await RestClient.DownloadRobotSourceCodeAsync(id, cancellationToken).ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -191,13 +191,13 @@ namespace KuFlow.Rest
         /// <param name="id"> The resource ID. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks> Given a robot, download the source code. </remarks>
-        public virtual Response<Stream> ActionsRobotDownloadSourceCode(Guid id, CancellationToken cancellationToken = default)
+        public virtual Response<Stream> DownloadRobotSourceCode(Guid id, CancellationToken cancellationToken = default)
         {
-            using var scope = _clientDiagnostics.CreateScope("RobotClient.ActionsRobotDownloadSourceCode");
+            using var scope = _clientDiagnostics.CreateScope("RobotClient.DownloadRobotSourceCode");
             scope.Start();
             try
             {
-                return RestClient.ActionsRobotDownloadSourceCode(id, cancellationToken);
+                return RestClient.DownloadRobotSourceCode(id, cancellationToken);
             }
             catch (Exception e)
             {
@@ -214,13 +214,13 @@ namespace KuFlow.Rest
         /// <param name="architecture"> The asset platform architecture. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks> Given a robot, download the requested asset. </remarks>
-        public virtual async Task<Response<Stream>> ActionsRobotDownloadAssetAsync(Guid id, RobotAssetType type, string version, RobotAssetPlatform platform, RobotAssetArchitecture architecture, CancellationToken cancellationToken = default)
+        public virtual async Task<Response<Stream>> DownloadRobotAssetAsync(Guid id, RobotAssetType type, string version, RobotAssetPlatform platform, RobotAssetArchitecture architecture, CancellationToken cancellationToken = default)
         {
-            using var scope = _clientDiagnostics.CreateScope("RobotClient.ActionsRobotDownloadAsset");
+            using var scope = _clientDiagnostics.CreateScope("RobotClient.DownloadRobotAsset");
             scope.Start();
             try
             {
-                return await RestClient.ActionsRobotDownloadAssetAsync(id, type, version, platform, architecture, cancellationToken).ConfigureAwait(false);
+                return await RestClient.DownloadRobotAssetAsync(id, type, version, platform, architecture, cancellationToken).ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -237,13 +237,13 @@ namespace KuFlow.Rest
         /// <param name="architecture"> The asset platform architecture. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks> Given a robot, download the requested asset. </remarks>
-        public virtual Response<Stream> ActionsRobotDownloadAsset(Guid id, RobotAssetType type, string version, RobotAssetPlatform platform, RobotAssetArchitecture architecture, CancellationToken cancellationToken = default)
+        public virtual Response<Stream> DownloadRobotAsset(Guid id, RobotAssetType type, string version, RobotAssetPlatform platform, RobotAssetArchitecture architecture, CancellationToken cancellationToken = default)
         {
-            using var scope = _clientDiagnostics.CreateScope("RobotClient.ActionsRobotDownloadAsset");
+            using var scope = _clientDiagnostics.CreateScope("RobotClient.DownloadRobotAsset");
             scope.Start();
             try
             {
-                return RestClient.ActionsRobotDownloadAsset(id, type, version, platform, architecture, cancellationToken);
+                return RestClient.DownloadRobotAsset(id, type, version, platform, architecture, cancellationToken);
             }
             catch (Exception e)
             {
