@@ -18,22 +18,16 @@ namespace KuFlow.Rest.Models
             {
                 return null;
             }
-            string schemaPath = default;
             string documentUri = default;
             foreach (var property in element.EnumerateObject())
             {
-                if (property.NameEquals("schemaPath"u8))
-                {
-                    schemaPath = property.Value.GetString();
-                    continue;
-                }
                 if (property.NameEquals("documentUri"u8))
                 {
                     documentUri = property.Value.GetString();
                     continue;
                 }
             }
-            return new DocumentReference(schemaPath, documentUri);
+            return new DocumentReference(documentUri);
         }
 
         /// <summary> Deserializes the model from a raw response. </summary>

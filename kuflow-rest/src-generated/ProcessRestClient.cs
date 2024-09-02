@@ -971,7 +971,7 @@ namespace KuFlow.Rest
             }
         }
 
-        internal HttpMessage CreateUploadProcessEntityDocumentRequest(Guid id, string fileContentType, string fileName, string schemaPath, Stream file)
+        internal HttpMessage CreateUploadProcessDocumentRequest(Guid id, string fileContentType, string fileName, Stream file)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -980,10 +980,9 @@ namespace KuFlow.Rest
             uri.Reset(_endpoint);
             uri.AppendPath("/processes/", false);
             uri.AppendPath(id, true);
-            uri.AppendPath("/entity/~actions/upload-document", false);
+            uri.AppendPath("/~actions/upload-document", false);
             uri.AppendQuery("fileContentType", fileContentType, true);
             uri.AppendQuery("fileName", fileName, true);
-            uri.AppendQuery("schemaPath", schemaPath, true);
             request.Uri = uri;
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("Content-Type", "application/octet-stream");
@@ -991,24 +990,21 @@ namespace KuFlow.Rest
             return message;
         }
 
-        /// <summary> Upload an entity document. </summary>
+        /// <summary> Upload a temporal document into the process that later on must be linked with a process domain resource. </summary>
         /// <param name="id"> The resource ID. </param>
         /// <param name="fileContentType"> Document content type. </param>
         /// <param name="fileName"> Document name. </param>
-        /// <param name="schemaPath">
-        /// JSON Schema path related to the document. The uploaded document will be validated by the passed schema path.
-        ///
-        /// ie: "#/properties/file", "#/definitions/UserType/name"
-        ///
-        /// </param>
         /// <param name="file"> Document to save. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="fileContentType"/>, <paramref name="fileName"/>, <paramref name="schemaPath"/> or <paramref name="file"/> is null. </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="fileContentType"/>, <paramref name="fileName"/> or <paramref name="file"/> is null. </exception>
         /// <remarks>
-        /// Save a document in the process to later be linked into the JSON data.
+        /// Upload a temporal document into the process that later on must be linked with a process domain resource.
+        ///
+        /// Documents uploaded with this API will be deleted after 24 hours as long as they have not been linked to a
+        /// process or process item..
         ///
         /// </remarks>
-        public async Task<Response<DocumentReference>> UploadProcessEntityDocumentAsync(Guid id, string fileContentType, string fileName, string schemaPath, Stream file, CancellationToken cancellationToken = default)
+        public async Task<Response<DocumentReference>> UploadProcessDocumentAsync(Guid id, string fileContentType, string fileName, Stream file, CancellationToken cancellationToken = default)
         {
             if (fileContentType == null)
             {
@@ -1018,16 +1014,12 @@ namespace KuFlow.Rest
             {
                 throw new ArgumentNullException(nameof(fileName));
             }
-            if (schemaPath == null)
-            {
-                throw new ArgumentNullException(nameof(schemaPath));
-            }
             if (file == null)
             {
                 throw new ArgumentNullException(nameof(file));
             }
 
-            using var message = CreateUploadProcessEntityDocumentRequest(id, fileContentType, fileName, schemaPath, file);
+            using var message = CreateUploadProcessDocumentRequest(id, fileContentType, fileName, file);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
@@ -1043,24 +1035,21 @@ namespace KuFlow.Rest
             }
         }
 
-        /// <summary> Upload an entity document. </summary>
+        /// <summary> Upload a temporal document into the process that later on must be linked with a process domain resource. </summary>
         /// <param name="id"> The resource ID. </param>
         /// <param name="fileContentType"> Document content type. </param>
         /// <param name="fileName"> Document name. </param>
-        /// <param name="schemaPath">
-        /// JSON Schema path related to the document. The uploaded document will be validated by the passed schema path.
-        ///
-        /// ie: "#/properties/file", "#/definitions/UserType/name"
-        ///
-        /// </param>
         /// <param name="file"> Document to save. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="fileContentType"/>, <paramref name="fileName"/>, <paramref name="schemaPath"/> or <paramref name="file"/> is null. </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="fileContentType"/>, <paramref name="fileName"/> or <paramref name="file"/> is null. </exception>
         /// <remarks>
-        /// Save a document in the process to later be linked into the JSON data.
+        /// Upload a temporal document into the process that later on must be linked with a process domain resource.
+        ///
+        /// Documents uploaded with this API will be deleted after 24 hours as long as they have not been linked to a
+        /// process or process item..
         ///
         /// </remarks>
-        public Response<DocumentReference> UploadProcessEntityDocument(Guid id, string fileContentType, string fileName, string schemaPath, Stream file, CancellationToken cancellationToken = default)
+        public Response<DocumentReference> UploadProcessDocument(Guid id, string fileContentType, string fileName, Stream file, CancellationToken cancellationToken = default)
         {
             if (fileContentType == null)
             {
@@ -1070,16 +1059,12 @@ namespace KuFlow.Rest
             {
                 throw new ArgumentNullException(nameof(fileName));
             }
-            if (schemaPath == null)
-            {
-                throw new ArgumentNullException(nameof(schemaPath));
-            }
             if (file == null)
             {
                 throw new ArgumentNullException(nameof(file));
             }
 
-            using var message = CreateUploadProcessEntityDocumentRequest(id, fileContentType, fileName, schemaPath, file);
+            using var message = CreateUploadProcessDocumentRequest(id, fileContentType, fileName, file);
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {
@@ -1095,7 +1080,7 @@ namespace KuFlow.Rest
             }
         }
 
-        internal HttpMessage CreateDownloadProcessEntityDocumentRequest(Guid id, string documentUri)
+        internal HttpMessage CreateDownloadProcessDocumentRequest(Guid id, string documentUri)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -1104,27 +1089,27 @@ namespace KuFlow.Rest
             uri.Reset(_endpoint);
             uri.AppendPath("/processes/", false);
             uri.AppendPath(id, true);
-            uri.AppendPath("/entity/~actions/download-document", false);
+            uri.AppendPath("/~actions/download-document", false);
             uri.AppendQuery("documentUri", documentUri, true);
             request.Uri = uri;
             request.Headers.Add("Accept", "application/octet-stream, application/json");
             return message;
         }
 
-        /// <summary> Download entity document. </summary>
+        /// <summary> Download document. </summary>
         /// <param name="id"> The resource ID. </param>
         /// <param name="documentUri"> Document URI to download. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="documentUri"/> is null. </exception>
-        /// <remarks> Given a process and a documentUri, download a document. </remarks>
-        public async Task<Response<Stream>> DownloadProcessEntityDocumentAsync(Guid id, string documentUri, CancellationToken cancellationToken = default)
+        /// <remarks> Given a document uri download a document. </remarks>
+        public async Task<Response<Stream>> DownloadProcessDocumentAsync(Guid id, string documentUri, CancellationToken cancellationToken = default)
         {
             if (documentUri == null)
             {
                 throw new ArgumentNullException(nameof(documentUri));
             }
 
-            using var message = CreateDownloadProcessEntityDocumentRequest(id, documentUri);
+            using var message = CreateDownloadProcessDocumentRequest(id, documentUri);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
@@ -1138,20 +1123,20 @@ namespace KuFlow.Rest
             }
         }
 
-        /// <summary> Download entity document. </summary>
+        /// <summary> Download document. </summary>
         /// <param name="id"> The resource ID. </param>
         /// <param name="documentUri"> Document URI to download. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="documentUri"/> is null. </exception>
-        /// <remarks> Given a process and a documentUri, download a document. </remarks>
-        public Response<Stream> DownloadProcessEntityDocument(Guid id, string documentUri, CancellationToken cancellationToken = default)
+        /// <remarks> Given a document uri download a document. </remarks>
+        public Response<Stream> DownloadProcessDocument(Guid id, string documentUri, CancellationToken cancellationToken = default)
         {
             if (documentUri == null)
             {
                 throw new ArgumentNullException(nameof(documentUri));
             }
 
-            using var message = CreateDownloadProcessEntityDocumentRequest(id, documentUri);
+            using var message = CreateDownloadProcessDocumentRequest(id, documentUri);
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {

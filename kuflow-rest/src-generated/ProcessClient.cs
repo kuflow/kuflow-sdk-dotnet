@@ -600,29 +600,26 @@ namespace KuFlow.Rest
             }
         }
 
-        /// <summary> Upload an entity document. </summary>
+        /// <summary> Upload a temporal document into the process that later on must be linked with a process domain resource. </summary>
         /// <param name="id"> The resource ID. </param>
         /// <param name="fileContentType"> Document content type. </param>
         /// <param name="fileName"> Document name. </param>
-        /// <param name="schemaPath">
-        /// JSON Schema path related to the document. The uploaded document will be validated by the passed schema path.
-        ///
-        /// ie: "#/properties/file", "#/definitions/UserType/name"
-        ///
-        /// </param>
         /// <param name="file"> Document to save. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
-        /// Save a document in the process to later be linked into the JSON data.
+        /// Upload a temporal document into the process that later on must be linked with a process domain resource.
+        ///
+        /// Documents uploaded with this API will be deleted after 24 hours as long as they have not been linked to a
+        /// process or process item..
         ///
         /// </remarks>
-        public virtual async Task<Response<DocumentReference>> UploadProcessEntityDocumentAsync(Guid id, string fileContentType, string fileName, string schemaPath, Stream file, CancellationToken cancellationToken = default)
+        public virtual async Task<Response<DocumentReference>> UploadProcessDocumentAsync(Guid id, string fileContentType, string fileName, Stream file, CancellationToken cancellationToken = default)
         {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.UploadProcessEntityDocument");
+            using var scope = _clientDiagnostics.CreateScope("ProcessClient.UploadProcessDocument");
             scope.Start();
             try
             {
-                return await RestClient.UploadProcessEntityDocumentAsync(id, fileContentType, fileName, schemaPath, file, cancellationToken).ConfigureAwait(false);
+                return await RestClient.UploadProcessDocumentAsync(id, fileContentType, fileName, file, cancellationToken).ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -631,29 +628,26 @@ namespace KuFlow.Rest
             }
         }
 
-        /// <summary> Upload an entity document. </summary>
+        /// <summary> Upload a temporal document into the process that later on must be linked with a process domain resource. </summary>
         /// <param name="id"> The resource ID. </param>
         /// <param name="fileContentType"> Document content type. </param>
         /// <param name="fileName"> Document name. </param>
-        /// <param name="schemaPath">
-        /// JSON Schema path related to the document. The uploaded document will be validated by the passed schema path.
-        ///
-        /// ie: "#/properties/file", "#/definitions/UserType/name"
-        ///
-        /// </param>
         /// <param name="file"> Document to save. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
-        /// Save a document in the process to later be linked into the JSON data.
+        /// Upload a temporal document into the process that later on must be linked with a process domain resource.
+        ///
+        /// Documents uploaded with this API will be deleted after 24 hours as long as they have not been linked to a
+        /// process or process item..
         ///
         /// </remarks>
-        public virtual Response<DocumentReference> UploadProcessEntityDocument(Guid id, string fileContentType, string fileName, string schemaPath, Stream file, CancellationToken cancellationToken = default)
+        public virtual Response<DocumentReference> UploadProcessDocument(Guid id, string fileContentType, string fileName, Stream file, CancellationToken cancellationToken = default)
         {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.UploadProcessEntityDocument");
+            using var scope = _clientDiagnostics.CreateScope("ProcessClient.UploadProcessDocument");
             scope.Start();
             try
             {
-                return RestClient.UploadProcessEntityDocument(id, fileContentType, fileName, schemaPath, file, cancellationToken);
+                return RestClient.UploadProcessDocument(id, fileContentType, fileName, file, cancellationToken);
             }
             catch (Exception e)
             {
@@ -662,18 +656,18 @@ namespace KuFlow.Rest
             }
         }
 
-        /// <summary> Download entity document. </summary>
+        /// <summary> Download document. </summary>
         /// <param name="id"> The resource ID. </param>
         /// <param name="documentUri"> Document URI to download. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks> Given a process and a documentUri, download a document. </remarks>
-        public virtual async Task<Response<Stream>> DownloadProcessEntityDocumentAsync(Guid id, string documentUri, CancellationToken cancellationToken = default)
+        /// <remarks> Given a document uri download a document. </remarks>
+        public virtual async Task<Response<Stream>> DownloadProcessDocumentAsync(Guid id, string documentUri, CancellationToken cancellationToken = default)
         {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.DownloadProcessEntityDocument");
+            using var scope = _clientDiagnostics.CreateScope("ProcessClient.DownloadProcessDocument");
             scope.Start();
             try
             {
-                return await RestClient.DownloadProcessEntityDocumentAsync(id, documentUri, cancellationToken).ConfigureAwait(false);
+                return await RestClient.DownloadProcessDocumentAsync(id, documentUri, cancellationToken).ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -682,18 +676,18 @@ namespace KuFlow.Rest
             }
         }
 
-        /// <summary> Download entity document. </summary>
+        /// <summary> Download document. </summary>
         /// <param name="id"> The resource ID. </param>
         /// <param name="documentUri"> Document URI to download. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks> Given a process and a documentUri, download a document. </remarks>
-        public virtual Response<Stream> DownloadProcessEntityDocument(Guid id, string documentUri, CancellationToken cancellationToken = default)
+        /// <remarks> Given a document uri download a document. </remarks>
+        public virtual Response<Stream> DownloadProcessDocument(Guid id, string documentUri, CancellationToken cancellationToken = default)
         {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.DownloadProcessEntityDocument");
+            using var scope = _clientDiagnostics.CreateScope("ProcessClient.DownloadProcessDocument");
             scope.Start();
             try
             {
-                return RestClient.DownloadProcessEntityDocument(id, documentUri, cancellationToken);
+                return RestClient.DownloadProcessDocument(id, documentUri, cancellationToken);
             }
             catch (Exception e)
             {

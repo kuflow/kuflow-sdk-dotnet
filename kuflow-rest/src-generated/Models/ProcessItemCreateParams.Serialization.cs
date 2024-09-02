@@ -39,6 +39,11 @@ namespace KuFlow.Rest.Models
                 writer.WritePropertyName("task"u8);
                 writer.WriteObjectValue(Task);
             }
+            if (Optional.IsDefined(Message))
+            {
+                writer.WritePropertyName("message"u8);
+                writer.WriteObjectValue(Message);
+            }
             writer.WriteEndObject();
         }
 

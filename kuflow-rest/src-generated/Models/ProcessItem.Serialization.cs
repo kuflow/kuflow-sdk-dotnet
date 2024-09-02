@@ -25,6 +25,7 @@ namespace KuFlow.Rest.Models
             Guid? ownerId = default;
             Guid? tenantId = default;
             ProcessItemTask task = default;
+            ProcessItemMessage message = default;
             Guid? createdBy = default;
             DateTimeOffset? createdAt = default;
             Guid? lastModifiedBy = default;
@@ -71,6 +72,15 @@ namespace KuFlow.Rest.Models
                         continue;
                     }
                     task = ProcessItemTask.DeserializeProcessItemTask(property.Value);
+                    continue;
+                }
+                if (property.NameEquals("message"u8))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    message = ProcessItemMessage.DeserializeProcessItemMessage(property.Value);
                     continue;
                 }
                 if (property.NameEquals("createdBy"u8))
@@ -120,7 +130,8 @@ namespace KuFlow.Rest.Models
                 processId,
                 ownerId,
                 tenantId,
-                task);
+                task,
+                message);
         }
 
         /// <summary> Deserializes the model from a raw response. </summary>
