@@ -34,7 +34,8 @@ namespace KuFlow.Rest.Models
         /// <param name="ownerId"> Owner Principal ID. </param>
         /// <param name="tenantId"> Tenant ID. </param>
         /// <param name="task"></param>
-        internal ProcessItem(Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid id, ProcessItemType type, Guid processId, Guid? ownerId, Guid? tenantId, ProcessItemTask task) : base(createdBy, createdAt, lastModifiedBy, lastModifiedAt)
+        /// <param name="message"></param>
+        internal ProcessItem(Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid id, ProcessItemType type, Guid processId, Guid? ownerId, Guid? tenantId, ProcessItemTask task, ProcessItemMessage message) : base(createdBy, createdAt, lastModifiedBy, lastModifiedAt)
         {
             Id = id;
             Type = type;
@@ -42,6 +43,7 @@ namespace KuFlow.Rest.Models
             OwnerId = ownerId;
             TenantId = tenantId;
             Task = task;
+            Message = message;
         }
 
         /// <summary> Gets the id. </summary>
@@ -56,5 +58,7 @@ namespace KuFlow.Rest.Models
         public Guid? TenantId { get; }
         /// <summary> Gets the task. </summary>
         public ProcessItemTask Task { get; }
+        /// <summary> Gets the message. </summary>
+        public ProcessItemMessage Message { get; }
     }
 }

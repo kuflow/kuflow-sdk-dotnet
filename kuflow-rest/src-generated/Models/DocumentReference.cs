@@ -13,35 +13,20 @@ namespace KuFlow.Rest.Models
     public partial class DocumentReference
     {
         /// <summary> Initializes a new instance of <see cref="DocumentReference"/>. </summary>
-        /// <param name="schemaPath">
-        /// JSON Schema path related to the document. The uploaded document will be validated by the passed schema path.
-        ///
-        /// ie: "#/properties/file", "#/definitions/UserType/name"
-        ///
-        /// </param>
         /// <param name="documentUri">
         /// JSON value representing the uploaded file.
         ///
         /// Example: `kuflow-file:uri=xxx-yyy-zzz;type=application/json;size=500;name=file.json;`
         ///
         /// </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="schemaPath"/> or <paramref name="documentUri"/> is null. </exception>
-        internal DocumentReference(string schemaPath, string documentUri)
+        /// <exception cref="ArgumentNullException"> <paramref name="documentUri"/> is null. </exception>
+        internal DocumentReference(string documentUri)
         {
-            Argument.AssertNotNull(schemaPath, nameof(schemaPath));
             Argument.AssertNotNull(documentUri, nameof(documentUri));
 
-            SchemaPath = schemaPath;
             DocumentUri = documentUri;
         }
 
-        /// <summary>
-        /// JSON Schema path related to the document. The uploaded document will be validated by the passed schema path.
-        ///
-        /// ie: "#/properties/file", "#/definitions/UserType/name"
-        ///
-        /// </summary>
-        public string SchemaPath { get; }
         /// <summary>
         /// JSON value representing the uploaded file.
         ///
