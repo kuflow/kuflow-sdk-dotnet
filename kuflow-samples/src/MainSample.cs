@@ -83,36 +83,36 @@ class Program
     //   Console.WriteLine("[KuFlowRestClient] ProcessId: " + processItem.ProcessId);
     // }
 
-  //   {
-  //     var client = new KuFlowRestClient(clientId: clientId, clientSecret: clientSecret, endpoint: endpoint);
-  //
-  //     var processItemId = new Guid(processItemIdentifier);
-  //
-  //     var filePath = "/home/user/file.jpg";
-  //
-  //     try
-  //     {
-  //       using Stream fileStream = File.Open(filePath, FileMode.Open, FileAccess.Read);
-  //       // Guess mime
-  //       var fileContentType = "image/jpeg";
-  //       var fileName = Path.GetFileName(filePath);
-  //
-  //       var processItemResponse = client.ProcessItemClient.UploadProcessItemTaskDataDocument(
-  //         processItemId,
-  //         fileContentType,
-  //         fileName,
-  //         "#/properties/DOC",
-  //         fileStream
-  //       );
-  //       var processItem = processItemResponse.Value;
-  //
-  //       Console.WriteLine("[KuFlowRestClient] DocumentUri: " + processItem.DocumentUri);
-  //     }
-  //     catch (Exception ex)
-  //     {
-  //       throw new Exception("Unable to upload file", ex);
-  //     }
-  //   }
-  //   Console.WriteLine("Bye");
+    //   {
+    //     var client = new KuFlowRestClient(clientId: clientId, clientSecret: clientSecret, endpoint: endpoint);
+    //
+    //     var processItemId = new Guid(processItemIdentifier);
+    //
+    //     var filePath = "/home/user/file.jpg";
+    //
+    //     try
+    //     {
+    //       using Stream fileStream = File.Open(filePath, FileMode.Open, FileAccess.Read);
+    //       // Guess mime
+    //       var fileContentType = "image/jpeg";
+    //       var fileName = Path.GetFileName(filePath);
+    //
+    //       var processItemResponse = client.ProcessItemClient.UploadProcessItemTaskDataDocument(
+    //         processItemId,
+    //         fileContentType,
+    //         fileName,
+    //         "#/properties/DOC",
+    //         fileStream
+    //       );
+    //       var processItem = processItemResponse.Value;
+    //
+    //       Console.WriteLine("[KuFlowRestClient] DocumentUri: " + processItem.DocumentUri);
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //       throw new Exception("Unable to upload file", ex);
+    //     }
+    //   }
+    //   Console.WriteLine("Bye");
   }
 }

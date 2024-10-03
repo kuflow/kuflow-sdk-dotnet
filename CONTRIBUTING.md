@@ -91,6 +91,10 @@ dotnet add TestConsole/TestConsole.csprok reference kuflow-rest/Kuflow.Rest.cspr
 cd kuflow-rest
 dotnet add package Azure.Core
 
-# Format code
+# Format code (install with: dotnet tool install csharpier)
 dotnet tool run dotnet-csharpier .
+# or
+dotnet dotnet-csharpier .
+# to format generated code, add "--include-generated" option
+dotnet dotnet-csharpier --include-generated .
 ```
