@@ -16,7 +16,7 @@ namespace KuFlow.Rest.Models
         }
 
         /// <summary> Initializes a new instance of <see cref="ProcessItemMessageCreateParams"/>. </summary>
-        /// <param name="text"></param>
+        /// <param name="text"> Message text in Markdown format according to the specification https://spec.commonmark.org/. </param>
         /// <param name="data"> Json value. </param>
         /// <param name="dataStructureDataDefinitionCode"></param>
         internal ProcessItemMessageCreateParams(string text, JsonValue data, string dataStructureDataDefinitionCode)
@@ -26,7 +26,7 @@ namespace KuFlow.Rest.Models
             DataStructureDataDefinitionCode = dataStructureDataDefinitionCode;
         }
 
-        /// <summary> Gets or sets the text. </summary>
+        /// <summary> Message text in Markdown format according to the specification https://spec.commonmark.org/. </summary>
         public string Text { get; set; }
         /// <summary> Json value. </summary>
         public JsonValue Data { get; set; }

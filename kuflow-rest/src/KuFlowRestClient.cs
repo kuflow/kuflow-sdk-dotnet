@@ -91,6 +91,7 @@ namespace KuFlow.Rest
       ProcessClient = new ProcessClient(policy, new Uri(endpoint), options);
       ProcessItemClient = new ProcessItemClient(policy, new Uri(endpoint), options);
       WorkerClient = new WorkerClient(policy, new Uri(endpoint), options);
+      TenantClient = new TenantClient(policy, new Uri(endpoint), options);
       TenantUserClient = new TenantUserClient(policy, new Uri(endpoint), options);
       RobotClient = new RobotClient(policy, new Uri(endpoint), options);
     }
@@ -135,6 +136,9 @@ namespace KuFlow.Rest
 
     /// <summary> Get client to operate with workers. </summary>
     public WorkerClient WorkerClient { get; }
+
+    /// <summary> Get client to operate with tenants. </summary>
+    public TenantClient TenantClient { get; }
 
     /// <summary> Get client to operate with tenant users. </summary>
     public TenantUserClient TenantUserClient { get; }

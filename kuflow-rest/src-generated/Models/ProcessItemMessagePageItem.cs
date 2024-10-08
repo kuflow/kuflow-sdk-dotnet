@@ -16,7 +16,7 @@ namespace KuFlow.Rest.Models
         }
 
         /// <summary> Initializes a new instance of <see cref="ProcessItemMessagePageItem"/>. </summary>
-        /// <param name="text"></param>
+        /// <param name="text"> Message text in Markdown format according to the specification https://spec.commonmark.org/. </param>
         /// <param name="dataStructureDataDefinitionCode"></param>
         internal ProcessItemMessagePageItem(string text, string dataStructureDataDefinitionCode)
         {
@@ -24,7 +24,7 @@ namespace KuFlow.Rest.Models
             DataStructureDataDefinitionCode = dataStructureDataDefinitionCode;
         }
 
-        /// <summary> Gets the text. </summary>
+        /// <summary> Message text in Markdown format according to the specification https://spec.commonmark.org/. </summary>
         public string Text { get; }
         /// <summary> Gets the data structure data definition code. </summary>
         public string DataStructureDataDefinitionCode { get; }
