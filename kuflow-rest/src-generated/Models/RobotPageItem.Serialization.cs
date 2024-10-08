@@ -23,6 +23,8 @@ namespace KuFlow.Rest.Models
             string code = default;
             string name = default;
             string description = default;
+            RobotSourceType sourceType = default;
+            RobotSourceFile sourceFile = default;
             Guid tenantId = default;
             Guid? createdBy = default;
             DateTimeOffset? createdAt = default;
@@ -48,6 +50,16 @@ namespace KuFlow.Rest.Models
                 if (property.NameEquals("description"u8))
                 {
                     description = property.Value.GetString();
+                    continue;
+                }
+                if (property.NameEquals("sourceType"u8))
+                {
+                    sourceType = property.Value.GetString().ToRobotSourceType();
+                    continue;
+                }
+                if (property.NameEquals("sourceFile"u8))
+                {
+                    sourceFile = RobotSourceFile.DeserializeRobotSourceFile(property.Value);
                     continue;
                 }
                 if (property.NameEquals("tenantId"u8))
@@ -101,6 +113,8 @@ namespace KuFlow.Rest.Models
                 code,
                 name,
                 description,
+                sourceType,
+                sourceFile,
                 tenantId);
         }
 

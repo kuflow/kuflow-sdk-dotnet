@@ -16,7 +16,7 @@ namespace KuFlow.Rest.Models
         {
             writer.WriteStartObject();
             writer.WritePropertyName("op"u8);
-            writer.WriteStringValue(Op.ToString());
+            writer.WriteStringValue(Op.ToSerialString());
             if (Optional.IsDefined(From))
             {
                 writer.WritePropertyName("from"u8);

@@ -16,16 +16,21 @@ namespace KuFlow.Rest.Models
         /// <param name="id"> Robot ID. </param>
         /// <param name="code"> Robot Code. </param>
         /// <param name="name"> Robot name. </param>
+        /// <param name="sourceType"> Robot source type. </param>
+        /// <param name="sourceFile"> Robot source type. </param>
         /// <param name="tenantId"> Tenant ID. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="code"/> or <paramref name="name"/> is null. </exception>
-        internal RobotPageItem(Guid id, string code, string name, Guid tenantId)
+        /// <exception cref="ArgumentNullException"> <paramref name="code"/>, <paramref name="name"/> or <paramref name="sourceFile"/> is null. </exception>
+        internal RobotPageItem(Guid id, string code, string name, RobotSourceType sourceType, RobotSourceFile sourceFile, Guid tenantId)
         {
             Argument.AssertNotNull(code, nameof(code));
             Argument.AssertNotNull(name, nameof(name));
+            Argument.AssertNotNull(sourceFile, nameof(sourceFile));
 
             Id = id;
             Code = code;
             Name = name;
+            SourceType = sourceType;
+            SourceFile = sourceFile;
             TenantId = tenantId;
         }
 
@@ -38,13 +43,17 @@ namespace KuFlow.Rest.Models
         /// <param name="code"> Robot Code. </param>
         /// <param name="name"> Robot name. </param>
         /// <param name="description"> Robot description. </param>
+        /// <param name="sourceType"> Robot source type. </param>
+        /// <param name="sourceFile"> Robot source type. </param>
         /// <param name="tenantId"> Tenant ID. </param>
-        internal RobotPageItem(Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid id, string code, string name, string description, Guid tenantId) : base(createdBy, createdAt, lastModifiedBy, lastModifiedAt)
+        internal RobotPageItem(Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid id, string code, string name, string description, RobotSourceType sourceType, RobotSourceFile sourceFile, Guid tenantId) : base(createdBy, createdAt, lastModifiedBy, lastModifiedAt)
         {
             Id = id;
             Code = code;
             Name = name;
             Description = description;
+            SourceType = sourceType;
+            SourceFile = sourceFile;
             TenantId = tenantId;
         }
 
@@ -56,6 +65,10 @@ namespace KuFlow.Rest.Models
         public string Name { get; }
         /// <summary> Robot description. </summary>
         public string Description { get; }
+        /// <summary> Robot source type. </summary>
+        public RobotSourceType SourceType { get; }
+        /// <summary> Robot source type. </summary>
+        public RobotSourceFile SourceFile { get; }
         /// <summary> Tenant ID. </summary>
         public Guid TenantId { get; }
     }
