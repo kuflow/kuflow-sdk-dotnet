@@ -70,7 +70,7 @@ namespace KuFlow.Rest
         /// Please refer to the method description for supported properties.
         ///
         /// </param>
-        /// <param name="tenantId"> Filter by an array of tenant ids. </param>
+        /// <param name="tenantId"> Filter by tenantId. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// List all the Tenants that the credentials used has access to.
@@ -104,7 +104,7 @@ namespace KuFlow.Rest
         /// Please refer to the method description for supported properties.
         ///
         /// </param>
-        /// <param name="tenantId"> Filter by an array of tenant ids. </param>
+        /// <param name="tenantId"> Filter by tenantId. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// List all the Tenants that the credentials used has access to.
@@ -119,6 +119,44 @@ namespace KuFlow.Rest
             try
             {
                 return RestClient.FindTenants(size, page, sort, tenantId, cancellationToken);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary> Get a Tenant by ID. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <remarks> Returns the requested Tenant when has access to do it. </remarks>
+        public virtual async Task<Response<Tenant>> RetrieveTenantAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            using var scope = _clientDiagnostics.CreateScope("TenantClient.RetrieveTenant");
+            scope.Start();
+            try
+            {
+                return await RestClient.RetrieveTenantAsync(id, cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary> Get a Tenant by ID. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <remarks> Returns the requested Tenant when has access to do it. </remarks>
+        public virtual Response<Tenant> RetrieveTenant(Guid id, CancellationToken cancellationToken = default)
+        {
+            using var scope = _clientDiagnostics.CreateScope("TenantClient.RetrieveTenant");
+            scope.Start();
+            try
+            {
+                return RestClient.RetrieveTenant(id, cancellationToken);
             }
             catch (Exception e)
             {

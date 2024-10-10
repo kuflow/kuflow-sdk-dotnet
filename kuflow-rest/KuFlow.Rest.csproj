@@ -40,11 +40,11 @@
 
   <!-- Package Versions -->
   <PropertyGroup Condition="'$(Configuration)' == 'Debug' AND '$(DesignTimeBuild)' != 'true'">
-    <PackageVersion>3.1.0.$([System.DateTime]::UtcNow.ToString(MMddHHmmss))-snapshot</PackageVersion>
+    <PackageVersion>3.2.0-dev.$([System.DateTime]::UtcNow.ToString(MMddHHmmss))-snapshot</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <PackageVersion>3.1.0</PackageVersion>
+    <PackageVersion>3.2.0-dev</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
