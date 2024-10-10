@@ -62,7 +62,10 @@ namespace KuFlow.Rest
             }
             if (tenantId != null && !(tenantId is ChangeTrackingList<Guid> changeTrackingList0 && changeTrackingList0.IsUndefined))
             {
-                uri.AppendQueryDelimited("tenantId", tenantId, ",", true);
+                foreach (var param in tenantId)
+                {
+                    uri.AppendQuery("tenantId", param, true);
+                }
             }
             request.Uri = uri;
             request.Headers.Add("Accept", "application/json");
@@ -80,7 +83,7 @@ namespace KuFlow.Rest
         /// Please refer to the method description for supported properties.
         ///
         /// </param>
-        /// <param name="tenantId"> Filter by an array of tenant ids. </param>
+        /// <param name="tenantId"> Filter by tenantId. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// List all the Tenants that the credentials used has access to.
@@ -117,7 +120,7 @@ namespace KuFlow.Rest
         /// Please refer to the method description for supported properties.
         ///
         /// </param>
-        /// <param name="tenantId"> Filter by an array of tenant ids. </param>
+        /// <param name="tenantId"> Filter by tenantId. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
         /// List all the Tenants that the credentials used has access to.
@@ -136,6 +139,64 @@ namespace KuFlow.Rest
                         TenantPage value = default;
                         using var document = JsonDocument.Parse(message.Response.ContentStream);
                         value = TenantPage.DeserializeTenantPage(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        internal HttpMessage CreateRetrieveTenantRequest(Guid id)
+        {
+            var message = _pipeline.CreateMessage();
+            var request = message.Request;
+            request.Method = RequestMethod.Get;
+            var uri = new RawRequestUriBuilder();
+            uri.Reset(_endpoint);
+            uri.AppendPath("/tenants/", false);
+            uri.AppendPath(id, true);
+            request.Uri = uri;
+            request.Headers.Add("Accept", "application/json");
+            return message;
+        }
+
+        /// <summary> Get a Tenant by ID. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <remarks> Returns the requested Tenant when has access to do it. </remarks>
+        public async Task<Response<Tenant>> RetrieveTenantAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            using var message = CreateRetrieveTenantRequest(id);
+            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        Tenant value = default;
+                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, default, cancellationToken).ConfigureAwait(false);
+                        value = Tenant.DeserializeTenant(document.RootElement);
+                        return Response.FromValue(value, message.Response);
+                    }
+                default:
+                    throw new RequestFailedException(message.Response);
+            }
+        }
+
+        /// <summary> Get a Tenant by ID. </summary>
+        /// <param name="id"> The resource ID. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <remarks> Returns the requested Tenant when has access to do it. </remarks>
+        public Response<Tenant> RetrieveTenant(Guid id, CancellationToken cancellationToken = default)
+        {
+            using var message = CreateRetrieveTenantRequest(id);
+            _pipeline.Send(message, cancellationToken);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        Tenant value = default;
+                        using var document = JsonDocument.Parse(message.Response.ContentStream);
+                        value = Tenant.DeserializeTenant(document.RootElement);
                         return Response.FromValue(value, message.Response);
                     }
                 default:
