@@ -62,7 +62,7 @@ namespace KuFlow.Rest
             }
             if (type != null)
             {
-                uri.AppendQuery("type", type.Value.ToSerialString(), true);
+                uri.AppendQuery("type", type.Value.ToString(), true);
             }
             if (groupId != null && !(groupId is ChangeTrackingList<Guid> changeTrackingList0 && changeTrackingList0.IsUndefined))
             {

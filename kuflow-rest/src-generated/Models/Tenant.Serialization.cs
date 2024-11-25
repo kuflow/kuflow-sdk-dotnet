@@ -40,7 +40,7 @@ namespace KuFlow.Rest.Models
                 }
                 if (property.NameEquals("plan"u8))
                 {
-                    plan = property.Value.GetString().ToTenantPricingPlan();
+                    plan = new TenantPricingPlan(property.Value.GetString());
                     continue;
                 }
                 if (property.NameEquals("createdBy"u8))

@@ -41,7 +41,7 @@ namespace KuFlow.Rest.Models
                     {
                         continue;
                     }
-                    type = property.Value.GetString().ToPrincipalType();
+                    type = new PrincipalType(property.Value.GetString());
                     continue;
                 }
                 if (property.NameEquals("name"u8))

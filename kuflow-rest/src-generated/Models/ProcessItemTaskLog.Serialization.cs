@@ -42,7 +42,7 @@ namespace KuFlow.Rest.Models
                 }
                 if (property.NameEquals("level"u8))
                 {
-                    level = property.Value.GetString().ToProcessItemTaskLogLevel();
+                    level = new ProcessItemTaskLogLevel(property.Value.GetString());
                     continue;
                 }
             }

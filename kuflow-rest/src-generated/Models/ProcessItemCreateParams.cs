@@ -27,15 +27,17 @@ namespace KuFlow.Rest.Models
         /// <param name="processId"></param>
         /// <param name="ownerId"></param>
         /// <param name="ownerEmail"></param>
+        /// <param name="processItemDefinitionCode"></param>
         /// <param name="task"></param>
         /// <param name="message"></param>
-        internal ProcessItemCreateParams(Guid? id, ProcessItemType type, Guid processId, Guid? ownerId, string ownerEmail, ProcessItemTaskCreateParams task, ProcessItemMessageCreateParams message)
+        internal ProcessItemCreateParams(Guid? id, ProcessItemType type, Guid processId, Guid? ownerId, string ownerEmail, string processItemDefinitionCode, ProcessItemTaskCreateParams task, ProcessItemMessageCreateParams message)
         {
             Id = id;
             Type = type;
             ProcessId = processId;
             OwnerId = ownerId;
             OwnerEmail = ownerEmail;
+            ProcessItemDefinitionCode = processItemDefinitionCode;
             Task = task;
             Message = message;
         }
@@ -50,6 +52,8 @@ namespace KuFlow.Rest.Models
         public Guid? OwnerId { get; set; }
         /// <summary> Gets or sets the owner email. </summary>
         public string OwnerEmail { get; set; }
+        /// <summary> Gets or sets the process item definition code. </summary>
+        public string ProcessItemDefinitionCode { get; set; }
         /// <summary> Gets or sets the task. </summary>
         public ProcessItemTaskCreateParams Task { get; set; }
         /// <summary> Gets or sets the message. </summary>

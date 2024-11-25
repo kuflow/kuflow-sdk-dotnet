@@ -5,14 +5,47 @@
 
 #nullable disable
 
+using System;
+using System.ComponentModel;
+
 namespace KuFlow.Rest.Models
 {
     /// <summary> Robot source type. </summary>
-    public enum RobotSourceType
+    public readonly partial struct RobotSourceType : IEquatable<RobotSourceType>
     {
+        private readonly string _value;
+
+        /// <summary> Initializes a new instance of <see cref="RobotSourceType"/>. </summary>
+        /// <exception cref="ArgumentNullException"> <paramref name="value"/> is null. </exception>
+        public RobotSourceType(string value)
+        {
+            _value = value ?? throw new ArgumentNullException(nameof(value));
+        }
+
+        private const string PackageValue = "PACKAGE";
+        private const string UnknownValue = "UNKNOWN";
+
         /// <summary> PACKAGE. </summary>
-        Package,
+        public static RobotSourceType Package { get; } = new RobotSourceType(PackageValue);
         /// <summary> UNKNOWN. </summary>
-        Unknown
+        public static RobotSourceType Unknown { get; } = new RobotSourceType(UnknownValue);
+        /// <summary> Determines if two <see cref="RobotSourceType"/> values are the same. </summary>
+        public static bool operator ==(RobotSourceType left, RobotSourceType right) => left.Equals(right);
+        /// <summary> Determines if two <see cref="RobotSourceType"/> values are not the same. </summary>
+        public static bool operator !=(RobotSourceType left, RobotSourceType right) => !left.Equals(right);
+        /// <summary> Converts a string to a <see cref="RobotSourceType"/>. </summary>
+        public static implicit operator RobotSourceType(string value) => new RobotSourceType(value);
+
+        /// <inheritdoc />
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override bool Equals(object obj) => obj is RobotSourceType other && Equals(other);
+        /// <inheritdoc />
+        public bool Equals(RobotSourceType other) => string.Equals(_value, other._value, StringComparison.InvariantCultureIgnoreCase);
+
+        /// <inheritdoc />
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override int GetHashCode() => _value != null ? StringComparer.InvariantCultureIgnoreCase.GetHashCode(_value) : 0;
+        /// <inheritdoc />
+        public override string ToString() => _value;
     }
 }

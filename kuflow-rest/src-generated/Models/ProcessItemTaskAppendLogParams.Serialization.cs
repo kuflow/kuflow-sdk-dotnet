@@ -18,7 +18,7 @@ namespace KuFlow.Rest.Models
             writer.WritePropertyName("message"u8);
             writer.WriteStringValue(Message);
             writer.WritePropertyName("level"u8);
-            writer.WriteStringValue(Level.ToSerialString());
+            writer.WriteStringValue(Level.ToString());
             writer.WriteEndObject();
         }
 

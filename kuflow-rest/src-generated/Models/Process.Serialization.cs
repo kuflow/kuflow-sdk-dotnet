@@ -21,7 +21,7 @@ namespace KuFlow.Rest.Models
             }
             Guid id = default;
             ProcessState state = default;
-            ProcessDefinitionSummary processDefinition = default;
+            ProcessDefinitionRef processDefinitionRef = default;
             JsonValue metadata = default;
             JsonValue entity = default;
             ProcessRelated processRelated = default;
@@ -40,12 +40,16 @@ namespace KuFlow.Rest.Models
                 }
                 if (property.NameEquals("state"u8))
                 {
-                    state = property.Value.GetString().ToProcessState();
+                    state = new ProcessState(property.Value.GetString());
                     continue;
                 }
-                if (property.NameEquals("processDefinition"u8))
+                if (property.NameEquals("processDefinitionRef"u8))
                 {
-                    processDefinition = ProcessDefinitionSummary.DeserializeProcessDefinitionSummary(property.Value);
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    processDefinitionRef = ProcessDefinitionRef.DeserializeProcessDefinitionRef(property.Value);
                     continue;
                 }
                 if (property.NameEquals("metadata"u8))
@@ -133,7 +137,7 @@ namespace KuFlow.Rest.Models
                 lastModifiedAt,
                 id,
                 state,
-                processDefinition,
+                processDefinitionRef,
                 metadata,
                 entity,
                 processRelated,

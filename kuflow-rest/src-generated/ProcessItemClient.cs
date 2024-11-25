@@ -74,7 +74,7 @@ namespace KuFlow.Rest
         /// <param name="processId"> Filter by an array of process ids. </param>
         /// <param name="type"> Filter by an array of type. </param>
         /// <param name="taskState"> Filter by an array of task states. </param>
-        /// <param name="taskDefinitionCode"> Filter by an array of task definition codes. </param>
+        /// <param name="processItemDefinitionCode"> Filter by an array of task definition codes. </param>
         /// <param name="tenantId"> Filter by tenantId. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
@@ -83,13 +83,13 @@ namespace KuFlow.Rest
         /// Available sort query values: id, createdAt, lastModifiedAt, claimedAt, completedAt, cancelledAt
         ///
         /// </remarks>
-        internal virtual async Task<Response<ProcessItemPage>> FindProcessItemsAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> processId = null, IEnumerable<ProcessItemType> type = null, IEnumerable<ProcessItemTaskState> taskState = null, IEnumerable<string> taskDefinitionCode = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
+        internal virtual async Task<Response<ProcessItemPage>> FindProcessItemsAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> processId = null, IEnumerable<ProcessItemType> type = null, IEnumerable<ProcessItemTaskState> taskState = null, IEnumerable<string> processItemDefinitionCode = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
         {
             using var scope = _clientDiagnostics.CreateScope("ProcessItemClient.FindProcessItems");
             scope.Start();
             try
             {
-                return await RestClient.FindProcessItemsAsync(size, page, sort, processId, type, taskState, taskDefinitionCode, tenantId, cancellationToken).ConfigureAwait(false);
+                return await RestClient.FindProcessItemsAsync(size, page, sort, processId, type, taskState, processItemDefinitionCode, tenantId, cancellationToken).ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -112,7 +112,7 @@ namespace KuFlow.Rest
         /// <param name="processId"> Filter by an array of process ids. </param>
         /// <param name="type"> Filter by an array of type. </param>
         /// <param name="taskState"> Filter by an array of task states. </param>
-        /// <param name="taskDefinitionCode"> Filter by an array of task definition codes. </param>
+        /// <param name="processItemDefinitionCode"> Filter by an array of task definition codes. </param>
         /// <param name="tenantId"> Filter by tenantId. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
@@ -121,13 +121,13 @@ namespace KuFlow.Rest
         /// Available sort query values: id, createdAt, lastModifiedAt, claimedAt, completedAt, cancelledAt
         ///
         /// </remarks>
-        internal virtual Response<ProcessItemPage> FindProcessItems(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> processId = null, IEnumerable<ProcessItemType> type = null, IEnumerable<ProcessItemTaskState> taskState = null, IEnumerable<string> taskDefinitionCode = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
+        internal virtual Response<ProcessItemPage> FindProcessItems(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> processId = null, IEnumerable<ProcessItemType> type = null, IEnumerable<ProcessItemTaskState> taskState = null, IEnumerable<string> processItemDefinitionCode = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
         {
             using var scope = _clientDiagnostics.CreateScope("ProcessItemClient.FindProcessItems");
             scope.Start();
             try
             {
-                return RestClient.FindProcessItems(size, page, sort, processId, type, taskState, taskDefinitionCode, tenantId, cancellationToken);
+                return RestClient.FindProcessItems(size, page, sort, processId, type, taskState, processItemDefinitionCode, tenantId, cancellationToken);
             }
             catch (Exception e)
             {

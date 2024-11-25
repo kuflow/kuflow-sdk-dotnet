@@ -5,16 +5,50 @@
 
 #nullable disable
 
+using System;
+using System.ComponentModel;
+
 namespace KuFlow.Rest.Models
 {
     /// <summary> Robot asset platform. </summary>
-    public enum RobotAssetPlatform
+    public readonly partial struct RobotAssetPlatform : IEquatable<RobotAssetPlatform>
     {
+        private readonly string _value;
+
+        /// <summary> Initializes a new instance of <see cref="RobotAssetPlatform"/>. </summary>
+        /// <exception cref="ArgumentNullException"> <paramref name="value"/> is null. </exception>
+        public RobotAssetPlatform(string value)
+        {
+            _value = value ?? throw new ArgumentNullException(nameof(value));
+        }
+
+        private const string WindowsValue = "WINDOWS";
+        private const string MACOSValue = "MAC_OS";
+        private const string LinuxValue = "LINUX";
+
         /// <summary> WINDOWS. </summary>
-        Windows,
+        public static RobotAssetPlatform Windows { get; } = new RobotAssetPlatform(WindowsValue);
         /// <summary> MAC_OS. </summary>
-        MacOS,
+        public static RobotAssetPlatform MACOS { get; } = new RobotAssetPlatform(MACOSValue);
         /// <summary> LINUX. </summary>
-        Linux
+        public static RobotAssetPlatform Linux { get; } = new RobotAssetPlatform(LinuxValue);
+        /// <summary> Determines if two <see cref="RobotAssetPlatform"/> values are the same. </summary>
+        public static bool operator ==(RobotAssetPlatform left, RobotAssetPlatform right) => left.Equals(right);
+        /// <summary> Determines if two <see cref="RobotAssetPlatform"/> values are not the same. </summary>
+        public static bool operator !=(RobotAssetPlatform left, RobotAssetPlatform right) => !left.Equals(right);
+        /// <summary> Converts a string to a <see cref="RobotAssetPlatform"/>. </summary>
+        public static implicit operator RobotAssetPlatform(string value) => new RobotAssetPlatform(value);
+
+        /// <inheritdoc />
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override bool Equals(object obj) => obj is RobotAssetPlatform other && Equals(other);
+        /// <inheritdoc />
+        public bool Equals(RobotAssetPlatform other) => string.Equals(_value, other._value, StringComparison.InvariantCultureIgnoreCase);
+
+        /// <inheritdoc />
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override int GetHashCode() => _value != null ? StringComparer.InvariantCultureIgnoreCase.GetHashCode(_value) : 0;
+        /// <inheritdoc />
+        public override string ToString() => _value;
     }
 }

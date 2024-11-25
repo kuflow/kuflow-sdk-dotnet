@@ -19,21 +19,15 @@ namespace KuFlow.Rest.Models
                 return null;
             }
             ProcessItemTaskState state = default;
-            TaskDefinitionSummary taskDefinition = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("state"u8))
                 {
-                    state = property.Value.GetString().ToProcessItemTaskState();
-                    continue;
-                }
-                if (property.NameEquals("taskDefinition"u8))
-                {
-                    taskDefinition = TaskDefinitionSummary.DeserializeTaskDefinitionSummary(property.Value);
+                    state = new ProcessItemTaskState(property.Value.GetString());
                     continue;
                 }
             }
-            return new ProcessItemTaskPageItem(state, taskDefinition);
+            return new ProcessItemTaskPageItem(state);
         }
 
         /// <summary> Deserializes the model from a raw response. </summary>

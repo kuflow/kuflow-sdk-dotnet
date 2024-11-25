@@ -70,7 +70,7 @@ namespace KuFlow.Rest
             }
             if (filterContext != null)
             {
-                uri.AppendQuery("filterContext", filterContext.Value.ToSerialString(), true);
+                uri.AppendQuery("filterContext", filterContext.Value.ToString(), true);
             }
             request.Uri = uri;
             request.Headers.Add("Accept", "application/json");
@@ -276,10 +276,10 @@ namespace KuFlow.Rest
             uri.AppendPath("/robots/", false);
             uri.AppendPath(id, true);
             uri.AppendPath("/~actions/download-asset", false);
-            uri.AppendQuery("type", type.ToSerialString(), true);
+            uri.AppendQuery("type", type.ToString(), true);
             uri.AppendQuery("version", version, true);
-            uri.AppendQuery("platform", platform.ToSerialString(), true);
-            uri.AppendQuery("architecture", architecture.ToSerialString(), true);
+            uri.AppendQuery("platform", platform.ToString(), true);
+            uri.AppendQuery("architecture", architecture.ToString(), true);
             request.Uri = uri;
             request.Headers.Add("Accept", "application/octet-stream, application/json");
             return message;

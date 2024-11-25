@@ -5,18 +5,53 @@
 
 #nullable disable
 
+using System;
+using System.ComponentModel;
+
 namespace KuFlow.Rest.Models
 {
     /// <summary> Type of the Event. </summary>
-    internal enum WebhookType
+    internal readonly partial struct WebhookType : IEquatable<WebhookType>
     {
+        private readonly string _value;
+
+        /// <summary> Initializes a new instance of <see cref="WebhookType"/>. </summary>
+        /// <exception cref="ArgumentNullException"> <paramref name="value"/> is null. </exception>
+        public WebhookType(string value)
+        {
+            _value = value ?? throw new ArgumentNullException(nameof(value));
+        }
+
+        private const string ProcessCreatedValue = "PROCESS.CREATED";
+        private const string ProcessStateChangedValue = "PROCESS.STATE_CHANGED";
+        private const string ProcessItemCreatedValue = "PROCESS_ITEM.CREATED";
+        private const string ProcessItemTaskStateChangedValue = "PROCESS_ITEM.TASK_STATE_CHANGED";
+
         /// <summary> PROCESS.CREATED. </summary>
-        ProcessCreated,
+        public static WebhookType ProcessCreated { get; } = new WebhookType(ProcessCreatedValue);
         /// <summary> PROCESS.STATE_CHANGED. </summary>
-        ProcessStateChanged,
+        public static WebhookType ProcessStateChanged { get; } = new WebhookType(ProcessStateChangedValue);
         /// <summary> PROCESS_ITEM.CREATED. </summary>
-        ProcessItemCreated,
+        public static WebhookType ProcessItemCreated { get; } = new WebhookType(ProcessItemCreatedValue);
         /// <summary> PROCESS_ITEM.TASK_STATE_CHANGED. </summary>
-        ProcessItemTaskStateChanged
+        public static WebhookType ProcessItemTaskStateChanged { get; } = new WebhookType(ProcessItemTaskStateChangedValue);
+        /// <summary> Determines if two <see cref="WebhookType"/> values are the same. </summary>
+        public static bool operator ==(WebhookType left, WebhookType right) => left.Equals(right);
+        /// <summary> Determines if two <see cref="WebhookType"/> values are not the same. </summary>
+        public static bool operator !=(WebhookType left, WebhookType right) => !left.Equals(right);
+        /// <summary> Converts a string to a <see cref="WebhookType"/>. </summary>
+        public static implicit operator WebhookType(string value) => new WebhookType(value);
+
+        /// <inheritdoc />
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override bool Equals(object obj) => obj is WebhookType other && Equals(other);
+        /// <inheritdoc />
+        public bool Equals(WebhookType other) => string.Equals(_value, other._value, StringComparison.InvariantCultureIgnoreCase);
+
+        /// <inheritdoc />
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override int GetHashCode() => _value != null ? StringComparer.InvariantCultureIgnoreCase.GetHashCode(_value) : 0;
+        /// <inheritdoc />
+        public override string ToString() => _value;
     }
 }

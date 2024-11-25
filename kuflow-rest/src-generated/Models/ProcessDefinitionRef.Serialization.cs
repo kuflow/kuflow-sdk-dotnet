@@ -11,9 +11,9 @@ using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class ProcessDefinitionSummary
+    public partial class ProcessDefinitionRef
     {
-        internal static ProcessDefinitionSummary DeserializeProcessDefinitionSummary(JsonElement element)
+        internal static ProcessDefinitionRef DeserializeProcessDefinitionRef(JsonElement element)
         {
             if (element.ValueKind == JsonValueKind.Null)
             {
@@ -21,7 +21,6 @@ namespace KuFlow.Rest.Models
             }
             Guid id = default;
             Guid version = default;
-            string name = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("id"u8))
@@ -34,21 +33,16 @@ namespace KuFlow.Rest.Models
                     version = property.Value.GetGuid();
                     continue;
                 }
-                if (property.NameEquals("name"u8))
-                {
-                    name = property.Value.GetString();
-                    continue;
-                }
             }
-            return new ProcessDefinitionSummary(id, version, name);
+            return new ProcessDefinitionRef(id, version);
         }
 
         /// <summary> Deserializes the model from a raw response. </summary>
         /// <param name="response"> The response to deserialize the model from. </param>
-        internal static ProcessDefinitionSummary FromResponse(Response response)
+        internal static ProcessDefinitionRef FromResponse(Response response)
         {
             using var document = JsonDocument.Parse(response.Content);
-            return DeserializeProcessDefinitionSummary(document.RootElement);
+            return DeserializeProcessDefinitionRef(document.RootElement);
         }
     }
 }
