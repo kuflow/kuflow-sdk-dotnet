@@ -39,7 +39,7 @@ namespace KuFlow.Rest.Models
         public static bool operator ==(WebhookType left, WebhookType right) => left.Equals(right);
         /// <summary> Determines if two <see cref="WebhookType"/> values are not the same. </summary>
         public static bool operator !=(WebhookType left, WebhookType right) => !left.Equals(right);
-        /// <summary> Converts a string to a <see cref="WebhookType"/>. </summary>
+        /// <summary> Converts a <see cref="string"/> to a <see cref="WebhookType"/>. </summary>
         public static implicit operator WebhookType(string value) => new WebhookType(value);
 
         /// <inheritdoc />
