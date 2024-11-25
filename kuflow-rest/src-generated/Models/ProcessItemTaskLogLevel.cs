@@ -36,7 +36,7 @@ namespace KuFlow.Rest.Models
         public static bool operator ==(ProcessItemTaskLogLevel left, ProcessItemTaskLogLevel right) => left.Equals(right);
         /// <summary> Determines if two <see cref="ProcessItemTaskLogLevel"/> values are not the same. </summary>
         public static bool operator !=(ProcessItemTaskLogLevel left, ProcessItemTaskLogLevel right) => !left.Equals(right);
-        /// <summary> Converts a string to a <see cref="ProcessItemTaskLogLevel"/>. </summary>
+        /// <summary> Converts a <see cref="string"/> to a <see cref="ProcessItemTaskLogLevel"/>. </summary>
         public static implicit operator ProcessItemTaskLogLevel(string value) => new ProcessItemTaskLogLevel(value);
 
         /// <inheritdoc />

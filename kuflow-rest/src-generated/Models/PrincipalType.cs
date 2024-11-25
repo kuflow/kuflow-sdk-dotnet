@@ -36,7 +36,7 @@ namespace KuFlow.Rest.Models
         public static bool operator ==(PrincipalType left, PrincipalType right) => left.Equals(right);
         /// <summary> Determines if two <see cref="PrincipalType"/> values are not the same. </summary>
         public static bool operator !=(PrincipalType left, PrincipalType right) => !left.Equals(right);
-        /// <summary> Converts a string to a <see cref="PrincipalType"/>. </summary>
+        /// <summary> Converts a <see cref="string"/> to a <see cref="PrincipalType"/>. </summary>
         public static implicit operator PrincipalType(string value) => new PrincipalType(value);
 
         /// <inheritdoc />

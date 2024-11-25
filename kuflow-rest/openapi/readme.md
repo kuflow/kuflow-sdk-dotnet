@@ -36,7 +36,7 @@ $> npm run generate
 version: "3"
 
 use-extension:
-  "@autorest/csharp": "3.0.0-beta.20240808.6"
+  "@autorest/csharp": "3.0.0-beta.20241124.1"
 
 modelerfour:
   seal-single-value-enum-by-default: false

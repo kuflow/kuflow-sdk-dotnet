@@ -39,7 +39,7 @@ namespace KuFlow.Rest.Models
         public static bool operator ==(ProcessItemTaskState left, ProcessItemTaskState right) => left.Equals(right);
         /// <summary> Determines if two <see cref="ProcessItemTaskState"/> values are not the same. </summary>
         public static bool operator !=(ProcessItemTaskState left, ProcessItemTaskState right) => !left.Equals(right);
-        /// <summary> Converts a string to a <see cref="ProcessItemTaskState"/>. </summary>
+        /// <summary> Converts a <see cref="string"/> to a <see cref="ProcessItemTaskState"/>. </summary>
         public static implicit operator ProcessItemTaskState(string value) => new ProcessItemTaskState(value);
 
         /// <inheritdoc />

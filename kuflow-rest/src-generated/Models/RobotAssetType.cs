@@ -36,7 +36,7 @@ namespace KuFlow.Rest.Models
         public static bool operator ==(RobotAssetType left, RobotAssetType right) => left.Equals(right);
         /// <summary> Determines if two <see cref="RobotAssetType"/> values are not the same. </summary>
         public static bool operator !=(RobotAssetType left, RobotAssetType right) => !left.Equals(right);
-        /// <summary> Converts a string to a <see cref="RobotAssetType"/>. </summary>
+        /// <summary> Converts a <see cref="string"/> to a <see cref="RobotAssetType"/>. </summary>
         public static implicit operator RobotAssetType(string value) => new RobotAssetType(value);
 
         /// <inheritdoc />

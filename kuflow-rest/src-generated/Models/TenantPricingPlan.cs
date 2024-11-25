@@ -36,7 +36,7 @@ namespace KuFlow.Rest.Models
         public static bool operator ==(TenantPricingPlan left, TenantPricingPlan right) => left.Equals(right);
         /// <summary> Determines if two <see cref="TenantPricingPlan"/> values are not the same. </summary>
         public static bool operator !=(TenantPricingPlan left, TenantPricingPlan right) => !left.Equals(right);
-        /// <summary> Converts a string to a <see cref="TenantPricingPlan"/>. </summary>
+        /// <summary> Converts a <see cref="string"/> to a <see cref="TenantPricingPlan"/>. </summary>
         public static implicit operator TenantPricingPlan(string value) => new TenantPricingPlan(value);
 
         /// <inheritdoc />

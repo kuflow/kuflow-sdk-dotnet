@@ -38,7 +38,7 @@ namespace KuFlow.Rest.Models
         public static bool operator ==(RobotFilterContext left, RobotFilterContext right) => left.Equals(right);
         /// <summary> Determines if two <see cref="RobotFilterContext"/> values are not the same. </summary>
         public static bool operator !=(RobotFilterContext left, RobotFilterContext right) => !left.Equals(right);
-        /// <summary> Converts a string to a <see cref="RobotFilterContext"/>. </summary>
+        /// <summary> Converts a <see cref="string"/> to a <see cref="RobotFilterContext"/>. </summary>
         public static implicit operator RobotFilterContext(string value) => new RobotFilterContext(value);
 
         /// <inheritdoc />
