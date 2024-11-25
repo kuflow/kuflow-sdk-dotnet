@@ -15,16 +15,11 @@ namespace KuFlow.Rest.Models
         /// <summary> Initializes a new instance of <see cref="Process"/>. </summary>
         /// <param name="id"> Process ID. </param>
         /// <param name="state"> Process state. </param>
-        /// <param name="processDefinition"></param>
         /// <param name="tenantId"> Tenant ID. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="processDefinition"/> is null. </exception>
-        internal Process(Guid id, ProcessState state, ProcessDefinitionSummary processDefinition, Guid tenantId)
+        internal Process(Guid id, ProcessState state, Guid tenantId)
         {
-            Argument.AssertNotNull(processDefinition, nameof(processDefinition));
-
             Id = id;
             State = state;
-            ProcessDefinition = processDefinition;
             TenantId = tenantId;
         }
 
@@ -35,17 +30,17 @@ namespace KuFlow.Rest.Models
         /// <param name="lastModifiedAt"> When this model type was last updated. </param>
         /// <param name="id"> Process ID. </param>
         /// <param name="state"> Process state. </param>
-        /// <param name="processDefinition"></param>
+        /// <param name="processDefinitionRef"></param>
         /// <param name="metadata"> Json value. </param>
         /// <param name="entity"> Json value. </param>
         /// <param name="processRelated"></param>
         /// <param name="initiatorId"> Process initiator id, Principal ID. </param>
         /// <param name="tenantId"> Tenant ID. </param>
-        internal Process(Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid id, ProcessState state, ProcessDefinitionSummary processDefinition, JsonValue metadata, JsonValue entity, ProcessRelated processRelated, Guid? initiatorId, Guid tenantId) : base(createdBy, createdAt, lastModifiedBy, lastModifiedAt)
+        internal Process(Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid id, ProcessState state, ProcessDefinitionRef processDefinitionRef, JsonValue metadata, JsonValue entity, ProcessRelated processRelated, Guid? initiatorId, Guid tenantId) : base(createdBy, createdAt, lastModifiedBy, lastModifiedAt)
         {
             Id = id;
             State = state;
-            ProcessDefinition = processDefinition;
+            ProcessDefinitionRef = processDefinitionRef;
             Metadata = metadata;
             Entity = entity;
             ProcessRelated = processRelated;
@@ -57,8 +52,8 @@ namespace KuFlow.Rest.Models
         public Guid Id { get; }
         /// <summary> Process state. </summary>
         public ProcessState State { get; }
-        /// <summary> Gets the process definition. </summary>
-        public ProcessDefinitionSummary ProcessDefinition { get; }
+        /// <summary> Gets the process definition ref. </summary>
+        public ProcessDefinitionRef ProcessDefinitionRef { get; }
         /// <summary> Json value. </summary>
         public JsonValue Metadata { get; }
         /// <summary> Json value. </summary>

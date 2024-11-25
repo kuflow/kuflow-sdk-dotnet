@@ -21,7 +21,7 @@ namespace KuFlow.Rest.Models
                 writer.WriteStringValue(Id.Value);
             }
             writer.WritePropertyName("type"u8);
-            writer.WriteStringValue(Type.ToSerialString());
+            writer.WriteStringValue(Type.ToString());
             writer.WritePropertyName("processId"u8);
             writer.WriteStringValue(ProcessId);
             if (Optional.IsDefined(OwnerId))
@@ -33,6 +33,11 @@ namespace KuFlow.Rest.Models
             {
                 writer.WritePropertyName("ownerEmail"u8);
                 writer.WriteStringValue(OwnerEmail);
+            }
+            if (Optional.IsDefined(ProcessItemDefinitionCode))
+            {
+                writer.WritePropertyName("processItemDefinitionCode"u8);
+                writer.WriteStringValue(ProcessItemDefinitionCode);
             }
             if (Optional.IsDefined(Task))
             {

@@ -38,7 +38,7 @@ namespace KuFlow.Rest
             _endpoint = endpoint ?? new Uri("https://api.kuflow.com/v2024-06-14");
         }
 
-        internal HttpMessage CreateFindProcessItemsRequest(int? size, int? page, IEnumerable<string> sort, IEnumerable<Guid> processId, IEnumerable<ProcessItemType> type, IEnumerable<ProcessItemTaskState> taskState, IEnumerable<string> taskDefinitionCode, IEnumerable<Guid> tenantId)
+        internal HttpMessage CreateFindProcessItemsRequest(int? size, int? page, IEnumerable<string> sort, IEnumerable<Guid> processId, IEnumerable<ProcessItemType> type, IEnumerable<ProcessItemTaskState> taskState, IEnumerable<string> processItemDefinitionCode, IEnumerable<Guid> tenantId)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -72,21 +72,21 @@ namespace KuFlow.Rest
             {
                 foreach (var param in type)
                 {
-                    uri.AppendQuery("type", param.ToSerialString(), true);
+                    uri.AppendQuery("type", param.ToString(), true);
                 }
             }
             if (taskState != null && !(taskState is ChangeTrackingList<ProcessItemTaskState> changeTrackingList2 && changeTrackingList2.IsUndefined))
             {
                 foreach (var param in taskState)
                 {
-                    uri.AppendQuery("taskState", param.ToSerialString(), true);
+                    uri.AppendQuery("taskState", param.ToString(), true);
                 }
             }
-            if (taskDefinitionCode != null && !(taskDefinitionCode is ChangeTrackingList<string> changeTrackingList3 && changeTrackingList3.IsUndefined))
+            if (processItemDefinitionCode != null && !(processItemDefinitionCode is ChangeTrackingList<string> changeTrackingList3 && changeTrackingList3.IsUndefined))
             {
-                foreach (var param in taskDefinitionCode)
+                foreach (var param in processItemDefinitionCode)
                 {
-                    uri.AppendQuery("taskDefinitionCode", param, true);
+                    uri.AppendQuery("processItemDefinitionCode", param, true);
                 }
             }
             if (tenantId != null && !(tenantId is ChangeTrackingList<Guid> changeTrackingList4 && changeTrackingList4.IsUndefined))
@@ -115,7 +115,7 @@ namespace KuFlow.Rest
         /// <param name="processId"> Filter by an array of process ids. </param>
         /// <param name="type"> Filter by an array of type. </param>
         /// <param name="taskState"> Filter by an array of task states. </param>
-        /// <param name="taskDefinitionCode"> Filter by an array of task definition codes. </param>
+        /// <param name="processItemDefinitionCode"> Filter by an array of task definition codes. </param>
         /// <param name="tenantId"> Filter by tenantId. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
@@ -124,9 +124,9 @@ namespace KuFlow.Rest
         /// Available sort query values: id, createdAt, lastModifiedAt, claimedAt, completedAt, cancelledAt
         ///
         /// </remarks>
-        public async Task<Response<ProcessItemPage>> FindProcessItemsAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> processId = null, IEnumerable<ProcessItemType> type = null, IEnumerable<ProcessItemTaskState> taskState = null, IEnumerable<string> taskDefinitionCode = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
+        public async Task<Response<ProcessItemPage>> FindProcessItemsAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> processId = null, IEnumerable<ProcessItemType> type = null, IEnumerable<ProcessItemTaskState> taskState = null, IEnumerable<string> processItemDefinitionCode = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
         {
-            using var message = CreateFindProcessItemsRequest(size, page, sort, processId, type, taskState, taskDefinitionCode, tenantId);
+            using var message = CreateFindProcessItemsRequest(size, page, sort, processId, type, taskState, processItemDefinitionCode, tenantId);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
@@ -156,7 +156,7 @@ namespace KuFlow.Rest
         /// <param name="processId"> Filter by an array of process ids. </param>
         /// <param name="type"> Filter by an array of type. </param>
         /// <param name="taskState"> Filter by an array of task states. </param>
-        /// <param name="taskDefinitionCode"> Filter by an array of task definition codes. </param>
+        /// <param name="processItemDefinitionCode"> Filter by an array of task definition codes. </param>
         /// <param name="tenantId"> Filter by tenantId. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <remarks>
@@ -165,9 +165,9 @@ namespace KuFlow.Rest
         /// Available sort query values: id, createdAt, lastModifiedAt, claimedAt, completedAt, cancelledAt
         ///
         /// </remarks>
-        public Response<ProcessItemPage> FindProcessItems(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> processId = null, IEnumerable<ProcessItemType> type = null, IEnumerable<ProcessItemTaskState> taskState = null, IEnumerable<string> taskDefinitionCode = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
+        public Response<ProcessItemPage> FindProcessItems(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> processId = null, IEnumerable<ProcessItemType> type = null, IEnumerable<ProcessItemTaskState> taskState = null, IEnumerable<string> processItemDefinitionCode = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
         {
-            using var message = CreateFindProcessItemsRequest(size, page, sort, processId, type, taskState, taskDefinitionCode, tenantId);
+            using var message = CreateFindProcessItemsRequest(size, page, sort, processId, type, taskState, processItemDefinitionCode, tenantId);
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {

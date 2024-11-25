@@ -5,8 +5,6 @@
 
 #nullable disable
 
-using System;
-
 namespace KuFlow.Rest.Models
 {
     /// <summary> The ProcessItemTaskPageItem. </summary>
@@ -14,19 +12,12 @@ namespace KuFlow.Rest.Models
     {
         /// <summary> Initializes a new instance of <see cref="ProcessItemTaskPageItem"/>. </summary>
         /// <param name="state"> Process Item Task state. </param>
-        /// <param name="taskDefinition"></param>
-        /// <exception cref="ArgumentNullException"> <paramref name="taskDefinition"/> is null. </exception>
-        internal ProcessItemTaskPageItem(ProcessItemTaskState state, TaskDefinitionSummary taskDefinition)
+        internal ProcessItemTaskPageItem(ProcessItemTaskState state)
         {
-            Argument.AssertNotNull(taskDefinition, nameof(taskDefinition));
-
             State = state;
-            TaskDefinition = taskDefinition;
         }
 
         /// <summary> Process Item Task state. </summary>
         public ProcessItemTaskState State { get; }
-        /// <summary> Gets the task definition. </summary>
-        public TaskDefinitionSummary TaskDefinition { get; }
     }
 }

@@ -5,16 +5,50 @@
 
 #nullable disable
 
+using System;
+using System.ComponentModel;
+
 namespace KuFlow.Rest.Models
 {
     /// <summary> Tenant pricing plan. </summary>
-    public enum TenantPricingPlan
+    public readonly partial struct TenantPricingPlan : IEquatable<TenantPricingPlan>
     {
+        private readonly string _value;
+
+        /// <summary> Initializes a new instance of <see cref="TenantPricingPlan"/>. </summary>
+        /// <exception cref="ArgumentNullException"> <paramref name="value"/> is null. </exception>
+        public TenantPricingPlan(string value)
+        {
+            _value = value ?? throw new ArgumentNullException(nameof(value));
+        }
+
+        private const string FreeValue = "FREE";
+        private const string PremiumValue = "PREMIUM";
+        private const string UnlimitedValue = "UNLIMITED";
+
         /// <summary> FREE. </summary>
-        Free,
+        public static TenantPricingPlan Free { get; } = new TenantPricingPlan(FreeValue);
         /// <summary> PREMIUM. </summary>
-        Premium,
+        public static TenantPricingPlan Premium { get; } = new TenantPricingPlan(PremiumValue);
         /// <summary> UNLIMITED. </summary>
-        Unlimited
+        public static TenantPricingPlan Unlimited { get; } = new TenantPricingPlan(UnlimitedValue);
+        /// <summary> Determines if two <see cref="TenantPricingPlan"/> values are the same. </summary>
+        public static bool operator ==(TenantPricingPlan left, TenantPricingPlan right) => left.Equals(right);
+        /// <summary> Determines if two <see cref="TenantPricingPlan"/> values are not the same. </summary>
+        public static bool operator !=(TenantPricingPlan left, TenantPricingPlan right) => !left.Equals(right);
+        /// <summary> Converts a string to a <see cref="TenantPricingPlan"/>. </summary>
+        public static implicit operator TenantPricingPlan(string value) => new TenantPricingPlan(value);
+
+        /// <inheritdoc />
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override bool Equals(object obj) => obj is TenantPricingPlan other && Equals(other);
+        /// <inheritdoc />
+        public bool Equals(TenantPricingPlan other) => string.Equals(_value, other._value, StringComparison.InvariantCultureIgnoreCase);
+
+        /// <inheritdoc />
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override int GetHashCode() => _value != null ? StringComparer.InvariantCultureIgnoreCase.GetHashCode(_value) : 0;
+        /// <inheritdoc />
+        public override string ToString() => _value;
     }
 }

@@ -24,6 +24,7 @@ namespace KuFlow.Rest.Models
             Guid processId = default;
             Guid? ownerId = default;
             Guid? tenantId = default;
+            ProcessItemDefinitionRef processItemDefinitionRef = default;
             ProcessItemTask task = default;
             ProcessItemMessage message = default;
             Guid? createdBy = default;
@@ -39,7 +40,7 @@ namespace KuFlow.Rest.Models
                 }
                 if (property.NameEquals("type"u8))
                 {
-                    type = property.Value.GetString().ToProcessItemType();
+                    type = new ProcessItemType(property.Value.GetString());
                     continue;
                 }
                 if (property.NameEquals("processId"u8))
@@ -63,6 +64,15 @@ namespace KuFlow.Rest.Models
                         continue;
                     }
                     tenantId = property.Value.GetGuid();
+                    continue;
+                }
+                if (property.NameEquals("processItemDefinitionRef"u8))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    processItemDefinitionRef = ProcessItemDefinitionRef.DeserializeProcessItemDefinitionRef(property.Value);
                     continue;
                 }
                 if (property.NameEquals("task"u8))
@@ -130,6 +140,7 @@ namespace KuFlow.Rest.Models
                 processId,
                 ownerId,
                 tenantId,
+                processItemDefinitionRef,
                 task,
                 message);
         }

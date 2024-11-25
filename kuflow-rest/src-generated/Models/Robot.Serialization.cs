@@ -56,7 +56,7 @@ namespace KuFlow.Rest.Models
                 }
                 if (property.NameEquals("sourceType"u8))
                 {
-                    sourceType = property.Value.GetString().ToRobotSourceType();
+                    sourceType = new RobotSourceType(property.Value.GetString());
                     continue;
                 }
                 if (property.NameEquals("sourceFile"u8))

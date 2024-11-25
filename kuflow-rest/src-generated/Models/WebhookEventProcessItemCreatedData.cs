@@ -27,15 +27,15 @@ namespace KuFlow.Rest.Models
         /// <param name="processId"></param>
         /// <param name="processItemId"></param>
         /// <param name="processItemType"> Process Item Type. </param>
-        /// <param name="processItemTaskCode"></param>
         /// <param name="processItemState"> Process Item Task state. </param>
-        internal WebhookEventProcessItemCreatedData(Guid processId, Guid processItemId, ProcessItemType processItemType, string processItemTaskCode, ProcessItemTaskState? processItemState)
+        /// <param name="processItemDefinitionCode"></param>
+        internal WebhookEventProcessItemCreatedData(Guid processId, Guid processItemId, ProcessItemType processItemType, ProcessItemTaskState? processItemState, string processItemDefinitionCode)
         {
             ProcessId = processId;
             ProcessItemId = processItemId;
             ProcessItemType = processItemType;
-            ProcessItemTaskCode = processItemTaskCode;
             ProcessItemState = processItemState;
+            ProcessItemDefinitionCode = processItemDefinitionCode;
         }
 
         /// <summary> Gets the process id. </summary>
@@ -44,9 +44,9 @@ namespace KuFlow.Rest.Models
         public Guid ProcessItemId { get; }
         /// <summary> Process Item Type. </summary>
         public ProcessItemType ProcessItemType { get; }
-        /// <summary> Gets the process item task code. </summary>
-        public string ProcessItemTaskCode { get; }
         /// <summary> Process Item Task state. </summary>
         public ProcessItemTaskState? ProcessItemState { get; }
+        /// <summary> Gets the process item definition code. </summary>
+        public string ProcessItemDefinitionCode { get; }
     }
 }

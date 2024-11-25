@@ -15,8 +15,6 @@ namespace KuFlow.Rest.Models
         void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
         {
             writer.WriteStartObject();
-            writer.WritePropertyName("taskDefinitionCode"u8);
-            writer.WriteStringValue(TaskDefinitionCode);
             if (Optional.IsDefined(Data))
             {
                 writer.WritePropertyName("data"u8);

@@ -9,24 +9,21 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The TaskDefinitionSummary. </summary>
-    public partial class TaskDefinitionSummary
+    /// <summary> The ProcessItemDefinitionRef. </summary>
+    public partial class ProcessItemDefinitionRef
     {
-        /// <summary> Initializes a new instance of <see cref="TaskDefinitionSummary"/>. </summary>
+        /// <summary> Initializes a new instance of <see cref="ProcessItemDefinitionRef"/>. </summary>
         /// <param name="id"></param>
         /// <param name="version"></param>
         /// <param name="code"></param>
-        /// <param name="name"></param>
-        /// <exception cref="ArgumentNullException"> <paramref name="code"/> or <paramref name="name"/> is null. </exception>
-        internal TaskDefinitionSummary(Guid id, Guid version, string code, string name)
+        /// <exception cref="ArgumentNullException"> <paramref name="code"/> is null. </exception>
+        internal ProcessItemDefinitionRef(Guid id, Guid version, string code)
         {
             Argument.AssertNotNull(code, nameof(code));
-            Argument.AssertNotNull(name, nameof(name));
 
             Id = id;
             Version = version;
             Code = code;
-            Name = name;
         }
 
         /// <summary> Gets the id. </summary>
@@ -35,7 +32,5 @@ namespace KuFlow.Rest.Models
         public Guid Version { get; }
         /// <summary> Gets the code. </summary>
         public string Code { get; }
-        /// <summary> Gets the name. </summary>
-        public string Name { get; }
     }
 }

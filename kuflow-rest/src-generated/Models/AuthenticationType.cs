@@ -5,14 +5,47 @@
 
 #nullable disable
 
+using System;
+using System.ComponentModel;
+
 namespace KuFlow.Rest.Models
 {
     /// <summary> The AuthenticationType. </summary>
-    public enum AuthenticationType
+    public readonly partial struct AuthenticationType : IEquatable<AuthenticationType>
     {
+        private readonly string _value;
+
+        /// <summary> Initializes a new instance of <see cref="AuthenticationType"/>. </summary>
+        /// <exception cref="ArgumentNullException"> <paramref name="value"/> is null. </exception>
+        public AuthenticationType(string value)
+        {
+            _value = value ?? throw new ArgumentNullException(nameof(value));
+        }
+
+        private const string EngineTokenValue = "ENGINE_TOKEN";
+        private const string EngineCertificateValue = "ENGINE_CERTIFICATE";
+
         /// <summary> ENGINE_TOKEN. </summary>
-        EngineToken,
+        public static AuthenticationType EngineToken { get; } = new AuthenticationType(EngineTokenValue);
         /// <summary> ENGINE_CERTIFICATE. </summary>
-        EngineCertificate
+        public static AuthenticationType EngineCertificate { get; } = new AuthenticationType(EngineCertificateValue);
+        /// <summary> Determines if two <see cref="AuthenticationType"/> values are the same. </summary>
+        public static bool operator ==(AuthenticationType left, AuthenticationType right) => left.Equals(right);
+        /// <summary> Determines if two <see cref="AuthenticationType"/> values are not the same. </summary>
+        public static bool operator !=(AuthenticationType left, AuthenticationType right) => !left.Equals(right);
+        /// <summary> Converts a string to a <see cref="AuthenticationType"/>. </summary>
+        public static implicit operator AuthenticationType(string value) => new AuthenticationType(value);
+
+        /// <inheritdoc />
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override bool Equals(object obj) => obj is AuthenticationType other && Equals(other);
+        /// <inheritdoc />
+        public bool Equals(AuthenticationType other) => string.Equals(_value, other._value, StringComparison.InvariantCultureIgnoreCase);
+
+        /// <inheritdoc />
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override int GetHashCode() => _value != null ? StringComparer.InvariantCultureIgnoreCase.GetHashCode(_value) : 0;
+        /// <inheritdoc />
+        public override string ToString() => _value;
     }
 }

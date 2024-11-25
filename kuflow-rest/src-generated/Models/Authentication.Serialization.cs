@@ -45,7 +45,7 @@ namespace KuFlow.Rest.Models
                     {
                         continue;
                     }
-                    type = property.Value.GetString().ToAuthenticationType();
+                    type = new AuthenticationType(property.Value.GetString());
                     continue;
                 }
                 if (property.NameEquals("tenantId"u8))

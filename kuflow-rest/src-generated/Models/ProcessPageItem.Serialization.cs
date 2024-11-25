@@ -21,7 +21,7 @@ namespace KuFlow.Rest.Models
             }
             Guid id = default;
             ProcessState state = default;
-            ProcessDefinitionSummary processDefinition = default;
+            ProcessDefinitionRef processDefinitionRef = default;
             Guid? initiatorId = default;
             Guid tenantId = default;
             Guid? createdBy = default;
@@ -37,12 +37,12 @@ namespace KuFlow.Rest.Models
                 }
                 if (property.NameEquals("state"u8))
                 {
-                    state = property.Value.GetString().ToProcessState();
+                    state = new ProcessState(property.Value.GetString());
                     continue;
                 }
-                if (property.NameEquals("processDefinition"u8))
+                if (property.NameEquals("processDefinitionRef"u8))
                 {
-                    processDefinition = ProcessDefinitionSummary.DeserializeProcessDefinitionSummary(property.Value);
+                    processDefinitionRef = ProcessDefinitionRef.DeserializeProcessDefinitionRef(property.Value);
                     continue;
                 }
                 if (property.NameEquals("initiatorId"u8))
@@ -103,7 +103,7 @@ namespace KuFlow.Rest.Models
                 lastModifiedAt,
                 id,
                 state,
-                processDefinition,
+                processDefinitionRef,
                 initiatorId,
                 tenantId);
         }
