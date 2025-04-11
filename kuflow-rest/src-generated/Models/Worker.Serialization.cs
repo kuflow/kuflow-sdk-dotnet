@@ -12,179 +12,180 @@ using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class Worker
+  public partial class Worker
+  {
+    internal static Worker DeserializeWorker(JsonElement element)
     {
-        internal static Worker DeserializeWorker(JsonElement element)
+      if (element.ValueKind == JsonValueKind.Null)
+      {
+        return null;
+      }
+      Guid? id = default;
+      string identity = default;
+      string taskQueue = default;
+      IReadOnlyList<string> workflowTypes = default;
+      IReadOnlyList<string> activityTypes = default;
+      string hostname = default;
+      string ip = default;
+      Guid? installationId = default;
+      IReadOnlyList<Guid> robotIds = default;
+      Guid? tenantId = default;
+      Guid? createdBy = default;
+      DateTimeOffset? createdAt = default;
+      Guid? lastModifiedBy = default;
+      DateTimeOffset? lastModifiedAt = default;
+      foreach (var property in element.EnumerateObject())
+      {
+        if (property.NameEquals("id"u8))
         {
-            if (element.ValueKind == JsonValueKind.Null)
-            {
-                return null;
-            }
-            Guid? id = default;
-            string identity = default;
-            string taskQueue = default;
-            IReadOnlyList<string> workflowTypes = default;
-            IReadOnlyList<string> activityTypes = default;
-            string hostname = default;
-            string ip = default;
-            Guid? installationId = default;
-            IReadOnlyList<Guid> robotIds = default;
-            Guid? tenantId = default;
-            Guid? createdBy = default;
-            DateTimeOffset? createdAt = default;
-            Guid? lastModifiedBy = default;
-            DateTimeOffset? lastModifiedAt = default;
-            foreach (var property in element.EnumerateObject())
-            {
-                if (property.NameEquals("id"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    id = property.Value.GetGuid();
-                    continue;
-                }
-                if (property.NameEquals("identity"u8))
-                {
-                    identity = property.Value.GetString();
-                    continue;
-                }
-                if (property.NameEquals("taskQueue"u8))
-                {
-                    taskQueue = property.Value.GetString();
-                    continue;
-                }
-                if (property.NameEquals("workflowTypes"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    List<string> array = new List<string>();
-                    foreach (var item in property.Value.EnumerateArray())
-                    {
-                        array.Add(item.GetString());
-                    }
-                    workflowTypes = array;
-                    continue;
-                }
-                if (property.NameEquals("activityTypes"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    List<string> array = new List<string>();
-                    foreach (var item in property.Value.EnumerateArray())
-                    {
-                        array.Add(item.GetString());
-                    }
-                    activityTypes = array;
-                    continue;
-                }
-                if (property.NameEquals("hostname"u8))
-                {
-                    hostname = property.Value.GetString();
-                    continue;
-                }
-                if (property.NameEquals("ip"u8))
-                {
-                    ip = property.Value.GetString();
-                    continue;
-                }
-                if (property.NameEquals("installationId"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    installationId = property.Value.GetGuid();
-                    continue;
-                }
-                if (property.NameEquals("robotIds"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    List<Guid> array = new List<Guid>();
-                    foreach (var item in property.Value.EnumerateArray())
-                    {
-                        array.Add(item.GetGuid());
-                    }
-                    robotIds = array;
-                    continue;
-                }
-                if (property.NameEquals("tenantId"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    tenantId = property.Value.GetGuid();
-                    continue;
-                }
-                if (property.NameEquals("createdBy"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    createdBy = property.Value.GetGuid();
-                    continue;
-                }
-                if (property.NameEquals("createdAt"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    createdAt = property.Value.GetDateTimeOffset("O");
-                    continue;
-                }
-                if (property.NameEquals("lastModifiedBy"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    lastModifiedBy = property.Value.GetGuid();
-                    continue;
-                }
-                if (property.NameEquals("lastModifiedAt"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    lastModifiedAt = property.Value.GetDateTimeOffset("O");
-                    continue;
-                }
-            }
-            return new Worker(
-                createdBy,
-                createdAt,
-                lastModifiedBy,
-                lastModifiedAt,
-                id,
-                identity,
-                taskQueue,
-                workflowTypes ?? new ChangeTrackingList<string>(),
-                activityTypes ?? new ChangeTrackingList<string>(),
-                hostname,
-                ip,
-                installationId,
-                robotIds ?? new ChangeTrackingList<Guid>(),
-                tenantId);
+          if (property.Value.ValueKind == JsonValueKind.Null)
+          {
+            continue;
+          }
+          id = property.Value.GetGuid();
+          continue;
         }
-
-        /// <summary> Deserializes the model from a raw response. </summary>
-        /// <param name="response"> The response to deserialize the model from. </param>
-        internal static new Worker FromResponse(Response response)
+        if (property.NameEquals("identity"u8))
         {
-            using var document = JsonDocument.Parse(response.Content);
-            return DeserializeWorker(document.RootElement);
+          identity = property.Value.GetString();
+          continue;
         }
+        if (property.NameEquals("taskQueue"u8))
+        {
+          taskQueue = property.Value.GetString();
+          continue;
+        }
+        if (property.NameEquals("workflowTypes"u8))
+        {
+          if (property.Value.ValueKind == JsonValueKind.Null)
+          {
+            continue;
+          }
+          List<string> array = new List<string>();
+          foreach (var item in property.Value.EnumerateArray())
+          {
+            array.Add(item.GetString());
+          }
+          workflowTypes = array;
+          continue;
+        }
+        if (property.NameEquals("activityTypes"u8))
+        {
+          if (property.Value.ValueKind == JsonValueKind.Null)
+          {
+            continue;
+          }
+          List<string> array = new List<string>();
+          foreach (var item in property.Value.EnumerateArray())
+          {
+            array.Add(item.GetString());
+          }
+          activityTypes = array;
+          continue;
+        }
+        if (property.NameEquals("hostname"u8))
+        {
+          hostname = property.Value.GetString();
+          continue;
+        }
+        if (property.NameEquals("ip"u8))
+        {
+          ip = property.Value.GetString();
+          continue;
+        }
+        if (property.NameEquals("installationId"u8))
+        {
+          if (property.Value.ValueKind == JsonValueKind.Null)
+          {
+            continue;
+          }
+          installationId = property.Value.GetGuid();
+          continue;
+        }
+        if (property.NameEquals("robotIds"u8))
+        {
+          if (property.Value.ValueKind == JsonValueKind.Null)
+          {
+            continue;
+          }
+          List<Guid> array = new List<Guid>();
+          foreach (var item in property.Value.EnumerateArray())
+          {
+            array.Add(item.GetGuid());
+          }
+          robotIds = array;
+          continue;
+        }
+        if (property.NameEquals("tenantId"u8))
+        {
+          if (property.Value.ValueKind == JsonValueKind.Null)
+          {
+            continue;
+          }
+          tenantId = property.Value.GetGuid();
+          continue;
+        }
+        if (property.NameEquals("createdBy"u8))
+        {
+          if (property.Value.ValueKind == JsonValueKind.Null)
+          {
+            continue;
+          }
+          createdBy = property.Value.GetGuid();
+          continue;
+        }
+        if (property.NameEquals("createdAt"u8))
+        {
+          if (property.Value.ValueKind == JsonValueKind.Null)
+          {
+            continue;
+          }
+          createdAt = property.Value.GetDateTimeOffset("O");
+          continue;
+        }
+        if (property.NameEquals("lastModifiedBy"u8))
+        {
+          if (property.Value.ValueKind == JsonValueKind.Null)
+          {
+            continue;
+          }
+          lastModifiedBy = property.Value.GetGuid();
+          continue;
+        }
+        if (property.NameEquals("lastModifiedAt"u8))
+        {
+          if (property.Value.ValueKind == JsonValueKind.Null)
+          {
+            continue;
+          }
+          lastModifiedAt = property.Value.GetDateTimeOffset("O");
+          continue;
+        }
+      }
+      return new Worker(
+        createdBy,
+        createdAt,
+        lastModifiedBy,
+        lastModifiedAt,
+        id,
+        identity,
+        taskQueue,
+        workflowTypes ?? new ChangeTrackingList<string>(),
+        activityTypes ?? new ChangeTrackingList<string>(),
+        hostname,
+        ip,
+        installationId,
+        robotIds ?? new ChangeTrackingList<Guid>(),
+        tenantId
+      );
     }
+
+    /// <summary> Deserializes the model from a raw response. </summary>
+    /// <param name="response"> The response to deserialize the model from. </param>
+    internal static new Worker FromResponse(Response response)
+    {
+      using var document = JsonDocument.Parse(response.Content);
+      return DeserializeWorker(document.RootElement);
+    }
+  }
 }

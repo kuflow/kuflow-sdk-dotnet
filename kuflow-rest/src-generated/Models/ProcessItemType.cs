@@ -10,45 +10,54 @@ using System.ComponentModel;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> Process Item Type. </summary>
-    public readonly partial struct ProcessItemType : IEquatable<ProcessItemType>
+  /// <summary> Process Item Type. </summary>
+  public readonly partial struct ProcessItemType : IEquatable<ProcessItemType>
+  {
+    private readonly string _value;
+
+    /// <summary> Initializes a new instance of <see cref="ProcessItemType"/>. </summary>
+    /// <exception cref="ArgumentNullException"> <paramref name="value"/> is null. </exception>
+    public ProcessItemType(string value)
     {
-        private readonly string _value;
-
-        /// <summary> Initializes a new instance of <see cref="ProcessItemType"/>. </summary>
-        /// <exception cref="ArgumentNullException"> <paramref name="value"/> is null. </exception>
-        public ProcessItemType(string value)
-        {
-            _value = value ?? throw new ArgumentNullException(nameof(value));
-        }
-
-        private const string TaskValue = "TASK";
-        private const string MessageValue = "MESSAGE";
-        private const string ThreadValue = "THREAD";
-
-        /// <summary> TASK. </summary>
-        public static ProcessItemType Task { get; } = new ProcessItemType(TaskValue);
-        /// <summary> MESSAGE. </summary>
-        public static ProcessItemType Message { get; } = new ProcessItemType(MessageValue);
-        /// <summary> THREAD. </summary>
-        public static ProcessItemType Thread { get; } = new ProcessItemType(ThreadValue);
-        /// <summary> Determines if two <see cref="ProcessItemType"/> values are the same. </summary>
-        public static bool operator ==(ProcessItemType left, ProcessItemType right) => left.Equals(right);
-        /// <summary> Determines if two <see cref="ProcessItemType"/> values are not the same. </summary>
-        public static bool operator !=(ProcessItemType left, ProcessItemType right) => !left.Equals(right);
-        /// <summary> Converts a <see cref="string"/> to a <see cref="ProcessItemType"/>. </summary>
-        public static implicit operator ProcessItemType(string value) => new ProcessItemType(value);
-
-        /// <inheritdoc />
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public override bool Equals(object obj) => obj is ProcessItemType other && Equals(other);
-        /// <inheritdoc />
-        public bool Equals(ProcessItemType other) => string.Equals(_value, other._value, StringComparison.InvariantCultureIgnoreCase);
-
-        /// <inheritdoc />
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public override int GetHashCode() => _value != null ? StringComparer.InvariantCultureIgnoreCase.GetHashCode(_value) : 0;
-        /// <inheritdoc />
-        public override string ToString() => _value;
+      _value = value ?? throw new ArgumentNullException(nameof(value));
     }
+
+    private const string TaskValue = "TASK";
+    private const string MessageValue = "MESSAGE";
+    private const string ThreadValue = "THREAD";
+
+    /// <summary> TASK. </summary>
+    public static ProcessItemType Task { get; } = new ProcessItemType(TaskValue);
+
+    /// <summary> MESSAGE. </summary>
+    public static ProcessItemType Message { get; } = new ProcessItemType(MessageValue);
+
+    /// <summary> THREAD. </summary>
+    public static ProcessItemType Thread { get; } = new ProcessItemType(ThreadValue);
+
+    /// <summary> Determines if two <see cref="ProcessItemType"/> values are the same. </summary>
+    public static bool operator ==(ProcessItemType left, ProcessItemType right) => left.Equals(right);
+
+    /// <summary> Determines if two <see cref="ProcessItemType"/> values are not the same. </summary>
+    public static bool operator !=(ProcessItemType left, ProcessItemType right) => !left.Equals(right);
+
+    /// <summary> Converts a <see cref="string"/> to a <see cref="ProcessItemType"/>. </summary>
+    public static implicit operator ProcessItemType(string value) => new ProcessItemType(value);
+
+    /// <inheritdoc />
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override bool Equals(object obj) => obj is ProcessItemType other && Equals(other);
+
+    /// <inheritdoc />
+    public bool Equals(ProcessItemType other) =>
+      string.Equals(_value, other._value, StringComparison.InvariantCultureIgnoreCase);
+
+    /// <inheritdoc />
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override int GetHashCode() =>
+      _value != null ? StringComparer.InvariantCultureIgnoreCase.GetHashCode(_value) : 0;
+
+    /// <inheritdoc />
+    public override string ToString() => _value;
+  }
 }

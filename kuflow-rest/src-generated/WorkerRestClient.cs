@@ -16,109 +16,117 @@ using KuFlow.Rest.Models;
 
 namespace KuFlow.Rest
 {
-    internal partial class WorkerRestClient
+  internal partial class WorkerRestClient
+  {
+    private readonly HttpPipeline _pipeline;
+    private readonly Uri _endpoint;
+
+    /// <summary> The ClientDiagnostics is used to provide tracing support for the client library. </summary>
+    internal ClientDiagnostics ClientDiagnostics { get; }
+
+    /// <summary> Initializes a new instance of WorkerRestClient. </summary>
+    /// <param name="clientDiagnostics"> The handler for diagnostic messaging in the client. </param>
+    /// <param name="pipeline"> The HTTP pipeline for sending and receiving REST requests and responses. </param>
+    /// <param name="endpoint"> server parameter. </param>
+    /// <exception cref="ArgumentNullException"> <paramref name="clientDiagnostics"/> or <paramref name="pipeline"/> is null. </exception>
+    public WorkerRestClient(ClientDiagnostics clientDiagnostics, HttpPipeline pipeline, Uri endpoint = null)
     {
-        private readonly HttpPipeline _pipeline;
-        private readonly Uri _endpoint;
-
-        /// <summary> The ClientDiagnostics is used to provide tracing support for the client library. </summary>
-        internal ClientDiagnostics ClientDiagnostics { get; }
-
-        /// <summary> Initializes a new instance of WorkerRestClient. </summary>
-        /// <param name="clientDiagnostics"> The handler for diagnostic messaging in the client. </param>
-        /// <param name="pipeline"> The HTTP pipeline for sending and receiving REST requests and responses. </param>
-        /// <param name="endpoint"> server parameter. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="clientDiagnostics"/> or <paramref name="pipeline"/> is null. </exception>
-        public WorkerRestClient(ClientDiagnostics clientDiagnostics, HttpPipeline pipeline, Uri endpoint = null)
-        {
-            ClientDiagnostics = clientDiagnostics ?? throw new ArgumentNullException(nameof(clientDiagnostics));
-            _pipeline = pipeline ?? throw new ArgumentNullException(nameof(pipeline));
-            _endpoint = endpoint ?? new Uri("https://api.kuflow.com/v2024-06-14");
-        }
-
-        internal HttpMessage CreateCreateWorkerRequest(WorkerCreateParams workerCreateParams)
-        {
-            var message = _pipeline.CreateMessage();
-            var request = message.Request;
-            request.Method = RequestMethod.Post;
-            var uri = new RawRequestUriBuilder();
-            uri.Reset(_endpoint);
-            uri.AppendPath("/workers", false);
-            request.Uri = uri;
-            request.Headers.Add("Accept", "application/json");
-            request.Headers.Add("Content-Type", "application/json");
-            var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(workerCreateParams);
-            request.Content = content;
-            return message;
-        }
-
-        /// <summary> Create or update a worker. </summary>
-        /// <param name="workerCreateParams"> Worker to create or update. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="workerCreateParams"/> is null. </exception>
-        /// <remarks>
-        /// Register a worker in KuFlow, this allows the platform to have a catalogue of all registered workers.
-        ///
-        /// If already exist a worker for the same identity, the worker will be updated.
-        ///
-        /// </remarks>
-        public async Task<Response<Worker>> CreateWorkerAsync(WorkerCreateParams workerCreateParams, CancellationToken cancellationToken = default)
-        {
-            if (workerCreateParams == null)
-            {
-                throw new ArgumentNullException(nameof(workerCreateParams));
-            }
-
-            using var message = CreateCreateWorkerRequest(workerCreateParams);
-            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
-            switch (message.Response.Status)
-            {
-                case 200:
-                case 201:
-                    {
-                        Worker value = default;
-                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, default, cancellationToken).ConfigureAwait(false);
-                        value = Worker.DeserializeWorker(document.RootElement);
-                        return Response.FromValue(value, message.Response);
-                    }
-                default:
-                    throw new RequestFailedException(message.Response);
-            }
-        }
-
-        /// <summary> Create or update a worker. </summary>
-        /// <param name="workerCreateParams"> Worker to create or update. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="workerCreateParams"/> is null. </exception>
-        /// <remarks>
-        /// Register a worker in KuFlow, this allows the platform to have a catalogue of all registered workers.
-        ///
-        /// If already exist a worker for the same identity, the worker will be updated.
-        ///
-        /// </remarks>
-        public Response<Worker> CreateWorker(WorkerCreateParams workerCreateParams, CancellationToken cancellationToken = default)
-        {
-            if (workerCreateParams == null)
-            {
-                throw new ArgumentNullException(nameof(workerCreateParams));
-            }
-
-            using var message = CreateCreateWorkerRequest(workerCreateParams);
-            _pipeline.Send(message, cancellationToken);
-            switch (message.Response.Status)
-            {
-                case 200:
-                case 201:
-                    {
-                        Worker value = default;
-                        using var document = JsonDocument.Parse(message.Response.ContentStream);
-                        value = Worker.DeserializeWorker(document.RootElement);
-                        return Response.FromValue(value, message.Response);
-                    }
-                default:
-                    throw new RequestFailedException(message.Response);
-            }
-        }
+      ClientDiagnostics = clientDiagnostics ?? throw new ArgumentNullException(nameof(clientDiagnostics));
+      _pipeline = pipeline ?? throw new ArgumentNullException(nameof(pipeline));
+      _endpoint = endpoint ?? new Uri("https://api.kuflow.com/v2024-06-14");
     }
+
+    internal HttpMessage CreateCreateWorkerRequest(WorkerCreateParams workerCreateParams)
+    {
+      var message = _pipeline.CreateMessage();
+      var request = message.Request;
+      request.Method = RequestMethod.Post;
+      var uri = new RawRequestUriBuilder();
+      uri.Reset(_endpoint);
+      uri.AppendPath("/workers", false);
+      request.Uri = uri;
+      request.Headers.Add("Accept", "application/json");
+      request.Headers.Add("Content-Type", "application/json");
+      var content = new Utf8JsonRequestContent();
+      content.JsonWriter.WriteObjectValue(workerCreateParams);
+      request.Content = content;
+      return message;
+    }
+
+    /// <summary> Create or update a worker. </summary>
+    /// <param name="workerCreateParams"> Worker to create or update. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <exception cref="ArgumentNullException"> <paramref name="workerCreateParams"/> is null. </exception>
+    /// <remarks>
+    /// Register a worker in KuFlow, this allows the platform to have a catalogue of all registered workers.
+    ///
+    /// If already exist a worker for the same identity, the worker will be updated.
+    ///
+    /// </remarks>
+    public async Task<Response<Worker>> CreateWorkerAsync(
+      WorkerCreateParams workerCreateParams,
+      CancellationToken cancellationToken = default
+    )
+    {
+      if (workerCreateParams == null)
+      {
+        throw new ArgumentNullException(nameof(workerCreateParams));
+      }
+
+      using var message = CreateCreateWorkerRequest(workerCreateParams);
+      await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
+      switch (message.Response.Status)
+      {
+        case 200:
+        case 201:
+        {
+          Worker value = default;
+          using var document = await JsonDocument
+            .ParseAsync(message.Response.ContentStream, default, cancellationToken)
+            .ConfigureAwait(false);
+          value = Worker.DeserializeWorker(document.RootElement);
+          return Response.FromValue(value, message.Response);
+        }
+        default:
+          throw new RequestFailedException(message.Response);
+      }
+    }
+
+    /// <summary> Create or update a worker. </summary>
+    /// <param name="workerCreateParams"> Worker to create or update. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <exception cref="ArgumentNullException"> <paramref name="workerCreateParams"/> is null. </exception>
+    /// <remarks>
+    /// Register a worker in KuFlow, this allows the platform to have a catalogue of all registered workers.
+    ///
+    /// If already exist a worker for the same identity, the worker will be updated.
+    ///
+    /// </remarks>
+    public Response<Worker> CreateWorker(
+      WorkerCreateParams workerCreateParams,
+      CancellationToken cancellationToken = default
+    )
+    {
+      if (workerCreateParams == null)
+      {
+        throw new ArgumentNullException(nameof(workerCreateParams));
+      }
+
+      using var message = CreateCreateWorkerRequest(workerCreateParams);
+      _pipeline.Send(message, cancellationToken);
+      switch (message.Response.Status)
+      {
+        case 200:
+        case 201:
+        {
+          Worker value = default;
+          using var document = JsonDocument.Parse(message.Response.ContentStream);
+          value = Worker.DeserializeWorker(document.RootElement);
+          return Response.FromValue(value, message.Response);
+        }
+        default:
+          throw new RequestFailedException(message.Response);
+      }
+    }
+  }
 }

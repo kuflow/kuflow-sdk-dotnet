@@ -16,157 +16,176 @@ using KuFlow.Rest.Models;
 
 namespace KuFlow.Rest
 {
-    /// <summary> The Principal service client. </summary>
-    public partial class PrincipalClient
+  /// <summary> The Principal service client. </summary>
+  public partial class PrincipalClient
+  {
+    private readonly ClientDiagnostics _clientDiagnostics;
+    private readonly HttpPipeline _pipeline;
+    internal PrincipalRestClient RestClient { get; }
+
+    /// <summary> Initializes a new instance of PrincipalClient for mocking. </summary>
+    protected PrincipalClient() { }
+
+    /// <summary> Initializes a new instance of PrincipalClient. </summary>
+    /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
+    /// <param name="endpoint"> server parameter. </param>
+    /// <param name="options"> The options for configuring the client. </param>
+    public PrincipalClient(TokenCredential credential, Uri endpoint = null, KuFlowRestClientOptions options = null)
     {
-        private readonly ClientDiagnostics _clientDiagnostics;
-        private readonly HttpPipeline _pipeline;
-        internal PrincipalRestClient RestClient { get; }
+      if (credential == null)
+      {
+        throw new ArgumentNullException(nameof(credential));
+      }
+      endpoint ??= new Uri("https://api.kuflow.com/v2024-06-14");
 
-        /// <summary> Initializes a new instance of PrincipalClient for mocking. </summary>
-        protected PrincipalClient()
-        {
-        }
-
-        /// <summary> Initializes a new instance of PrincipalClient. </summary>
-        /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
-        /// <param name="endpoint"> server parameter. </param>
-        /// <param name="options"> The options for configuring the client. </param>
-        public PrincipalClient(TokenCredential credential, Uri endpoint = null, KuFlowRestClientOptions options = null)
-        {
-            if (credential == null)
-            {
-                throw new ArgumentNullException(nameof(credential));
-            }
-            endpoint ??= new Uri("https://api.kuflow.com/v2024-06-14");
-
-            options ??= new KuFlowRestClientOptions();
-            _clientDiagnostics = new ClientDiagnostics(options);
-            string[] scopes = { };
-            _pipeline = HttpPipelineBuilder.Build(options, new BearerTokenAuthenticationPolicy(credential, scopes));
-            RestClient = new PrincipalRestClient(_clientDiagnostics, _pipeline, endpoint);
-        }
-
-        /// <summary> Initializes a new instance of PrincipalClient. </summary>
-        /// <param name="clientDiagnostics"> The handler for diagnostic messaging in the client. </param>
-        /// <param name="pipeline"> The HTTP pipeline for sending and receiving REST requests and responses. </param>
-        /// <param name="endpoint"> server parameter. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="clientDiagnostics"/> or <paramref name="pipeline"/> is null. </exception>
-        internal PrincipalClient(ClientDiagnostics clientDiagnostics, HttpPipeline pipeline, Uri endpoint = null)
-        {
-            RestClient = new PrincipalRestClient(clientDiagnostics, pipeline, endpoint);
-            _clientDiagnostics = clientDiagnostics;
-            _pipeline = pipeline;
-        }
-
-        /// <summary> Find all accessible Principals. </summary>
-        /// <param name="size"> The number of records returned within a single API call. </param>
-        /// <param name="page"> The page number of the current page in the returned records, 0 is the first page. </param>
-        /// <param name="sort">
-        /// Sorting criteria in the format: property{,asc|desc}. Example: createdAt,desc
-        ///
-        /// Default sort order is ascending. Multiple sort criteria are supported.
-        ///
-        /// Please refer to the method description for supported properties.
-        ///
-        /// </param>
-        /// <param name="type"> Filter principals by type. </param>
-        /// <param name="groupId"> Filter by group ids. </param>
-        /// <param name="tenantId"> Filter by tenantId. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks>
-        /// List all the Principals that have been created and the used credentials has access.
-        ///
-        /// Available sort query values: id, name
-        ///
-        /// </remarks>
-        internal virtual async Task<Response<PrincipalPage>> FindPrincipalsAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, PrincipalType? type = null, IEnumerable<Guid> groupId = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("PrincipalClient.FindPrincipals");
-            scope.Start();
-            try
-            {
-                return await RestClient.FindPrincipalsAsync(size, page, sort, type, groupId, tenantId, cancellationToken).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Find all accessible Principals. </summary>
-        /// <param name="size"> The number of records returned within a single API call. </param>
-        /// <param name="page"> The page number of the current page in the returned records, 0 is the first page. </param>
-        /// <param name="sort">
-        /// Sorting criteria in the format: property{,asc|desc}. Example: createdAt,desc
-        ///
-        /// Default sort order is ascending. Multiple sort criteria are supported.
-        ///
-        /// Please refer to the method description for supported properties.
-        ///
-        /// </param>
-        /// <param name="type"> Filter principals by type. </param>
-        /// <param name="groupId"> Filter by group ids. </param>
-        /// <param name="tenantId"> Filter by tenantId. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks>
-        /// List all the Principals that have been created and the used credentials has access.
-        ///
-        /// Available sort query values: id, name
-        ///
-        /// </remarks>
-        internal virtual Response<PrincipalPage> FindPrincipals(int? size = null, int? page = null, IEnumerable<string> sort = null, PrincipalType? type = null, IEnumerable<Guid> groupId = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("PrincipalClient.FindPrincipals");
-            scope.Start();
-            try
-            {
-                return RestClient.FindPrincipals(size, page, sort, type, groupId, tenantId, cancellationToken);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Get a Principal by ID. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks> Returns the requested Principal when has access to do it. </remarks>
-        public virtual async Task<Response<Principal>> RetrievePrincipalAsync(Guid id, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("PrincipalClient.RetrievePrincipal");
-            scope.Start();
-            try
-            {
-                return await RestClient.RetrievePrincipalAsync(id, cancellationToken).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Get a Principal by ID. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks> Returns the requested Principal when has access to do it. </remarks>
-        public virtual Response<Principal> RetrievePrincipal(Guid id, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("PrincipalClient.RetrievePrincipal");
-            scope.Start();
-            try
-            {
-                return RestClient.RetrievePrincipal(id, cancellationToken);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
+      options ??= new KuFlowRestClientOptions();
+      _clientDiagnostics = new ClientDiagnostics(options);
+      string[] scopes = { };
+      _pipeline = HttpPipelineBuilder.Build(options, new BearerTokenAuthenticationPolicy(credential, scopes));
+      RestClient = new PrincipalRestClient(_clientDiagnostics, _pipeline, endpoint);
     }
+
+    /// <summary> Initializes a new instance of PrincipalClient. </summary>
+    /// <param name="clientDiagnostics"> The handler for diagnostic messaging in the client. </param>
+    /// <param name="pipeline"> The HTTP pipeline for sending and receiving REST requests and responses. </param>
+    /// <param name="endpoint"> server parameter. </param>
+    /// <exception cref="ArgumentNullException"> <paramref name="clientDiagnostics"/> or <paramref name="pipeline"/> is null. </exception>
+    internal PrincipalClient(ClientDiagnostics clientDiagnostics, HttpPipeline pipeline, Uri endpoint = null)
+    {
+      RestClient = new PrincipalRestClient(clientDiagnostics, pipeline, endpoint);
+      _clientDiagnostics = clientDiagnostics;
+      _pipeline = pipeline;
+    }
+
+    /// <summary> Find all accessible Principals. </summary>
+    /// <param name="size"> The number of records returned within a single API call. </param>
+    /// <param name="page"> The page number of the current page in the returned records, 0 is the first page. </param>
+    /// <param name="sort">
+    /// Sorting criteria in the format: property{,asc|desc}. Example: createdAt,desc
+    ///
+    /// Default sort order is ascending. Multiple sort criteria are supported.
+    ///
+    /// Please refer to the method description for supported properties.
+    ///
+    /// </param>
+    /// <param name="type"> Filter principals by type. </param>
+    /// <param name="groupId"> Filter by group ids. </param>
+    /// <param name="tenantId"> Filter by tenantId. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks>
+    /// List all the Principals that have been created and the used credentials has access.
+    ///
+    /// Available sort query values: id, name
+    ///
+    /// </remarks>
+    internal virtual async Task<Response<PrincipalPage>> FindPrincipalsAsync(
+      int? size = null,
+      int? page = null,
+      IEnumerable<string> sort = null,
+      PrincipalType? type = null,
+      IEnumerable<Guid> groupId = null,
+      IEnumerable<Guid> tenantId = null,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("PrincipalClient.FindPrincipals");
+      scope.Start();
+      try
+      {
+        return await RestClient
+          .FindPrincipalsAsync(size, page, sort, type, groupId, tenantId, cancellationToken)
+          .ConfigureAwait(false);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Find all accessible Principals. </summary>
+    /// <param name="size"> The number of records returned within a single API call. </param>
+    /// <param name="page"> The page number of the current page in the returned records, 0 is the first page. </param>
+    /// <param name="sort">
+    /// Sorting criteria in the format: property{,asc|desc}. Example: createdAt,desc
+    ///
+    /// Default sort order is ascending. Multiple sort criteria are supported.
+    ///
+    /// Please refer to the method description for supported properties.
+    ///
+    /// </param>
+    /// <param name="type"> Filter principals by type. </param>
+    /// <param name="groupId"> Filter by group ids. </param>
+    /// <param name="tenantId"> Filter by tenantId. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks>
+    /// List all the Principals that have been created and the used credentials has access.
+    ///
+    /// Available sort query values: id, name
+    ///
+    /// </remarks>
+    internal virtual Response<PrincipalPage> FindPrincipals(
+      int? size = null,
+      int? page = null,
+      IEnumerable<string> sort = null,
+      PrincipalType? type = null,
+      IEnumerable<Guid> groupId = null,
+      IEnumerable<Guid> tenantId = null,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("PrincipalClient.FindPrincipals");
+      scope.Start();
+      try
+      {
+        return RestClient.FindPrincipals(size, page, sort, type, groupId, tenantId, cancellationToken);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Get a Principal by ID. </summary>
+    /// <param name="id"> The resource ID. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks> Returns the requested Principal when has access to do it. </remarks>
+    public virtual async Task<Response<Principal>> RetrievePrincipalAsync(
+      Guid id,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("PrincipalClient.RetrievePrincipal");
+      scope.Start();
+      try
+      {
+        return await RestClient.RetrievePrincipalAsync(id, cancellationToken).ConfigureAwait(false);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Get a Principal by ID. </summary>
+    /// <param name="id"> The resource ID. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks> Returns the requested Principal when has access to do it. </remarks>
+    public virtual Response<Principal> RetrievePrincipal(Guid id, CancellationToken cancellationToken = default)
+    {
+      using var scope = _clientDiagnostics.CreateScope("PrincipalClient.RetrievePrincipal");
+      scope.Start();
+      try
+      {
+        return RestClient.RetrievePrincipal(id, cancellationToken);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+  }
 }

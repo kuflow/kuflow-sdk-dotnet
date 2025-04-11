@@ -9,26 +9,25 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> Params to change the process initiator, only one option is required. </summary>
-    public partial class ProcessChangeInitiatorParams
+  /// <summary> Params to change the process initiator, only one option is required. </summary>
+  public partial class ProcessChangeInitiatorParams
+  {
+    /// <summary> Initializes a new instance of <see cref="ProcessChangeInitiatorParams"/>. </summary>
+    public ProcessChangeInitiatorParams() { }
+
+    /// <summary> Initializes a new instance of <see cref="ProcessChangeInitiatorParams"/>. </summary>
+    /// <param name="initiatorId"></param>
+    /// <param name="initiatorEmail"></param>
+    internal ProcessChangeInitiatorParams(Guid? initiatorId, string initiatorEmail)
     {
-        /// <summary> Initializes a new instance of <see cref="ProcessChangeInitiatorParams"/>. </summary>
-        public ProcessChangeInitiatorParams()
-        {
-        }
-
-        /// <summary> Initializes a new instance of <see cref="ProcessChangeInitiatorParams"/>. </summary>
-        /// <param name="initiatorId"></param>
-        /// <param name="initiatorEmail"></param>
-        internal ProcessChangeInitiatorParams(Guid? initiatorId, string initiatorEmail)
-        {
-            InitiatorId = initiatorId;
-            InitiatorEmail = initiatorEmail;
-        }
-
-        /// <summary> Gets or sets the initiator id. </summary>
-        public Guid? InitiatorId { get; set; }
-        /// <summary> Gets or sets the initiator email. </summary>
-        public string InitiatorEmail { get; set; }
+      InitiatorId = initiatorId;
+      InitiatorEmail = initiatorEmail;
     }
+
+    /// <summary> Gets or sets the initiator id. </summary>
+    public Guid? InitiatorId { get; set; }
+
+    /// <summary> Gets or sets the initiator email. </summary>
+    public string InitiatorEmail { get; set; }
+  }
 }

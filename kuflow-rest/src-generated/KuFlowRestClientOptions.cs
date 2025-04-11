@@ -10,28 +10,28 @@ using Azure.Core;
 
 namespace KuFlow.Rest
 {
-    /// <summary> Client options for KuFlowRestClient. </summary>
-    public partial class KuFlowRestClientOptions : ClientOptions
+  /// <summary> Client options for KuFlowRestClient. </summary>
+  public partial class KuFlowRestClientOptions : ClientOptions
+  {
+    private const ServiceVersion LatestVersion = ServiceVersion.V2024_06_14;
+
+    /// <summary> The version of the service to use. </summary>
+    public enum ServiceVersion
     {
-        private const ServiceVersion LatestVersion = ServiceVersion.V2024_06_14;
-
-        /// <summary> The version of the service to use. </summary>
-        public enum ServiceVersion
-        {
-            /// <summary> Service version "2024-06-14". </summary>
-            V2024_06_14 = 1,
-        }
-
-        internal string Version { get; }
-
-        /// <summary> Initializes new instance of KuFlowRestClientOptions. </summary>
-        public KuFlowRestClientOptions(ServiceVersion version = LatestVersion)
-        {
-            Version = version switch
-            {
-                ServiceVersion.V2024_06_14 => "2024-06-14",
-                _ => throw new NotSupportedException()
-            };
-        }
+      /// <summary> Service version "2024-06-14". </summary>
+      V2024_06_14 = 1,
     }
+
+    internal string Version { get; }
+
+    /// <summary> Initializes new instance of KuFlowRestClientOptions. </summary>
+    public KuFlowRestClientOptions(ServiceVersion version = LatestVersion)
+    {
+      Version = version switch
+      {
+        ServiceVersion.V2024_06_14 => "2024-06-14",
+        _ => throw new NotSupportedException()
+      };
+    }
+  }
 }

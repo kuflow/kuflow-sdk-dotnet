@@ -10,41 +10,41 @@ using Azure.Core;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class JsonPatchOperation : IUtf8JsonSerializable
+  public partial class JsonPatchOperation : IUtf8JsonSerializable
+  {
+    void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
     {
-        void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
+      writer.WriteStartObject();
+      writer.WritePropertyName("op"u8);
+      writer.WriteStringValue(Op.ToString());
+      if (Optional.IsDefined(From))
+      {
+        writer.WritePropertyName("from"u8);
+        writer.WriteStringValue(From);
+      }
+      writer.WritePropertyName("path"u8);
+      writer.WriteStringValue(Path);
+      if (Optional.IsDefined(Value))
+      {
+        if (Value != null)
         {
-            writer.WriteStartObject();
-            writer.WritePropertyName("op"u8);
-            writer.WriteStringValue(Op.ToString());
-            if (Optional.IsDefined(From))
-            {
-                writer.WritePropertyName("from"u8);
-                writer.WriteStringValue(From);
-            }
-            writer.WritePropertyName("path"u8);
-            writer.WriteStringValue(Path);
-            if (Optional.IsDefined(Value))
-            {
-                if (Value != null)
-                {
-                    writer.WritePropertyName("value"u8);
-                    writer.WriteObjectValue<object>(Value);
-                }
-                else
-                {
-                    writer.WriteNull("value");
-                }
-            }
-            writer.WriteEndObject();
+          writer.WritePropertyName("value"u8);
+          writer.WriteObjectValue<object>(Value);
         }
-
-        /// <summary> Convert into a <see cref="RequestContent"/>. </summary>
-        internal virtual RequestContent ToRequestContent()
+        else
         {
-            var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(this);
-            return content;
+          writer.WriteNull("value");
         }
+      }
+      writer.WriteEndObject();
     }
+
+    /// <summary> Convert into a <see cref="RequestContent"/>. </summary>
+    internal virtual RequestContent ToRequestContent()
+    {
+      var content = new Utf8JsonRequestContent();
+      content.JsonWriter.WriteObjectValue(this);
+      return content;
+    }
+  }
 }

@@ -9,41 +9,44 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The JsonPatchOperation. </summary>
-    public partial class JsonPatchOperation
+  /// <summary> The JsonPatchOperation. </summary>
+  public partial class JsonPatchOperation
+  {
+    /// <summary> Initializes a new instance of <see cref="JsonPatchOperation"/>. </summary>
+    /// <param name="op"> The operation to perform. </param>
+    /// <param name="path"> A JSON Pointer path. </param>
+    /// <exception cref="ArgumentNullException"> <paramref name="path"/> is null. </exception>
+    public JsonPatchOperation(JsonPatchOperationType op, string path)
     {
-        /// <summary> Initializes a new instance of <see cref="JsonPatchOperation"/>. </summary>
-        /// <param name="op"> The operation to perform. </param>
-        /// <param name="path"> A JSON Pointer path. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="path"/> is null. </exception>
-        public JsonPatchOperation(JsonPatchOperationType op, string path)
-        {
-            Argument.AssertNotNull(path, nameof(path));
+      Argument.AssertNotNull(path, nameof(path));
 
-            Op = op;
-            Path = path;
-        }
-
-        /// <summary> Initializes a new instance of <see cref="JsonPatchOperation"/>. </summary>
-        /// <param name="op"> The operation to perform. </param>
-        /// <param name="from"> A JSON Pointer path used when op is "copy" or "move". </param>
-        /// <param name="path"> A JSON Pointer path. </param>
-        /// <param name="value"> The value to "add", "replace" or "test". </param>
-        internal JsonPatchOperation(JsonPatchOperationType op, string @from, string path, object value)
-        {
-            Op = op;
-            From = @from;
-            Path = path;
-            Value = value;
-        }
-
-        /// <summary> The operation to perform. </summary>
-        public JsonPatchOperationType Op { get; }
-        /// <summary> A JSON Pointer path used when op is "copy" or "move". </summary>
-        public string From { get; set; }
-        /// <summary> A JSON Pointer path. </summary>
-        public string Path { get; }
-        /// <summary> The value to "add", "replace" or "test". </summary>
-        public object Value { get; set; }
+      Op = op;
+      Path = path;
     }
+
+    /// <summary> Initializes a new instance of <see cref="JsonPatchOperation"/>. </summary>
+    /// <param name="op"> The operation to perform. </param>
+    /// <param name="from"> A JSON Pointer path used when op is "copy" or "move". </param>
+    /// <param name="path"> A JSON Pointer path. </param>
+    /// <param name="value"> The value to "add", "replace" or "test". </param>
+    internal JsonPatchOperation(JsonPatchOperationType op, string @from, string path, object value)
+    {
+      Op = op;
+      From = @from;
+      Path = path;
+      Value = value;
+    }
+
+    /// <summary> The operation to perform. </summary>
+    public JsonPatchOperationType Op { get; }
+
+    /// <summary> A JSON Pointer path used when op is "copy" or "move". </summary>
+    public string From { get; set; }
+
+    /// <summary> A JSON Pointer path. </summary>
+    public string Path { get; }
+
+    /// <summary> The value to "add", "replace" or "test". </summary>
+    public object Value { get; set; }
+  }
 }

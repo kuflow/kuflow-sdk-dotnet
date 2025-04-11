@@ -16,153 +16,166 @@ using KuFlow.Rest.Models;
 
 namespace KuFlow.Rest
 {
-    /// <summary> The Tenant service client. </summary>
-    public partial class TenantClient
+  /// <summary> The Tenant service client. </summary>
+  public partial class TenantClient
+  {
+    private readonly ClientDiagnostics _clientDiagnostics;
+    private readonly HttpPipeline _pipeline;
+    internal TenantRestClient RestClient { get; }
+
+    /// <summary> Initializes a new instance of TenantClient for mocking. </summary>
+    protected TenantClient() { }
+
+    /// <summary> Initializes a new instance of TenantClient. </summary>
+    /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
+    /// <param name="endpoint"> server parameter. </param>
+    /// <param name="options"> The options for configuring the client. </param>
+    public TenantClient(TokenCredential credential, Uri endpoint = null, KuFlowRestClientOptions options = null)
     {
-        private readonly ClientDiagnostics _clientDiagnostics;
-        private readonly HttpPipeline _pipeline;
-        internal TenantRestClient RestClient { get; }
+      if (credential == null)
+      {
+        throw new ArgumentNullException(nameof(credential));
+      }
+      endpoint ??= new Uri("https://api.kuflow.com/v2024-06-14");
 
-        /// <summary> Initializes a new instance of TenantClient for mocking. </summary>
-        protected TenantClient()
-        {
-        }
-
-        /// <summary> Initializes a new instance of TenantClient. </summary>
-        /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
-        /// <param name="endpoint"> server parameter. </param>
-        /// <param name="options"> The options for configuring the client. </param>
-        public TenantClient(TokenCredential credential, Uri endpoint = null, KuFlowRestClientOptions options = null)
-        {
-            if (credential == null)
-            {
-                throw new ArgumentNullException(nameof(credential));
-            }
-            endpoint ??= new Uri("https://api.kuflow.com/v2024-06-14");
-
-            options ??= new KuFlowRestClientOptions();
-            _clientDiagnostics = new ClientDiagnostics(options);
-            string[] scopes = { };
-            _pipeline = HttpPipelineBuilder.Build(options, new BearerTokenAuthenticationPolicy(credential, scopes));
-            RestClient = new TenantRestClient(_clientDiagnostics, _pipeline, endpoint);
-        }
-
-        /// <summary> Initializes a new instance of TenantClient. </summary>
-        /// <param name="clientDiagnostics"> The handler for diagnostic messaging in the client. </param>
-        /// <param name="pipeline"> The HTTP pipeline for sending and receiving REST requests and responses. </param>
-        /// <param name="endpoint"> server parameter. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="clientDiagnostics"/> or <paramref name="pipeline"/> is null. </exception>
-        internal TenantClient(ClientDiagnostics clientDiagnostics, HttpPipeline pipeline, Uri endpoint = null)
-        {
-            RestClient = new TenantRestClient(clientDiagnostics, pipeline, endpoint);
-            _clientDiagnostics = clientDiagnostics;
-            _pipeline = pipeline;
-        }
-
-        /// <summary> Find all accessible Tenants. </summary>
-        /// <param name="size"> The number of records returned within a single API call. </param>
-        /// <param name="page"> The page number of the current page in the returned records, 0 is the first page. </param>
-        /// <param name="sort">
-        /// Sorting criteria in the format: property{,asc|desc}. Example: createdAt,desc
-        ///
-        /// Default sort order is ascending. Multiple sort criteria are supported.
-        ///
-        /// Please refer to the method description for supported properties.
-        ///
-        /// </param>
-        /// <param name="tenantId"> Filter by tenantId. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks>
-        /// List all the Tenants that the credentials used has access to.
-        ///
-        /// Available sort query values: id, name
-        ///
-        /// </remarks>
-        internal virtual async Task<Response<TenantPage>> FindTenantsAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("TenantClient.FindTenants");
-            scope.Start();
-            try
-            {
-                return await RestClient.FindTenantsAsync(size, page, sort, tenantId, cancellationToken).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Find all accessible Tenants. </summary>
-        /// <param name="size"> The number of records returned within a single API call. </param>
-        /// <param name="page"> The page number of the current page in the returned records, 0 is the first page. </param>
-        /// <param name="sort">
-        /// Sorting criteria in the format: property{,asc|desc}. Example: createdAt,desc
-        ///
-        /// Default sort order is ascending. Multiple sort criteria are supported.
-        ///
-        /// Please refer to the method description for supported properties.
-        ///
-        /// </param>
-        /// <param name="tenantId"> Filter by tenantId. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks>
-        /// List all the Tenants that the credentials used has access to.
-        ///
-        /// Available sort query values: id, name
-        ///
-        /// </remarks>
-        internal virtual Response<TenantPage> FindTenants(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("TenantClient.FindTenants");
-            scope.Start();
-            try
-            {
-                return RestClient.FindTenants(size, page, sort, tenantId, cancellationToken);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Get a Tenant by ID. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks> Returns the requested Tenant when has access to do it. </remarks>
-        public virtual async Task<Response<Tenant>> RetrieveTenantAsync(Guid id, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("TenantClient.RetrieveTenant");
-            scope.Start();
-            try
-            {
-                return await RestClient.RetrieveTenantAsync(id, cancellationToken).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Get a Tenant by ID. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks> Returns the requested Tenant when has access to do it. </remarks>
-        public virtual Response<Tenant> RetrieveTenant(Guid id, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("TenantClient.RetrieveTenant");
-            scope.Start();
-            try
-            {
-                return RestClient.RetrieveTenant(id, cancellationToken);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
+      options ??= new KuFlowRestClientOptions();
+      _clientDiagnostics = new ClientDiagnostics(options);
+      string[] scopes = { };
+      _pipeline = HttpPipelineBuilder.Build(options, new BearerTokenAuthenticationPolicy(credential, scopes));
+      RestClient = new TenantRestClient(_clientDiagnostics, _pipeline, endpoint);
     }
+
+    /// <summary> Initializes a new instance of TenantClient. </summary>
+    /// <param name="clientDiagnostics"> The handler for diagnostic messaging in the client. </param>
+    /// <param name="pipeline"> The HTTP pipeline for sending and receiving REST requests and responses. </param>
+    /// <param name="endpoint"> server parameter. </param>
+    /// <exception cref="ArgumentNullException"> <paramref name="clientDiagnostics"/> or <paramref name="pipeline"/> is null. </exception>
+    internal TenantClient(ClientDiagnostics clientDiagnostics, HttpPipeline pipeline, Uri endpoint = null)
+    {
+      RestClient = new TenantRestClient(clientDiagnostics, pipeline, endpoint);
+      _clientDiagnostics = clientDiagnostics;
+      _pipeline = pipeline;
+    }
+
+    /// <summary> Find all accessible Tenants. </summary>
+    /// <param name="size"> The number of records returned within a single API call. </param>
+    /// <param name="page"> The page number of the current page in the returned records, 0 is the first page. </param>
+    /// <param name="sort">
+    /// Sorting criteria in the format: property{,asc|desc}. Example: createdAt,desc
+    ///
+    /// Default sort order is ascending. Multiple sort criteria are supported.
+    ///
+    /// Please refer to the method description for supported properties.
+    ///
+    /// </param>
+    /// <param name="tenantId"> Filter by tenantId. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks>
+    /// List all the Tenants that the credentials used has access to.
+    ///
+    /// Available sort query values: id, name
+    ///
+    /// </remarks>
+    internal virtual async Task<Response<TenantPage>> FindTenantsAsync(
+      int? size = null,
+      int? page = null,
+      IEnumerable<string> sort = null,
+      IEnumerable<Guid> tenantId = null,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("TenantClient.FindTenants");
+      scope.Start();
+      try
+      {
+        return await RestClient.FindTenantsAsync(size, page, sort, tenantId, cancellationToken).ConfigureAwait(false);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Find all accessible Tenants. </summary>
+    /// <param name="size"> The number of records returned within a single API call. </param>
+    /// <param name="page"> The page number of the current page in the returned records, 0 is the first page. </param>
+    /// <param name="sort">
+    /// Sorting criteria in the format: property{,asc|desc}. Example: createdAt,desc
+    ///
+    /// Default sort order is ascending. Multiple sort criteria are supported.
+    ///
+    /// Please refer to the method description for supported properties.
+    ///
+    /// </param>
+    /// <param name="tenantId"> Filter by tenantId. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks>
+    /// List all the Tenants that the credentials used has access to.
+    ///
+    /// Available sort query values: id, name
+    ///
+    /// </remarks>
+    internal virtual Response<TenantPage> FindTenants(
+      int? size = null,
+      int? page = null,
+      IEnumerable<string> sort = null,
+      IEnumerable<Guid> tenantId = null,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("TenantClient.FindTenants");
+      scope.Start();
+      try
+      {
+        return RestClient.FindTenants(size, page, sort, tenantId, cancellationToken);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Get a Tenant by ID. </summary>
+    /// <param name="id"> The resource ID. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks> Returns the requested Tenant when has access to do it. </remarks>
+    public virtual async Task<Response<Tenant>> RetrieveTenantAsync(
+      Guid id,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("TenantClient.RetrieveTenant");
+      scope.Start();
+      try
+      {
+        return await RestClient.RetrieveTenantAsync(id, cancellationToken).ConfigureAwait(false);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Get a Tenant by ID. </summary>
+    /// <param name="id"> The resource ID. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks> Returns the requested Tenant when has access to do it. </remarks>
+    public virtual Response<Tenant> RetrieveTenant(Guid id, CancellationToken cancellationToken = default)
+    {
+      using var scope = _clientDiagnostics.CreateScope("TenantClient.RetrieveTenant");
+      scope.Start();
+      try
+      {
+        return RestClient.RetrieveTenant(id, cancellationToken);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+  }
 }

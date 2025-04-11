@@ -9,20 +9,20 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The Page. </summary>
-    public partial class Page
+  /// <summary> The Page. </summary>
+  public partial class Page
+  {
+    /// <summary> Initializes a new instance of <see cref="Page"/>. </summary>
+    /// <param name="metadata"></param>
+    /// <exception cref="ArgumentNullException"> <paramref name="metadata"/> is null. </exception>
+    internal Page(PageMetadata metadata)
     {
-        /// <summary> Initializes a new instance of <see cref="Page"/>. </summary>
-        /// <param name="metadata"></param>
-        /// <exception cref="ArgumentNullException"> <paramref name="metadata"/> is null. </exception>
-        internal Page(PageMetadata metadata)
-        {
-            Argument.AssertNotNull(metadata, nameof(metadata));
+      Argument.AssertNotNull(metadata, nameof(metadata));
 
-            Metadata = metadata;
-        }
-
-        /// <summary> Gets the metadata. </summary>
-        public PageMetadata Metadata { get; }
+      Metadata = metadata;
     }
+
+    /// <summary> Gets the metadata. </summary>
+    public PageMetadata Metadata { get; }
+  }
 }

@@ -9,47 +9,60 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The TenantUser. </summary>
-    public partial class TenantUser : AbstractAudited
+  /// <summary> The TenantUser. </summary>
+  public partial class TenantUser : AbstractAudited
+  {
+    /// <summary> Initializes a new instance of <see cref="TenantUser"/>. </summary>
+    /// <param name="id"></param>
+    /// <param name="principal"></param>
+    /// <param name="tenantId"></param>
+    /// <exception cref="ArgumentNullException"> <paramref name="principal"/> is null. </exception>
+    internal TenantUser(Guid id, Principal principal, Guid tenantId)
     {
-        /// <summary> Initializes a new instance of <see cref="TenantUser"/>. </summary>
-        /// <param name="id"></param>
-        /// <param name="principal"></param>
-        /// <param name="tenantId"></param>
-        /// <exception cref="ArgumentNullException"> <paramref name="principal"/> is null. </exception>
-        internal TenantUser(Guid id, Principal principal, Guid tenantId)
-        {
-            Argument.AssertNotNull(principal, nameof(principal));
+      Argument.AssertNotNull(principal, nameof(principal));
 
-            Id = id;
-            Principal = principal;
-            TenantId = tenantId;
-        }
-
-        /// <summary> Initializes a new instance of <see cref="TenantUser"/>. </summary>
-        /// <param name="createdBy"> Who create this model. </param>
-        /// <param name="createdAt"> When this model was created. </param>
-        /// <param name="lastModifiedBy"> Who was last update this model. </param>
-        /// <param name="lastModifiedAt"> When this model type was last updated. </param>
-        /// <param name="id"></param>
-        /// <param name="metadata"> Json value. </param>
-        /// <param name="principal"></param>
-        /// <param name="tenantId"></param>
-        internal TenantUser(Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid id, JsonValue metadata, Principal principal, Guid tenantId) : base(createdBy, createdAt, lastModifiedBy, lastModifiedAt)
-        {
-            Id = id;
-            Metadata = metadata;
-            Principal = principal;
-            TenantId = tenantId;
-        }
-
-        /// <summary> Gets the id. </summary>
-        public Guid Id { get; }
-        /// <summary> Json value. </summary>
-        public JsonValue Metadata { get; }
-        /// <summary> Gets the principal. </summary>
-        public Principal Principal { get; }
-        /// <summary> Gets the tenant id. </summary>
-        public Guid TenantId { get; }
+      Id = id;
+      Principal = principal;
+      TenantId = tenantId;
     }
+
+    /// <summary> Initializes a new instance of <see cref="TenantUser"/>. </summary>
+    /// <param name="createdBy"> Who create this model. </param>
+    /// <param name="createdAt"> When this model was created. </param>
+    /// <param name="lastModifiedBy"> Who was last update this model. </param>
+    /// <param name="lastModifiedAt"> When this model type was last updated. </param>
+    /// <param name="id"></param>
+    /// <param name="metadata"> Json value. </param>
+    /// <param name="principal"></param>
+    /// <param name="tenantId"></param>
+    internal TenantUser(
+      Guid? createdBy,
+      DateTimeOffset? createdAt,
+      Guid? lastModifiedBy,
+      DateTimeOffset? lastModifiedAt,
+      Guid id,
+      JsonValue metadata,
+      Principal principal,
+      Guid tenantId
+    )
+      : base(createdBy, createdAt, lastModifiedBy, lastModifiedAt)
+    {
+      Id = id;
+      Metadata = metadata;
+      Principal = principal;
+      TenantId = tenantId;
+    }
+
+    /// <summary> Gets the id. </summary>
+    public Guid Id { get; }
+
+    /// <summary> Json value. </summary>
+    public JsonValue Metadata { get; }
+
+    /// <summary> Gets the principal. </summary>
+    public Principal Principal { get; }
+
+    /// <summary> Gets the tenant id. </summary>
+    public Guid TenantId { get; }
+  }
 }

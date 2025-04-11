@@ -11,36 +11,36 @@ using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class PrincipalApplication
+  public partial class PrincipalApplication
+  {
+    internal static PrincipalApplication DeserializePrincipalApplication(JsonElement element)
     {
-        internal static PrincipalApplication DeserializePrincipalApplication(JsonElement element)
+      if (element.ValueKind == JsonValueKind.Null)
+      {
+        return null;
+      }
+      Guid? id = default;
+      foreach (var property in element.EnumerateObject())
+      {
+        if (property.NameEquals("id"u8))
         {
-            if (element.ValueKind == JsonValueKind.Null)
-            {
-                return null;
-            }
-            Guid? id = default;
-            foreach (var property in element.EnumerateObject())
-            {
-                if (property.NameEquals("id"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    id = property.Value.GetGuid();
-                    continue;
-                }
-            }
-            return new PrincipalApplication(id);
+          if (property.Value.ValueKind == JsonValueKind.Null)
+          {
+            continue;
+          }
+          id = property.Value.GetGuid();
+          continue;
         }
-
-        /// <summary> Deserializes the model from a raw response. </summary>
-        /// <param name="response"> The response to deserialize the model from. </param>
-        internal static PrincipalApplication FromResponse(Response response)
-        {
-            using var document = JsonDocument.Parse(response.Content);
-            return DeserializePrincipalApplication(document.RootElement);
-        }
+      }
+      return new PrincipalApplication(id);
     }
+
+    /// <summary> Deserializes the model from a raw response. </summary>
+    /// <param name="response"> The response to deserialize the model from. </param>
+    internal static PrincipalApplication FromResponse(Response response)
+    {
+      using var document = JsonDocument.Parse(response.Content);
+      return DeserializePrincipalApplication(document.RootElement);
+    }
+  }
 }

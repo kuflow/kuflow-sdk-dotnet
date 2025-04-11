@@ -11,43 +11,43 @@ using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class PrincipalPage
+  public partial class PrincipalPage
+  {
+    internal static PrincipalPage DeserializePrincipalPage(JsonElement element)
     {
-        internal static PrincipalPage DeserializePrincipalPage(JsonElement element)
+      if (element.ValueKind == JsonValueKind.Null)
+      {
+        return null;
+      }
+      IReadOnlyList<PrincipalPageItem> content = default;
+      PageMetadata metadata = default;
+      foreach (var property in element.EnumerateObject())
+      {
+        if (property.NameEquals("content"u8))
         {
-            if (element.ValueKind == JsonValueKind.Null)
-            {
-                return null;
-            }
-            IReadOnlyList<PrincipalPageItem> content = default;
-            PageMetadata metadata = default;
-            foreach (var property in element.EnumerateObject())
-            {
-                if (property.NameEquals("content"u8))
-                {
-                    List<PrincipalPageItem> array = new List<PrincipalPageItem>();
-                    foreach (var item in property.Value.EnumerateArray())
-                    {
-                        array.Add(PrincipalPageItem.DeserializePrincipalPageItem(item));
-                    }
-                    content = array;
-                    continue;
-                }
-                if (property.NameEquals("metadata"u8))
-                {
-                    metadata = PageMetadata.DeserializePageMetadata(property.Value);
-                    continue;
-                }
-            }
-            return new PrincipalPage(metadata, content);
+          List<PrincipalPageItem> array = new List<PrincipalPageItem>();
+          foreach (var item in property.Value.EnumerateArray())
+          {
+            array.Add(PrincipalPageItem.DeserializePrincipalPageItem(item));
+          }
+          content = array;
+          continue;
         }
-
-        /// <summary> Deserializes the model from a raw response. </summary>
-        /// <param name="response"> The response to deserialize the model from. </param>
-        internal static new PrincipalPage FromResponse(Response response)
+        if (property.NameEquals("metadata"u8))
         {
-            using var document = JsonDocument.Parse(response.Content);
-            return DeserializePrincipalPage(document.RootElement);
+          metadata = PageMetadata.DeserializePageMetadata(property.Value);
+          continue;
         }
+      }
+      return new PrincipalPage(metadata, content);
     }
+
+    /// <summary> Deserializes the model from a raw response. </summary>
+    /// <param name="response"> The response to deserialize the model from. </param>
+    internal static new PrincipalPage FromResponse(Response response)
+    {
+      using var document = JsonDocument.Parse(response.Content);
+      return DeserializePrincipalPage(document.RootElement);
+    }
+  }
 }

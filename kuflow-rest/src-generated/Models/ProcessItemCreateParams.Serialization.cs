@@ -10,54 +10,54 @@ using Azure.Core;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class ProcessItemCreateParams : IUtf8JsonSerializable
+  public partial class ProcessItemCreateParams : IUtf8JsonSerializable
+  {
+    void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
     {
-        void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
-        {
-            writer.WriteStartObject();
-            if (Optional.IsDefined(Id))
-            {
-                writer.WritePropertyName("id"u8);
-                writer.WriteStringValue(Id.Value);
-            }
-            writer.WritePropertyName("type"u8);
-            writer.WriteStringValue(Type.ToString());
-            writer.WritePropertyName("processId"u8);
-            writer.WriteStringValue(ProcessId);
-            if (Optional.IsDefined(OwnerId))
-            {
-                writer.WritePropertyName("ownerId"u8);
-                writer.WriteStringValue(OwnerId.Value);
-            }
-            if (Optional.IsDefined(OwnerEmail))
-            {
-                writer.WritePropertyName("ownerEmail"u8);
-                writer.WriteStringValue(OwnerEmail);
-            }
-            if (Optional.IsDefined(ProcessItemDefinitionCode))
-            {
-                writer.WritePropertyName("processItemDefinitionCode"u8);
-                writer.WriteStringValue(ProcessItemDefinitionCode);
-            }
-            if (Optional.IsDefined(Task))
-            {
-                writer.WritePropertyName("task"u8);
-                writer.WriteObjectValue(Task);
-            }
-            if (Optional.IsDefined(Message))
-            {
-                writer.WritePropertyName("message"u8);
-                writer.WriteObjectValue(Message);
-            }
-            writer.WriteEndObject();
-        }
-
-        /// <summary> Convert into a <see cref="RequestContent"/>. </summary>
-        internal virtual RequestContent ToRequestContent()
-        {
-            var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(this);
-            return content;
-        }
+      writer.WriteStartObject();
+      if (Optional.IsDefined(Id))
+      {
+        writer.WritePropertyName("id"u8);
+        writer.WriteStringValue(Id.Value);
+      }
+      writer.WritePropertyName("type"u8);
+      writer.WriteStringValue(Type.ToString());
+      writer.WritePropertyName("processId"u8);
+      writer.WriteStringValue(ProcessId);
+      if (Optional.IsDefined(OwnerId))
+      {
+        writer.WritePropertyName("ownerId"u8);
+        writer.WriteStringValue(OwnerId.Value);
+      }
+      if (Optional.IsDefined(OwnerEmail))
+      {
+        writer.WritePropertyName("ownerEmail"u8);
+        writer.WriteStringValue(OwnerEmail);
+      }
+      if (Optional.IsDefined(ProcessItemDefinitionCode))
+      {
+        writer.WritePropertyName("processItemDefinitionCode"u8);
+        writer.WriteStringValue(ProcessItemDefinitionCode);
+      }
+      if (Optional.IsDefined(Task))
+      {
+        writer.WritePropertyName("task"u8);
+        writer.WriteObjectValue(Task);
+      }
+      if (Optional.IsDefined(Message))
+      {
+        writer.WritePropertyName("message"u8);
+        writer.WriteObjectValue(Message);
+      }
+      writer.WriteEndObject();
     }
+
+    /// <summary> Convert into a <see cref="RequestContent"/>. </summary>
+    internal virtual RequestContent ToRequestContent()
+    {
+      var content = new Utf8JsonRequestContent();
+      content.JsonWriter.WriteObjectValue(this);
+      return content;
+    }
+  }
 }

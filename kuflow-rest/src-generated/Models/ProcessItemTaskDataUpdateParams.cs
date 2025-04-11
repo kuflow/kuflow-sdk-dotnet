@@ -9,20 +9,20 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The ProcessItemTaskDataUpdateParams. </summary>
-    public partial class ProcessItemTaskDataUpdateParams
+  /// <summary> The ProcessItemTaskDataUpdateParams. </summary>
+  public partial class ProcessItemTaskDataUpdateParams
+  {
+    /// <summary> Initializes a new instance of <see cref="ProcessItemTaskDataUpdateParams"/>. </summary>
+    /// <param name="data"> Json value. </param>
+    /// <exception cref="ArgumentNullException"> <paramref name="data"/> is null. </exception>
+    public ProcessItemTaskDataUpdateParams(JsonValue data)
     {
-        /// <summary> Initializes a new instance of <see cref="ProcessItemTaskDataUpdateParams"/>. </summary>
-        /// <param name="data"> Json value. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="data"/> is null. </exception>
-        public ProcessItemTaskDataUpdateParams(JsonValue data)
-        {
-            Argument.AssertNotNull(data, nameof(data));
+      Argument.AssertNotNull(data, nameof(data));
 
-            Data = data;
-        }
-
-        /// <summary> Json value. </summary>
-        public JsonValue Data { get; }
+      Data = data;
     }
+
+    /// <summary> Json value. </summary>
+    public JsonValue Data { get; }
+  }
 }

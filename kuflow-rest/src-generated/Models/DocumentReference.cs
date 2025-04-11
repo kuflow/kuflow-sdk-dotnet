@@ -9,30 +9,30 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The DocumentReference. </summary>
-    public partial class DocumentReference
+  /// <summary> The DocumentReference. </summary>
+  public partial class DocumentReference
+  {
+    /// <summary> Initializes a new instance of <see cref="DocumentReference"/>. </summary>
+    /// <param name="documentUri">
+    /// JSON value representing the uploaded file.
+    ///
+    /// Example: `kuflow-file:uri=xxx-yyy-zzz;type=application/json;size=500;name=file.json;`
+    ///
+    /// </param>
+    /// <exception cref="ArgumentNullException"> <paramref name="documentUri"/> is null. </exception>
+    internal DocumentReference(string documentUri)
     {
-        /// <summary> Initializes a new instance of <see cref="DocumentReference"/>. </summary>
-        /// <param name="documentUri">
-        /// JSON value representing the uploaded file.
-        ///
-        /// Example: `kuflow-file:uri=xxx-yyy-zzz;type=application/json;size=500;name=file.json;`
-        ///
-        /// </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="documentUri"/> is null. </exception>
-        internal DocumentReference(string documentUri)
-        {
-            Argument.AssertNotNull(documentUri, nameof(documentUri));
+      Argument.AssertNotNull(documentUri, nameof(documentUri));
 
-            DocumentUri = documentUri;
-        }
-
-        /// <summary>
-        /// JSON value representing the uploaded file.
-        ///
-        /// Example: `kuflow-file:uri=xxx-yyy-zzz;type=application/json;size=500;name=file.json;`
-        ///
-        /// </summary>
-        public string DocumentUri { get; }
+      DocumentUri = documentUri;
     }
+
+    /// <summary>
+    /// JSON value representing the uploaded file.
+    ///
+    /// Example: `kuflow-file:uri=xxx-yyy-zzz;type=application/json;size=500;name=file.json;`
+    ///
+    /// </summary>
+    public string DocumentUri { get; }
+  }
 }

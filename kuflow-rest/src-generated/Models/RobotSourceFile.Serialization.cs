@@ -11,56 +11,56 @@ using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class RobotSourceFile
+  public partial class RobotSourceFile
+  {
+    internal static RobotSourceFile DeserializeRobotSourceFile(JsonElement element)
     {
-        internal static RobotSourceFile DeserializeRobotSourceFile(JsonElement element)
+      if (element.ValueKind == JsonValueKind.Null)
+      {
+        return null;
+      }
+      Guid id = default;
+      string name = default;
+      string contentType = default;
+      long contentLength = default;
+      string contentHash = default;
+      foreach (var property in element.EnumerateObject())
+      {
+        if (property.NameEquals("id"u8))
         {
-            if (element.ValueKind == JsonValueKind.Null)
-            {
-                return null;
-            }
-            Guid id = default;
-            string name = default;
-            string contentType = default;
-            long contentLength = default;
-            string contentHash = default;
-            foreach (var property in element.EnumerateObject())
-            {
-                if (property.NameEquals("id"u8))
-                {
-                    id = property.Value.GetGuid();
-                    continue;
-                }
-                if (property.NameEquals("name"u8))
-                {
-                    name = property.Value.GetString();
-                    continue;
-                }
-                if (property.NameEquals("contentType"u8))
-                {
-                    contentType = property.Value.GetString();
-                    continue;
-                }
-                if (property.NameEquals("contentLength"u8))
-                {
-                    contentLength = property.Value.GetInt64();
-                    continue;
-                }
-                if (property.NameEquals("contentHash"u8))
-                {
-                    contentHash = property.Value.GetString();
-                    continue;
-                }
-            }
-            return new RobotSourceFile(id, name, contentType, contentLength, contentHash);
+          id = property.Value.GetGuid();
+          continue;
         }
-
-        /// <summary> Deserializes the model from a raw response. </summary>
-        /// <param name="response"> The response to deserialize the model from. </param>
-        internal static RobotSourceFile FromResponse(Response response)
+        if (property.NameEquals("name"u8))
         {
-            using var document = JsonDocument.Parse(response.Content);
-            return DeserializeRobotSourceFile(document.RootElement);
+          name = property.Value.GetString();
+          continue;
         }
+        if (property.NameEquals("contentType"u8))
+        {
+          contentType = property.Value.GetString();
+          continue;
+        }
+        if (property.NameEquals("contentLength"u8))
+        {
+          contentLength = property.Value.GetInt64();
+          continue;
+        }
+        if (property.NameEquals("contentHash"u8))
+        {
+          contentHash = property.Value.GetString();
+          continue;
+        }
+      }
+      return new RobotSourceFile(id, name, contentType, contentLength, contentHash);
     }
+
+    /// <summary> Deserializes the model from a raw response. </summary>
+    /// <param name="response"> The response to deserialize the model from. </param>
+    internal static RobotSourceFile FromResponse(Response response)
+    {
+      using var document = JsonDocument.Parse(response.Content);
+      return DeserializeRobotSourceFile(document.RootElement);
+    }
+  }
 }

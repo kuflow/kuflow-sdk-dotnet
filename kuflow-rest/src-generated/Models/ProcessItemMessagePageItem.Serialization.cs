@@ -10,38 +10,38 @@ using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class ProcessItemMessagePageItem
+  public partial class ProcessItemMessagePageItem
+  {
+    internal static ProcessItemMessagePageItem DeserializeProcessItemMessagePageItem(JsonElement element)
     {
-        internal static ProcessItemMessagePageItem DeserializeProcessItemMessagePageItem(JsonElement element)
+      if (element.ValueKind == JsonValueKind.Null)
+      {
+        return null;
+      }
+      string text = default;
+      string dataStructureDataDefinitionCode = default;
+      foreach (var property in element.EnumerateObject())
+      {
+        if (property.NameEquals("text"u8))
         {
-            if (element.ValueKind == JsonValueKind.Null)
-            {
-                return null;
-            }
-            string text = default;
-            string dataStructureDataDefinitionCode = default;
-            foreach (var property in element.EnumerateObject())
-            {
-                if (property.NameEquals("text"u8))
-                {
-                    text = property.Value.GetString();
-                    continue;
-                }
-                if (property.NameEquals("dataStructureDataDefinitionCode"u8))
-                {
-                    dataStructureDataDefinitionCode = property.Value.GetString();
-                    continue;
-                }
-            }
-            return new ProcessItemMessagePageItem(text, dataStructureDataDefinitionCode);
+          text = property.Value.GetString();
+          continue;
         }
-
-        /// <summary> Deserializes the model from a raw response. </summary>
-        /// <param name="response"> The response to deserialize the model from. </param>
-        internal static ProcessItemMessagePageItem FromResponse(Response response)
+        if (property.NameEquals("dataStructureDataDefinitionCode"u8))
         {
-            using var document = JsonDocument.Parse(response.Content);
-            return DeserializeProcessItemMessagePageItem(document.RootElement);
+          dataStructureDataDefinitionCode = property.Value.GetString();
+          continue;
         }
+      }
+      return new ProcessItemMessagePageItem(text, dataStructureDataDefinitionCode);
     }
+
+    /// <summary> Deserializes the model from a raw response. </summary>
+    /// <param name="response"> The response to deserialize the model from. </param>
+    internal static ProcessItemMessagePageItem FromResponse(Response response)
+    {
+      using var document = JsonDocument.Parse(response.Content);
+      return DeserializeProcessItemMessagePageItem(document.RootElement);
+    }
+  }
 }

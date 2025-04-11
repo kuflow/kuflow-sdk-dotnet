@@ -7,30 +7,30 @@
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The ProcessItemMessage. </summary>
-    public partial class ProcessItemMessage
+  /// <summary> The ProcessItemMessage. </summary>
+  public partial class ProcessItemMessage
+  {
+    /// <summary> Initializes a new instance of <see cref="ProcessItemMessage"/>. </summary>
+    internal ProcessItemMessage() { }
+
+    /// <summary> Initializes a new instance of <see cref="ProcessItemMessage"/>. </summary>
+    /// <param name="text"> Message text in Markdown format according to the specification https://spec.commonmark.org/. </param>
+    /// <param name="data"> Json value. </param>
+    /// <param name="dataStructureDataDefinitionCode"></param>
+    internal ProcessItemMessage(string text, JsonValue data, string dataStructureDataDefinitionCode)
     {
-        /// <summary> Initializes a new instance of <see cref="ProcessItemMessage"/>. </summary>
-        internal ProcessItemMessage()
-        {
-        }
-
-        /// <summary> Initializes a new instance of <see cref="ProcessItemMessage"/>. </summary>
-        /// <param name="text"> Message text in Markdown format according to the specification https://spec.commonmark.org/. </param>
-        /// <param name="data"> Json value. </param>
-        /// <param name="dataStructureDataDefinitionCode"></param>
-        internal ProcessItemMessage(string text, JsonValue data, string dataStructureDataDefinitionCode)
-        {
-            Text = text;
-            Data = data;
-            DataStructureDataDefinitionCode = dataStructureDataDefinitionCode;
-        }
-
-        /// <summary> Message text in Markdown format according to the specification https://spec.commonmark.org/. </summary>
-        public string Text { get; }
-        /// <summary> Json value. </summary>
-        public JsonValue Data { get; }
-        /// <summary> Gets the data structure data definition code. </summary>
-        public string DataStructureDataDefinitionCode { get; }
+      Text = text;
+      Data = data;
+      DataStructureDataDefinitionCode = dataStructureDataDefinitionCode;
     }
+
+    /// <summary> Message text in Markdown format according to the specification https://spec.commonmark.org/. </summary>
+    public string Text { get; }
+
+    /// <summary> Json value. </summary>
+    public JsonValue Data { get; }
+
+    /// <summary> Gets the data structure data definition code. </summary>
+    public string DataStructureDataDefinitionCode { get; }
+  }
 }

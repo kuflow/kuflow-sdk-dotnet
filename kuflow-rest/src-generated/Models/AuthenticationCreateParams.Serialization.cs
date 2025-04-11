@@ -10,27 +10,27 @@ using Azure.Core;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class AuthenticationCreateParams : IUtf8JsonSerializable
+  public partial class AuthenticationCreateParams : IUtf8JsonSerializable
+  {
+    void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
     {
-        void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
-        {
-            writer.WriteStartObject();
-            writer.WritePropertyName("type"u8);
-            writer.WriteStringValue(Type.ToString());
-            if (Optional.IsDefined(TenantId))
-            {
-                writer.WritePropertyName("tenantId"u8);
-                writer.WriteStringValue(TenantId.Value);
-            }
-            writer.WriteEndObject();
-        }
-
-        /// <summary> Convert into a <see cref="RequestContent"/>. </summary>
-        internal virtual RequestContent ToRequestContent()
-        {
-            var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(this);
-            return content;
-        }
+      writer.WriteStartObject();
+      writer.WritePropertyName("type"u8);
+      writer.WriteStringValue(Type.ToString());
+      if (Optional.IsDefined(TenantId))
+      {
+        writer.WritePropertyName("tenantId"u8);
+        writer.WriteStringValue(TenantId.Value);
+      }
+      writer.WriteEndObject();
     }
+
+    /// <summary> Convert into a <see cref="RequestContent"/>. </summary>
+    internal virtual RequestContent ToRequestContent()
+    {
+      var content = new Utf8JsonRequestContent();
+      content.JsonWriter.WriteObjectValue(this);
+      return content;
+    }
+  }
 }

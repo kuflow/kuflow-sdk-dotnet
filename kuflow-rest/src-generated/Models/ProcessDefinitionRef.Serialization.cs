@@ -11,38 +11,38 @@ using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class ProcessDefinitionRef
+  public partial class ProcessDefinitionRef
+  {
+    internal static ProcessDefinitionRef DeserializeProcessDefinitionRef(JsonElement element)
     {
-        internal static ProcessDefinitionRef DeserializeProcessDefinitionRef(JsonElement element)
+      if (element.ValueKind == JsonValueKind.Null)
+      {
+        return null;
+      }
+      Guid id = default;
+      Guid version = default;
+      foreach (var property in element.EnumerateObject())
+      {
+        if (property.NameEquals("id"u8))
         {
-            if (element.ValueKind == JsonValueKind.Null)
-            {
-                return null;
-            }
-            Guid id = default;
-            Guid version = default;
-            foreach (var property in element.EnumerateObject())
-            {
-                if (property.NameEquals("id"u8))
-                {
-                    id = property.Value.GetGuid();
-                    continue;
-                }
-                if (property.NameEquals("version"u8))
-                {
-                    version = property.Value.GetGuid();
-                    continue;
-                }
-            }
-            return new ProcessDefinitionRef(id, version);
+          id = property.Value.GetGuid();
+          continue;
         }
-
-        /// <summary> Deserializes the model from a raw response. </summary>
-        /// <param name="response"> The response to deserialize the model from. </param>
-        internal static ProcessDefinitionRef FromResponse(Response response)
+        if (property.NameEquals("version"u8))
         {
-            using var document = JsonDocument.Parse(response.Content);
-            return DeserializeProcessDefinitionRef(document.RootElement);
+          version = property.Value.GetGuid();
+          continue;
         }
+      }
+      return new ProcessDefinitionRef(id, version);
     }
+
+    /// <summary> Deserializes the model from a raw response. </summary>
+    /// <param name="response"> The response to deserialize the model from. </param>
+    internal static ProcessDefinitionRef FromResponse(Response response)
+    {
+      using var document = JsonDocument.Parse(response.Content);
+      return DeserializeProcessDefinitionRef(document.RootElement);
+    }
+  }
 }

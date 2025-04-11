@@ -10,38 +10,38 @@ using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class AuthenticationEngineCertificate
+  public partial class AuthenticationEngineCertificate
+  {
+    internal static AuthenticationEngineCertificate DeserializeAuthenticationEngineCertificate(JsonElement element)
     {
-        internal static AuthenticationEngineCertificate DeserializeAuthenticationEngineCertificate(JsonElement element)
+      if (element.ValueKind == JsonValueKind.Null)
+      {
+        return null;
+      }
+      string @namespace = default;
+      AuthenticationEngineCertificateTls tls = default;
+      foreach (var property in element.EnumerateObject())
+      {
+        if (property.NameEquals("namespace"u8))
         {
-            if (element.ValueKind == JsonValueKind.Null)
-            {
-                return null;
-            }
-            string @namespace = default;
-            AuthenticationEngineCertificateTls tls = default;
-            foreach (var property in element.EnumerateObject())
-            {
-                if (property.NameEquals("namespace"u8))
-                {
-                    @namespace = property.Value.GetString();
-                    continue;
-                }
-                if (property.NameEquals("tls"u8))
-                {
-                    tls = AuthenticationEngineCertificateTls.DeserializeAuthenticationEngineCertificateTls(property.Value);
-                    continue;
-                }
-            }
-            return new AuthenticationEngineCertificate(@namespace, tls);
+          @namespace = property.Value.GetString();
+          continue;
         }
-
-        /// <summary> Deserializes the model from a raw response. </summary>
-        /// <param name="response"> The response to deserialize the model from. </param>
-        internal static AuthenticationEngineCertificate FromResponse(Response response)
+        if (property.NameEquals("tls"u8))
         {
-            using var document = JsonDocument.Parse(response.Content);
-            return DeserializeAuthenticationEngineCertificate(document.RootElement);
+          tls = AuthenticationEngineCertificateTls.DeserializeAuthenticationEngineCertificateTls(property.Value);
+          continue;
         }
+      }
+      return new AuthenticationEngineCertificate(@namespace, tls);
     }
+
+    /// <summary> Deserializes the model from a raw response. </summary>
+    /// <param name="response"> The response to deserialize the model from. </param>
+    internal static AuthenticationEngineCertificate FromResponse(Response response)
+    {
+      using var document = JsonDocument.Parse(response.Content);
+      return DeserializeAuthenticationEngineCertificate(document.RootElement);
+    }
+  }
 }

@@ -9,38 +9,42 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> Robot source type. </summary>
-    public partial class RobotSourceFile
+  /// <summary> Robot source type. </summary>
+  public partial class RobotSourceFile
+  {
+    /// <summary> Initializes a new instance of <see cref="RobotSourceFile"/>. </summary>
+    /// <param name="id"> Robot ID. </param>
+    /// <param name="name"> Source file name. </param>
+    /// <param name="contentType"> Source file content type. </param>
+    /// <param name="contentLength"> Source file length. </param>
+    /// <param name="contentHash"> Source file to check the integrity. </param>
+    /// <exception cref="ArgumentNullException"> <paramref name="name"/>, <paramref name="contentType"/> or <paramref name="contentHash"/> is null. </exception>
+    internal RobotSourceFile(Guid id, string name, string contentType, long contentLength, string contentHash)
     {
-        /// <summary> Initializes a new instance of <see cref="RobotSourceFile"/>. </summary>
-        /// <param name="id"> Robot ID. </param>
-        /// <param name="name"> Source file name. </param>
-        /// <param name="contentType"> Source file content type. </param>
-        /// <param name="contentLength"> Source file length. </param>
-        /// <param name="contentHash"> Source file to check the integrity. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="name"/>, <paramref name="contentType"/> or <paramref name="contentHash"/> is null. </exception>
-        internal RobotSourceFile(Guid id, string name, string contentType, long contentLength, string contentHash)
-        {
-            Argument.AssertNotNull(name, nameof(name));
-            Argument.AssertNotNull(contentType, nameof(contentType));
-            Argument.AssertNotNull(contentHash, nameof(contentHash));
+      Argument.AssertNotNull(name, nameof(name));
+      Argument.AssertNotNull(contentType, nameof(contentType));
+      Argument.AssertNotNull(contentHash, nameof(contentHash));
 
-            Id = id;
-            Name = name;
-            ContentType = contentType;
-            ContentLength = contentLength;
-            ContentHash = contentHash;
-        }
-
-        /// <summary> Robot ID. </summary>
-        public Guid Id { get; }
-        /// <summary> Source file name. </summary>
-        public string Name { get; }
-        /// <summary> Source file content type. </summary>
-        public string ContentType { get; }
-        /// <summary> Source file length. </summary>
-        public long ContentLength { get; }
-        /// <summary> Source file to check the integrity. </summary>
-        public string ContentHash { get; }
+      Id = id;
+      Name = name;
+      ContentType = contentType;
+      ContentLength = contentLength;
+      ContentHash = contentHash;
     }
+
+    /// <summary> Robot ID. </summary>
+    public Guid Id { get; }
+
+    /// <summary> Source file name. </summary>
+    public string Name { get; }
+
+    /// <summary> Source file content type. </summary>
+    public string ContentType { get; }
+
+    /// <summary> Source file length. </summary>
+    public long ContentLength { get; }
+
+    /// <summary> Source file to check the integrity. </summary>
+    public string ContentHash { get; }
+  }
 }

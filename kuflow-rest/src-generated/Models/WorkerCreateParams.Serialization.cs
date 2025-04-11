@@ -10,68 +10,68 @@ using Azure.Core;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class WorkerCreateParams : IUtf8JsonSerializable
+  public partial class WorkerCreateParams : IUtf8JsonSerializable
+  {
+    void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
     {
-        void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
+      writer.WriteStartObject();
+      writer.WritePropertyName("identity"u8);
+      writer.WriteStringValue(Identity);
+      writer.WritePropertyName("taskQueue"u8);
+      writer.WriteStringValue(TaskQueue);
+      if (Optional.IsCollectionDefined(WorkflowTypes))
+      {
+        writer.WritePropertyName("workflowTypes"u8);
+        writer.WriteStartArray();
+        foreach (var item in WorkflowTypes)
         {
-            writer.WriteStartObject();
-            writer.WritePropertyName("identity"u8);
-            writer.WriteStringValue(Identity);
-            writer.WritePropertyName("taskQueue"u8);
-            writer.WriteStringValue(TaskQueue);
-            if (Optional.IsCollectionDefined(WorkflowTypes))
-            {
-                writer.WritePropertyName("workflowTypes"u8);
-                writer.WriteStartArray();
-                foreach (var item in WorkflowTypes)
-                {
-                    writer.WriteStringValue(item);
-                }
-                writer.WriteEndArray();
-            }
-            if (Optional.IsCollectionDefined(ActivityTypes))
-            {
-                writer.WritePropertyName("activityTypes"u8);
-                writer.WriteStartArray();
-                foreach (var item in ActivityTypes)
-                {
-                    writer.WriteStringValue(item);
-                }
-                writer.WriteEndArray();
-            }
-            writer.WritePropertyName("hostname"u8);
-            writer.WriteStringValue(Hostname);
-            writer.WritePropertyName("ip"u8);
-            writer.WriteStringValue(Ip);
-            if (Optional.IsDefined(InstallationId))
-            {
-                writer.WritePropertyName("installationId"u8);
-                writer.WriteStringValue(InstallationId.Value);
-            }
-            if (Optional.IsCollectionDefined(RobotIds))
-            {
-                writer.WritePropertyName("robotIds"u8);
-                writer.WriteStartArray();
-                foreach (var item in RobotIds)
-                {
-                    writer.WriteStringValue(item);
-                }
-                writer.WriteEndArray();
-            }
-            if (Optional.IsDefined(TenantId))
-            {
-                writer.WritePropertyName("tenantId"u8);
-                writer.WriteStringValue(TenantId.Value);
-            }
-            writer.WriteEndObject();
+          writer.WriteStringValue(item);
         }
-
-        /// <summary> Convert into a <see cref="RequestContent"/>. </summary>
-        internal virtual RequestContent ToRequestContent()
+        writer.WriteEndArray();
+      }
+      if (Optional.IsCollectionDefined(ActivityTypes))
+      {
+        writer.WritePropertyName("activityTypes"u8);
+        writer.WriteStartArray();
+        foreach (var item in ActivityTypes)
         {
-            var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(this);
-            return content;
+          writer.WriteStringValue(item);
         }
+        writer.WriteEndArray();
+      }
+      writer.WritePropertyName("hostname"u8);
+      writer.WriteStringValue(Hostname);
+      writer.WritePropertyName("ip"u8);
+      writer.WriteStringValue(Ip);
+      if (Optional.IsDefined(InstallationId))
+      {
+        writer.WritePropertyName("installationId"u8);
+        writer.WriteStringValue(InstallationId.Value);
+      }
+      if (Optional.IsCollectionDefined(RobotIds))
+      {
+        writer.WritePropertyName("robotIds"u8);
+        writer.WriteStartArray();
+        foreach (var item in RobotIds)
+        {
+          writer.WriteStringValue(item);
+        }
+        writer.WriteEndArray();
+      }
+      if (Optional.IsDefined(TenantId))
+      {
+        writer.WritePropertyName("tenantId"u8);
+        writer.WriteStringValue(TenantId.Value);
+      }
+      writer.WriteEndObject();
     }
+
+    /// <summary> Convert into a <see cref="RequestContent"/>. </summary>
+    internal virtual RequestContent ToRequestContent()
+    {
+      var content = new Utf8JsonRequestContent();
+      content.JsonWriter.WriteObjectValue(this);
+      return content;
+    }
+  }
 }

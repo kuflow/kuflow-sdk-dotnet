@@ -7,22 +7,20 @@
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The ProcessItemTaskCreateParams. </summary>
-    public partial class ProcessItemTaskCreateParams
+  /// <summary> The ProcessItemTaskCreateParams. </summary>
+  public partial class ProcessItemTaskCreateParams
+  {
+    /// <summary> Initializes a new instance of <see cref="ProcessItemTaskCreateParams"/>. </summary>
+    public ProcessItemTaskCreateParams() { }
+
+    /// <summary> Initializes a new instance of <see cref="ProcessItemTaskCreateParams"/>. </summary>
+    /// <param name="data"> Json value. </param>
+    internal ProcessItemTaskCreateParams(JsonValue data)
     {
-        /// <summary> Initializes a new instance of <see cref="ProcessItemTaskCreateParams"/>. </summary>
-        public ProcessItemTaskCreateParams()
-        {
-        }
-
-        /// <summary> Initializes a new instance of <see cref="ProcessItemTaskCreateParams"/>. </summary>
-        /// <param name="data"> Json value. </param>
-        internal ProcessItemTaskCreateParams(JsonValue data)
-        {
-            Data = data;
-        }
-
-        /// <summary> Json value. </summary>
-        public JsonValue Data { get; set; }
+      Data = data;
     }
+
+    /// <summary> Json value. </summary>
+    public JsonValue Data { get; set; }
+  }
 }

@@ -9,44 +9,54 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The WebhookEventProcessItemCreatedData. </summary>
-    internal partial class WebhookEventProcessItemCreatedData
+  /// <summary> The WebhookEventProcessItemCreatedData. </summary>
+  internal partial class WebhookEventProcessItemCreatedData
+  {
+    /// <summary> Initializes a new instance of <see cref="WebhookEventProcessItemCreatedData"/>. </summary>
+    /// <param name="processId"></param>
+    /// <param name="processItemId"></param>
+    /// <param name="processItemType"> Process Item Type. </param>
+    internal WebhookEventProcessItemCreatedData(Guid processId, Guid processItemId, ProcessItemType processItemType)
     {
-        /// <summary> Initializes a new instance of <see cref="WebhookEventProcessItemCreatedData"/>. </summary>
-        /// <param name="processId"></param>
-        /// <param name="processItemId"></param>
-        /// <param name="processItemType"> Process Item Type. </param>
-        internal WebhookEventProcessItemCreatedData(Guid processId, Guid processItemId, ProcessItemType processItemType)
-        {
-            ProcessId = processId;
-            ProcessItemId = processItemId;
-            ProcessItemType = processItemType;
-        }
-
-        /// <summary> Initializes a new instance of <see cref="WebhookEventProcessItemCreatedData"/>. </summary>
-        /// <param name="processId"></param>
-        /// <param name="processItemId"></param>
-        /// <param name="processItemType"> Process Item Type. </param>
-        /// <param name="processItemState"> Process Item Task state. </param>
-        /// <param name="processItemDefinitionCode"></param>
-        internal WebhookEventProcessItemCreatedData(Guid processId, Guid processItemId, ProcessItemType processItemType, ProcessItemTaskState? processItemState, string processItemDefinitionCode)
-        {
-            ProcessId = processId;
-            ProcessItemId = processItemId;
-            ProcessItemType = processItemType;
-            ProcessItemState = processItemState;
-            ProcessItemDefinitionCode = processItemDefinitionCode;
-        }
-
-        /// <summary> Gets the process id. </summary>
-        public Guid ProcessId { get; }
-        /// <summary> Gets the process item id. </summary>
-        public Guid ProcessItemId { get; }
-        /// <summary> Process Item Type. </summary>
-        public ProcessItemType ProcessItemType { get; }
-        /// <summary> Process Item Task state. </summary>
-        public ProcessItemTaskState? ProcessItemState { get; }
-        /// <summary> Gets the process item definition code. </summary>
-        public string ProcessItemDefinitionCode { get; }
+      ProcessId = processId;
+      ProcessItemId = processItemId;
+      ProcessItemType = processItemType;
     }
+
+    /// <summary> Initializes a new instance of <see cref="WebhookEventProcessItemCreatedData"/>. </summary>
+    /// <param name="processId"></param>
+    /// <param name="processItemId"></param>
+    /// <param name="processItemType"> Process Item Type. </param>
+    /// <param name="processItemState"> Process Item Task state. </param>
+    /// <param name="processItemDefinitionCode"></param>
+    internal WebhookEventProcessItemCreatedData(
+      Guid processId,
+      Guid processItemId,
+      ProcessItemType processItemType,
+      ProcessItemTaskState? processItemState,
+      string processItemDefinitionCode
+    )
+    {
+      ProcessId = processId;
+      ProcessItemId = processItemId;
+      ProcessItemType = processItemType;
+      ProcessItemState = processItemState;
+      ProcessItemDefinitionCode = processItemDefinitionCode;
+    }
+
+    /// <summary> Gets the process id. </summary>
+    public Guid ProcessId { get; }
+
+    /// <summary> Gets the process item id. </summary>
+    public Guid ProcessItemId { get; }
+
+    /// <summary> Process Item Type. </summary>
+    public ProcessItemType ProcessItemType { get; }
+
+    /// <summary> Process Item Task state. </summary>
+    public ProcessItemTaskState? ProcessItemState { get; }
+
+    /// <summary> Gets the process item definition code. </summary>
+    public string ProcessItemDefinitionCode { get; }
+  }
 }

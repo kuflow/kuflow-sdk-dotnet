@@ -9,33 +9,35 @@ using System.Collections.Generic;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The ProcessItemTask. </summary>
-    public partial class ProcessItemTask
+  /// <summary> The ProcessItemTask. </summary>
+  public partial class ProcessItemTask
+  {
+    /// <summary> Initializes a new instance of <see cref="ProcessItemTask"/>. </summary>
+    /// <param name="state"> Process Item Task state. </param>
+    internal ProcessItemTask(ProcessItemTaskState state)
     {
-        /// <summary> Initializes a new instance of <see cref="ProcessItemTask"/>. </summary>
-        /// <param name="state"> Process Item Task state. </param>
-        internal ProcessItemTask(ProcessItemTaskState state)
-        {
-            State = state;
-            Logs = new ChangeTrackingList<ProcessItemTaskLog>();
-        }
-
-        /// <summary> Initializes a new instance of <see cref="ProcessItemTask"/>. </summary>
-        /// <param name="state"> Process Item Task state. </param>
-        /// <param name="data"> Json value. </param>
-        /// <param name="logs"></param>
-        internal ProcessItemTask(ProcessItemTaskState state, JsonValue data, IReadOnlyList<ProcessItemTaskLog> logs)
-        {
-            State = state;
-            Data = data;
-            Logs = logs;
-        }
-
-        /// <summary> Process Item Task state. </summary>
-        public ProcessItemTaskState State { get; }
-        /// <summary> Json value. </summary>
-        public JsonValue Data { get; }
-        /// <summary> Gets the logs. </summary>
-        public IReadOnlyList<ProcessItemTaskLog> Logs { get; }
+      State = state;
+      Logs = new ChangeTrackingList<ProcessItemTaskLog>();
     }
+
+    /// <summary> Initializes a new instance of <see cref="ProcessItemTask"/>. </summary>
+    /// <param name="state"> Process Item Task state. </param>
+    /// <param name="data"> Json value. </param>
+    /// <param name="logs"></param>
+    internal ProcessItemTask(ProcessItemTaskState state, JsonValue data, IReadOnlyList<ProcessItemTaskLog> logs)
+    {
+      State = state;
+      Data = data;
+      Logs = logs;
+    }
+
+    /// <summary> Process Item Task state. </summary>
+    public ProcessItemTaskState State { get; }
+
+    /// <summary> Json value. </summary>
+    public JsonValue Data { get; }
+
+    /// <summary> Gets the logs. </summary>
+    public IReadOnlyList<ProcessItemTaskLog> Logs { get; }
+  }
 }

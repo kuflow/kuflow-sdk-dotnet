@@ -10,45 +10,54 @@ using System.ComponentModel;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The ProcessItemTaskLogLevel. </summary>
-    public readonly partial struct ProcessItemTaskLogLevel : IEquatable<ProcessItemTaskLogLevel>
+  /// <summary> The ProcessItemTaskLogLevel. </summary>
+  public readonly partial struct ProcessItemTaskLogLevel : IEquatable<ProcessItemTaskLogLevel>
+  {
+    private readonly string _value;
+
+    /// <summary> Initializes a new instance of <see cref="ProcessItemTaskLogLevel"/>. </summary>
+    /// <exception cref="ArgumentNullException"> <paramref name="value"/> is null. </exception>
+    public ProcessItemTaskLogLevel(string value)
     {
-        private readonly string _value;
-
-        /// <summary> Initializes a new instance of <see cref="ProcessItemTaskLogLevel"/>. </summary>
-        /// <exception cref="ArgumentNullException"> <paramref name="value"/> is null. </exception>
-        public ProcessItemTaskLogLevel(string value)
-        {
-            _value = value ?? throw new ArgumentNullException(nameof(value));
-        }
-
-        private const string InfoValue = "INFO";
-        private const string WarnValue = "WARN";
-        private const string ErrorValue = "ERROR";
-
-        /// <summary> INFO. </summary>
-        public static ProcessItemTaskLogLevel Info { get; } = new ProcessItemTaskLogLevel(InfoValue);
-        /// <summary> WARN. </summary>
-        public static ProcessItemTaskLogLevel Warn { get; } = new ProcessItemTaskLogLevel(WarnValue);
-        /// <summary> ERROR. </summary>
-        public static ProcessItemTaskLogLevel Error { get; } = new ProcessItemTaskLogLevel(ErrorValue);
-        /// <summary> Determines if two <see cref="ProcessItemTaskLogLevel"/> values are the same. </summary>
-        public static bool operator ==(ProcessItemTaskLogLevel left, ProcessItemTaskLogLevel right) => left.Equals(right);
-        /// <summary> Determines if two <see cref="ProcessItemTaskLogLevel"/> values are not the same. </summary>
-        public static bool operator !=(ProcessItemTaskLogLevel left, ProcessItemTaskLogLevel right) => !left.Equals(right);
-        /// <summary> Converts a <see cref="string"/> to a <see cref="ProcessItemTaskLogLevel"/>. </summary>
-        public static implicit operator ProcessItemTaskLogLevel(string value) => new ProcessItemTaskLogLevel(value);
-
-        /// <inheritdoc />
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public override bool Equals(object obj) => obj is ProcessItemTaskLogLevel other && Equals(other);
-        /// <inheritdoc />
-        public bool Equals(ProcessItemTaskLogLevel other) => string.Equals(_value, other._value, StringComparison.InvariantCultureIgnoreCase);
-
-        /// <inheritdoc />
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public override int GetHashCode() => _value != null ? StringComparer.InvariantCultureIgnoreCase.GetHashCode(_value) : 0;
-        /// <inheritdoc />
-        public override string ToString() => _value;
+      _value = value ?? throw new ArgumentNullException(nameof(value));
     }
+
+    private const string InfoValue = "INFO";
+    private const string WarnValue = "WARN";
+    private const string ErrorValue = "ERROR";
+
+    /// <summary> INFO. </summary>
+    public static ProcessItemTaskLogLevel Info { get; } = new ProcessItemTaskLogLevel(InfoValue);
+
+    /// <summary> WARN. </summary>
+    public static ProcessItemTaskLogLevel Warn { get; } = new ProcessItemTaskLogLevel(WarnValue);
+
+    /// <summary> ERROR. </summary>
+    public static ProcessItemTaskLogLevel Error { get; } = new ProcessItemTaskLogLevel(ErrorValue);
+
+    /// <summary> Determines if two <see cref="ProcessItemTaskLogLevel"/> values are the same. </summary>
+    public static bool operator ==(ProcessItemTaskLogLevel left, ProcessItemTaskLogLevel right) => left.Equals(right);
+
+    /// <summary> Determines if two <see cref="ProcessItemTaskLogLevel"/> values are not the same. </summary>
+    public static bool operator !=(ProcessItemTaskLogLevel left, ProcessItemTaskLogLevel right) => !left.Equals(right);
+
+    /// <summary> Converts a <see cref="string"/> to a <see cref="ProcessItemTaskLogLevel"/>. </summary>
+    public static implicit operator ProcessItemTaskLogLevel(string value) => new ProcessItemTaskLogLevel(value);
+
+    /// <inheritdoc />
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override bool Equals(object obj) => obj is ProcessItemTaskLogLevel other && Equals(other);
+
+    /// <inheritdoc />
+    public bool Equals(ProcessItemTaskLogLevel other) =>
+      string.Equals(_value, other._value, StringComparison.InvariantCultureIgnoreCase);
+
+    /// <inheritdoc />
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override int GetHashCode() =>
+      _value != null ? StringComparer.InvariantCultureIgnoreCase.GetHashCode(_value) : 0;
+
+    /// <inheritdoc />
+    public override string ToString() => _value;
+  }
 }

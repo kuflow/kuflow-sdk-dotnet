@@ -9,28 +9,30 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The ProcessItemDefinitionRef. </summary>
-    public partial class ProcessItemDefinitionRef
+  /// <summary> The ProcessItemDefinitionRef. </summary>
+  public partial class ProcessItemDefinitionRef
+  {
+    /// <summary> Initializes a new instance of <see cref="ProcessItemDefinitionRef"/>. </summary>
+    /// <param name="id"></param>
+    /// <param name="version"></param>
+    /// <param name="code"></param>
+    /// <exception cref="ArgumentNullException"> <paramref name="code"/> is null. </exception>
+    internal ProcessItemDefinitionRef(Guid id, Guid version, string code)
     {
-        /// <summary> Initializes a new instance of <see cref="ProcessItemDefinitionRef"/>. </summary>
-        /// <param name="id"></param>
-        /// <param name="version"></param>
-        /// <param name="code"></param>
-        /// <exception cref="ArgumentNullException"> <paramref name="code"/> is null. </exception>
-        internal ProcessItemDefinitionRef(Guid id, Guid version, string code)
-        {
-            Argument.AssertNotNull(code, nameof(code));
+      Argument.AssertNotNull(code, nameof(code));
 
-            Id = id;
-            Version = version;
-            Code = code;
-        }
-
-        /// <summary> Gets the id. </summary>
-        public Guid Id { get; }
-        /// <summary> Gets the version. </summary>
-        public Guid Version { get; }
-        /// <summary> Gets the code. </summary>
-        public string Code { get; }
+      Id = id;
+      Version = version;
+      Code = code;
     }
+
+    /// <summary> Gets the id. </summary>
+    public Guid Id { get; }
+
+    /// <summary> Gets the version. </summary>
+    public Guid Version { get; }
+
+    /// <summary> Gets the code. </summary>
+    public string Code { get; }
+  }
 }

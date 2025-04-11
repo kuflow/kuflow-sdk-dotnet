@@ -9,42 +9,45 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The DefaultErrorInfo. </summary>
-    internal partial class DefaultErrorInfo
+  /// <summary> The DefaultErrorInfo. </summary>
+  internal partial class DefaultErrorInfo
+  {
+    /// <summary> Initializes a new instance of <see cref="DefaultErrorInfo"/>. </summary>
+    /// <param name="code"></param>
+    /// <param name="message"></param>
+    /// <exception cref="ArgumentNullException"> <paramref name="code"/> or <paramref name="message"/> is null. </exception>
+    internal DefaultErrorInfo(string code, string message)
     {
-        /// <summary> Initializes a new instance of <see cref="DefaultErrorInfo"/>. </summary>
-        /// <param name="code"></param>
-        /// <param name="message"></param>
-        /// <exception cref="ArgumentNullException"> <paramref name="code"/> or <paramref name="message"/> is null. </exception>
-        internal DefaultErrorInfo(string code, string message)
-        {
-            Argument.AssertNotNull(code, nameof(code));
-            Argument.AssertNotNull(message, nameof(message));
+      Argument.AssertNotNull(code, nameof(code));
+      Argument.AssertNotNull(message, nameof(message));
 
-            Code = code;
-            Message = message;
-        }
-
-        /// <summary> Initializes a new instance of <see cref="DefaultErrorInfo"/>. </summary>
-        /// <param name="code"></param>
-        /// <param name="message"></param>
-        /// <param name="location"></param>
-        /// <param name="locationType"></param>
-        internal DefaultErrorInfo(string code, string message, string location, string locationType)
-        {
-            Code = code;
-            Message = message;
-            Location = location;
-            LocationType = locationType;
-        }
-
-        /// <summary> Gets the code. </summary>
-        public string Code { get; }
-        /// <summary> Gets the message. </summary>
-        public string Message { get; }
-        /// <summary> Gets the location. </summary>
-        public string Location { get; }
-        /// <summary> Gets the location type. </summary>
-        public string LocationType { get; }
+      Code = code;
+      Message = message;
     }
+
+    /// <summary> Initializes a new instance of <see cref="DefaultErrorInfo"/>. </summary>
+    /// <param name="code"></param>
+    /// <param name="message"></param>
+    /// <param name="location"></param>
+    /// <param name="locationType"></param>
+    internal DefaultErrorInfo(string code, string message, string location, string locationType)
+    {
+      Code = code;
+      Message = message;
+      Location = location;
+      LocationType = locationType;
+    }
+
+    /// <summary> Gets the code. </summary>
+    public string Code { get; }
+
+    /// <summary> Gets the message. </summary>
+    public string Message { get; }
+
+    /// <summary> Gets the location. </summary>
+    public string Location { get; }
+
+    /// <summary> Gets the location type. </summary>
+    public string LocationType { get; }
+  }
 }

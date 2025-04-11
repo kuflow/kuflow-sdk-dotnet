@@ -11,33 +11,35 @@ using System.Linq;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The ProcessPage. </summary>
-    public partial class ProcessPage : Page
+  /// <summary> The ProcessPage. </summary>
+  public partial class ProcessPage : Page
+  {
+    /// <summary> Initializes a new instance of <see cref="ProcessPage"/>. </summary>
+    /// <param name="metadata"></param>
+    /// <param name="content"></param>
+    /// <exception cref="ArgumentNullException"> <paramref name="metadata"/> or <paramref name="content"/> is null. </exception>
+    internal ProcessPage(PageMetadata metadata, IEnumerable<ProcessPageItem> content)
+      : base(metadata)
     {
-        /// <summary> Initializes a new instance of <see cref="ProcessPage"/>. </summary>
-        /// <param name="metadata"></param>
-        /// <param name="content"></param>
-        /// <exception cref="ArgumentNullException"> <paramref name="metadata"/> or <paramref name="content"/> is null. </exception>
-        internal ProcessPage(PageMetadata metadata, IEnumerable<ProcessPageItem> content) : base(metadata)
-        {
-            Argument.AssertNotNull(metadata, nameof(metadata));
-            Argument.AssertNotNull(content, nameof(content));
+      Argument.AssertNotNull(metadata, nameof(metadata));
+      Argument.AssertNotNull(content, nameof(content));
 
-            Content = content.ToList();
-        }
-
-        /// <summary> Initializes a new instance of <see cref="ProcessPage"/>. </summary>
-        /// <param name="metadata"></param>
-        /// <param name="content"></param>
-        /// <exception cref="ArgumentNullException"> <paramref name="metadata"/> is null. </exception>
-        internal ProcessPage(PageMetadata metadata, IReadOnlyList<ProcessPageItem> content) : base(metadata)
-        {
-            Argument.AssertNotNull(metadata, nameof(metadata));
-
-            Content = content;
-        }
-
-        /// <summary> Gets the content. </summary>
-        public IReadOnlyList<ProcessPageItem> Content { get; }
+      Content = content.ToList();
     }
+
+    /// <summary> Initializes a new instance of <see cref="ProcessPage"/>. </summary>
+    /// <param name="metadata"></param>
+    /// <param name="content"></param>
+    /// <exception cref="ArgumentNullException"> <paramref name="metadata"/> is null. </exception>
+    internal ProcessPage(PageMetadata metadata, IReadOnlyList<ProcessPageItem> content)
+      : base(metadata)
+    {
+      Argument.AssertNotNull(metadata, nameof(metadata));
+
+      Content = content;
+    }
+
+    /// <summary> Gets the content. </summary>
+    public IReadOnlyList<ProcessPageItem> Content { get; }
+  }
 }

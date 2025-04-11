@@ -9,60 +9,81 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The Process. </summary>
-    public partial class Process : AbstractAudited
+  /// <summary> The Process. </summary>
+  public partial class Process : AbstractAudited
+  {
+    /// <summary> Initializes a new instance of <see cref="Process"/>. </summary>
+    /// <param name="id"> Process ID. </param>
+    /// <param name="state"> Process state. </param>
+    /// <param name="tenantId"> Tenant ID. </param>
+    internal Process(Guid id, ProcessState state, Guid tenantId)
     {
-        /// <summary> Initializes a new instance of <see cref="Process"/>. </summary>
-        /// <param name="id"> Process ID. </param>
-        /// <param name="state"> Process state. </param>
-        /// <param name="tenantId"> Tenant ID. </param>
-        internal Process(Guid id, ProcessState state, Guid tenantId)
-        {
-            Id = id;
-            State = state;
-            TenantId = tenantId;
-        }
-
-        /// <summary> Initializes a new instance of <see cref="Process"/>. </summary>
-        /// <param name="createdBy"> Who create this model. </param>
-        /// <param name="createdAt"> When this model was created. </param>
-        /// <param name="lastModifiedBy"> Who was last update this model. </param>
-        /// <param name="lastModifiedAt"> When this model type was last updated. </param>
-        /// <param name="id"> Process ID. </param>
-        /// <param name="state"> Process state. </param>
-        /// <param name="processDefinitionRef"></param>
-        /// <param name="metadata"> Json value. </param>
-        /// <param name="entity"> Json value. </param>
-        /// <param name="processRelated"></param>
-        /// <param name="initiatorId"> Process initiator id, Principal ID. </param>
-        /// <param name="tenantId"> Tenant ID. </param>
-        internal Process(Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid id, ProcessState state, ProcessDefinitionRef processDefinitionRef, JsonValue metadata, JsonValue entity, ProcessRelated processRelated, Guid? initiatorId, Guid tenantId) : base(createdBy, createdAt, lastModifiedBy, lastModifiedAt)
-        {
-            Id = id;
-            State = state;
-            ProcessDefinitionRef = processDefinitionRef;
-            Metadata = metadata;
-            Entity = entity;
-            ProcessRelated = processRelated;
-            InitiatorId = initiatorId;
-            TenantId = tenantId;
-        }
-
-        /// <summary> Process ID. </summary>
-        public Guid Id { get; }
-        /// <summary> Process state. </summary>
-        public ProcessState State { get; }
-        /// <summary> Gets the process definition ref. </summary>
-        public ProcessDefinitionRef ProcessDefinitionRef { get; }
-        /// <summary> Json value. </summary>
-        public JsonValue Metadata { get; }
-        /// <summary> Json value. </summary>
-        public JsonValue Entity { get; }
-        /// <summary> Gets the process related. </summary>
-        public ProcessRelated ProcessRelated { get; }
-        /// <summary> Process initiator id, Principal ID. </summary>
-        public Guid? InitiatorId { get; }
-        /// <summary> Tenant ID. </summary>
-        public Guid TenantId { get; }
+      Id = id;
+      State = state;
+      TenantId = tenantId;
     }
+
+    /// <summary> Initializes a new instance of <see cref="Process"/>. </summary>
+    /// <param name="createdBy"> Who create this model. </param>
+    /// <param name="createdAt"> When this model was created. </param>
+    /// <param name="lastModifiedBy"> Who was last update this model. </param>
+    /// <param name="lastModifiedAt"> When this model type was last updated. </param>
+    /// <param name="id"> Process ID. </param>
+    /// <param name="state"> Process state. </param>
+    /// <param name="processDefinitionRef"></param>
+    /// <param name="metadata"> Json value. </param>
+    /// <param name="entity"> Json value. </param>
+    /// <param name="processRelated"></param>
+    /// <param name="initiatorId"> Process initiator id, Principal ID. </param>
+    /// <param name="tenantId"> Tenant ID. </param>
+    internal Process(
+      Guid? createdBy,
+      DateTimeOffset? createdAt,
+      Guid? lastModifiedBy,
+      DateTimeOffset? lastModifiedAt,
+      Guid id,
+      ProcessState state,
+      ProcessDefinitionRef processDefinitionRef,
+      JsonValue metadata,
+      JsonValue entity,
+      ProcessRelated processRelated,
+      Guid? initiatorId,
+      Guid tenantId
+    )
+      : base(createdBy, createdAt, lastModifiedBy, lastModifiedAt)
+    {
+      Id = id;
+      State = state;
+      ProcessDefinitionRef = processDefinitionRef;
+      Metadata = metadata;
+      Entity = entity;
+      ProcessRelated = processRelated;
+      InitiatorId = initiatorId;
+      TenantId = tenantId;
+    }
+
+    /// <summary> Process ID. </summary>
+    public Guid Id { get; }
+
+    /// <summary> Process state. </summary>
+    public ProcessState State { get; }
+
+    /// <summary> Gets the process definition ref. </summary>
+    public ProcessDefinitionRef ProcessDefinitionRef { get; }
+
+    /// <summary> Json value. </summary>
+    public JsonValue Metadata { get; }
+
+    /// <summary> Json value. </summary>
+    public JsonValue Entity { get; }
+
+    /// <summary> Gets the process related. </summary>
+    public ProcessRelated ProcessRelated { get; }
+
+    /// <summary> Process initiator id, Principal ID. </summary>
+    public Guid? InitiatorId { get; }
+
+    /// <summary> Tenant ID. </summary>
+    public Guid TenantId { get; }
+  }
 }

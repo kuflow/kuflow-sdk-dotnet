@@ -11,72 +11,72 @@ using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class Principal
+  public partial class Principal
+  {
+    internal static Principal DeserializePrincipal(JsonElement element)
     {
-        internal static Principal DeserializePrincipal(JsonElement element)
+      if (element.ValueKind == JsonValueKind.Null)
+      {
+        return null;
+      }
+      Guid? id = default;
+      PrincipalType? type = default;
+      string name = default;
+      PrincipalUser user = default;
+      PrincipalApplication application = default;
+      foreach (var property in element.EnumerateObject())
+      {
+        if (property.NameEquals("id"u8))
         {
-            if (element.ValueKind == JsonValueKind.Null)
-            {
-                return null;
-            }
-            Guid? id = default;
-            PrincipalType? type = default;
-            string name = default;
-            PrincipalUser user = default;
-            PrincipalApplication application = default;
-            foreach (var property in element.EnumerateObject())
-            {
-                if (property.NameEquals("id"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    id = property.Value.GetGuid();
-                    continue;
-                }
-                if (property.NameEquals("type"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    type = new PrincipalType(property.Value.GetString());
-                    continue;
-                }
-                if (property.NameEquals("name"u8))
-                {
-                    name = property.Value.GetString();
-                    continue;
-                }
-                if (property.NameEquals("user"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    user = PrincipalUser.DeserializePrincipalUser(property.Value);
-                    continue;
-                }
-                if (property.NameEquals("application"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    application = PrincipalApplication.DeserializePrincipalApplication(property.Value);
-                    continue;
-                }
-            }
-            return new Principal(id, type, name, user, application);
+          if (property.Value.ValueKind == JsonValueKind.Null)
+          {
+            continue;
+          }
+          id = property.Value.GetGuid();
+          continue;
         }
-
-        /// <summary> Deserializes the model from a raw response. </summary>
-        /// <param name="response"> The response to deserialize the model from. </param>
-        internal static Principal FromResponse(Response response)
+        if (property.NameEquals("type"u8))
         {
-            using var document = JsonDocument.Parse(response.Content);
-            return DeserializePrincipal(document.RootElement);
+          if (property.Value.ValueKind == JsonValueKind.Null)
+          {
+            continue;
+          }
+          type = new PrincipalType(property.Value.GetString());
+          continue;
         }
+        if (property.NameEquals("name"u8))
+        {
+          name = property.Value.GetString();
+          continue;
+        }
+        if (property.NameEquals("user"u8))
+        {
+          if (property.Value.ValueKind == JsonValueKind.Null)
+          {
+            continue;
+          }
+          user = PrincipalUser.DeserializePrincipalUser(property.Value);
+          continue;
+        }
+        if (property.NameEquals("application"u8))
+        {
+          if (property.Value.ValueKind == JsonValueKind.Null)
+          {
+            continue;
+          }
+          application = PrincipalApplication.DeserializePrincipalApplication(property.Value);
+          continue;
+        }
+      }
+      return new Principal(id, type, name, user, application);
     }
+
+    /// <summary> Deserializes the model from a raw response. </summary>
+    /// <param name="response"> The response to deserialize the model from. </param>
+    internal static Principal FromResponse(Response response)
+    {
+      using var document = JsonDocument.Parse(response.Content);
+      return DeserializePrincipal(document.RootElement);
+    }
+  }
 }

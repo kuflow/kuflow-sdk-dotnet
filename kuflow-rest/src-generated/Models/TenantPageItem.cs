@@ -9,24 +9,25 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The TenantPageItem. </summary>
-    public partial class TenantPageItem
+  /// <summary> The TenantPageItem. </summary>
+  public partial class TenantPageItem
+  {
+    /// <summary> Initializes a new instance of <see cref="TenantPageItem"/>. </summary>
+    /// <param name="id"></param>
+    /// <param name="name"></param>
+    /// <exception cref="ArgumentNullException"> <paramref name="name"/> is null. </exception>
+    internal TenantPageItem(Guid id, string name)
     {
-        /// <summary> Initializes a new instance of <see cref="TenantPageItem"/>. </summary>
-        /// <param name="id"></param>
-        /// <param name="name"></param>
-        /// <exception cref="ArgumentNullException"> <paramref name="name"/> is null. </exception>
-        internal TenantPageItem(Guid id, string name)
-        {
-            Argument.AssertNotNull(name, nameof(name));
+      Argument.AssertNotNull(name, nameof(name));
 
-            Id = id;
-            Name = name;
-        }
-
-        /// <summary> Gets the id. </summary>
-        public Guid Id { get; }
-        /// <summary> Gets the name. </summary>
-        public string Name { get; }
+      Id = id;
+      Name = name;
     }
+
+    /// <summary> Gets the id. </summary>
+    public Guid Id { get; }
+
+    /// <summary> Gets the name. </summary>
+    public string Name { get; }
+  }
 }

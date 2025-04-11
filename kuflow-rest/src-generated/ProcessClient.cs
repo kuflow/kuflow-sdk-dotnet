@@ -17,683 +17,806 @@ using KuFlow.Rest.Models;
 
 namespace KuFlow.Rest
 {
-    /// <summary> The Process service client. </summary>
-    public partial class ProcessClient
+  /// <summary> The Process service client. </summary>
+  public partial class ProcessClient
+  {
+    private readonly ClientDiagnostics _clientDiagnostics;
+    private readonly HttpPipeline _pipeline;
+    internal ProcessRestClient RestClient { get; }
+
+    /// <summary> Initializes a new instance of ProcessClient for mocking. </summary>
+    protected ProcessClient() { }
+
+    /// <summary> Initializes a new instance of ProcessClient. </summary>
+    /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
+    /// <param name="endpoint"> server parameter. </param>
+    /// <param name="options"> The options for configuring the client. </param>
+    public ProcessClient(TokenCredential credential, Uri endpoint = null, KuFlowRestClientOptions options = null)
     {
-        private readonly ClientDiagnostics _clientDiagnostics;
-        private readonly HttpPipeline _pipeline;
-        internal ProcessRestClient RestClient { get; }
+      if (credential == null)
+      {
+        throw new ArgumentNullException(nameof(credential));
+      }
+      endpoint ??= new Uri("https://api.kuflow.com/v2024-06-14");
 
-        /// <summary> Initializes a new instance of ProcessClient for mocking. </summary>
-        protected ProcessClient()
-        {
-        }
-
-        /// <summary> Initializes a new instance of ProcessClient. </summary>
-        /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
-        /// <param name="endpoint"> server parameter. </param>
-        /// <param name="options"> The options for configuring the client. </param>
-        public ProcessClient(TokenCredential credential, Uri endpoint = null, KuFlowRestClientOptions options = null)
-        {
-            if (credential == null)
-            {
-                throw new ArgumentNullException(nameof(credential));
-            }
-            endpoint ??= new Uri("https://api.kuflow.com/v2024-06-14");
-
-            options ??= new KuFlowRestClientOptions();
-            _clientDiagnostics = new ClientDiagnostics(options);
-            string[] scopes = { };
-            _pipeline = HttpPipelineBuilder.Build(options, new BearerTokenAuthenticationPolicy(credential, scopes));
-            RestClient = new ProcessRestClient(_clientDiagnostics, _pipeline, endpoint);
-        }
-
-        /// <summary> Initializes a new instance of ProcessClient. </summary>
-        /// <param name="clientDiagnostics"> The handler for diagnostic messaging in the client. </param>
-        /// <param name="pipeline"> The HTTP pipeline for sending and receiving REST requests and responses. </param>
-        /// <param name="endpoint"> server parameter. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="clientDiagnostics"/> or <paramref name="pipeline"/> is null. </exception>
-        internal ProcessClient(ClientDiagnostics clientDiagnostics, HttpPipeline pipeline, Uri endpoint = null)
-        {
-            RestClient = new ProcessRestClient(clientDiagnostics, pipeline, endpoint);
-            _clientDiagnostics = clientDiagnostics;
-            _pipeline = pipeline;
-        }
-
-        /// <summary> Find all accessible Processes. </summary>
-        /// <param name="size"> The number of records returned within a single API call. </param>
-        /// <param name="page"> The page number of the current page in the returned records, 0 is the first page. </param>
-        /// <param name="sort">
-        /// Sorting criteria in the format: property{,asc|desc}. Example: createdAt,desc
-        ///
-        /// Default sort order is ascending. Multiple sort criteria are supported.
-        ///
-        /// Please refer to the method description for supported properties.
-        ///
-        /// </param>
-        /// <param name="tenantId"> Filter by tenantId. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks>
-        /// List all the Processes that have been created and the credentials has access.
-        ///
-        /// Available sort query values: id, createdAt, lastModifiedAt
-        ///
-        /// </remarks>
-        internal virtual async Task<Response<ProcessPage>> FindProcessesAsync(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.FindProcesses");
-            scope.Start();
-            try
-            {
-                return await RestClient.FindProcessesAsync(size, page, sort, tenantId, cancellationToken).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Find all accessible Processes. </summary>
-        /// <param name="size"> The number of records returned within a single API call. </param>
-        /// <param name="page"> The page number of the current page in the returned records, 0 is the first page. </param>
-        /// <param name="sort">
-        /// Sorting criteria in the format: property{,asc|desc}. Example: createdAt,desc
-        ///
-        /// Default sort order is ascending. Multiple sort criteria are supported.
-        ///
-        /// Please refer to the method description for supported properties.
-        ///
-        /// </param>
-        /// <param name="tenantId"> Filter by tenantId. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks>
-        /// List all the Processes that have been created and the credentials has access.
-        ///
-        /// Available sort query values: id, createdAt, lastModifiedAt
-        ///
-        /// </remarks>
-        internal virtual Response<ProcessPage> FindProcesses(int? size = null, int? page = null, IEnumerable<string> sort = null, IEnumerable<Guid> tenantId = null, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.FindProcesses");
-            scope.Start();
-            try
-            {
-                return RestClient.FindProcesses(size, page, sort, tenantId, cancellationToken);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Create a new process. </summary>
-        /// <param name="processCreateParams"> Process to create. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks>
-        /// Creates a process. This option has direct correspondence to the action of starting a process in the Kuflow GUI.
-        ///
-        /// If you want the method to be idempotent, please specify the `id` field in the request body.
-        ///
-        /// </remarks>
-        public virtual async Task<Response<Process>> CreateProcessAsync(ProcessCreateParams processCreateParams, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.CreateProcess");
-            scope.Start();
-            try
-            {
-                return await RestClient.CreateProcessAsync(processCreateParams, cancellationToken).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Create a new process. </summary>
-        /// <param name="processCreateParams"> Process to create. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks>
-        /// Creates a process. This option has direct correspondence to the action of starting a process in the Kuflow GUI.
-        ///
-        /// If you want the method to be idempotent, please specify the `id` field in the request body.
-        ///
-        /// </remarks>
-        public virtual Response<Process> CreateProcess(ProcessCreateParams processCreateParams, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.CreateProcess");
-            scope.Start();
-            try
-            {
-                return RestClient.CreateProcess(processCreateParams, cancellationToken);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Get a Process by ID. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks> Returns the requested Process when has access to do it. </remarks>
-        public virtual async Task<Response<Process>> RetrieveProcessAsync(Guid id, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.RetrieveProcess");
-            scope.Start();
-            try
-            {
-                return await RestClient.RetrieveProcessAsync(id, cancellationToken).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Get a Process by ID. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks> Returns the requested Process when has access to do it. </remarks>
-        public virtual Response<Process> RetrieveProcess(Guid id, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.RetrieveProcess");
-            scope.Start();
-            try
-            {
-                return RestClient.RetrieveProcess(id, cancellationToken);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Complete a Process. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks>
-        /// Complete a Process. The state of Process is set to 'completed'.
-        ///
-        /// If you are already in this state, no action is taken.
-        ///
-        /// </remarks>
-        public virtual async Task<Response<Process>> CompleteProcessAsync(Guid id, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.CompleteProcess");
-            scope.Start();
-            try
-            {
-                return await RestClient.CompleteProcessAsync(id, cancellationToken).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Complete a Process. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks>
-        /// Complete a Process. The state of Process is set to 'completed'.
-        ///
-        /// If you are already in this state, no action is taken.
-        ///
-        /// </remarks>
-        public virtual Response<Process> CompleteProcess(Guid id, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.CompleteProcess");
-            scope.Start();
-            try
-            {
-                return RestClient.CompleteProcess(id, cancellationToken);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Cancel a Process. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks>
-        /// Cancel a Process. The Process state is set to 'cancelled'.
-        ///
-        /// All the active process items will be marked as cancelled too.
-        ///
-        /// If you are already in this state, no action is taken.
-        ///
-        /// </remarks>
-        public virtual async Task<Response<Process>> CancelProcessAsync(Guid id, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.CancelProcess");
-            scope.Start();
-            try
-            {
-                return await RestClient.CancelProcessAsync(id, cancellationToken).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Cancel a Process. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks>
-        /// Cancel a Process. The Process state is set to 'cancelled'.
-        ///
-        /// All the active process items will be marked as cancelled too.
-        ///
-        /// If you are already in this state, no action is taken.
-        ///
-        /// </remarks>
-        public virtual Response<Process> CancelProcess(Guid id, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.CancelProcess");
-            scope.Start();
-            try
-            {
-                return RestClient.CancelProcess(id, cancellationToken);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Change process initiator. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="processChangeInitiatorParams"> Params to change the process initiator. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks>
-        /// Change the current initiator of a process.
-        ///
-        /// Allows you to choose a user (by email or principal identifier) or an application (principal identifier).
-        /// Only one option will be necessary.
-        ///
-        /// </remarks>
-        public virtual async Task<Response<Process>> ChangeProcessInitiatorAsync(Guid id, ProcessChangeInitiatorParams processChangeInitiatorParams, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.ChangeProcessInitiator");
-            scope.Start();
-            try
-            {
-                return await RestClient.ChangeProcessInitiatorAsync(id, processChangeInitiatorParams, cancellationToken).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Change process initiator. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="processChangeInitiatorParams"> Params to change the process initiator. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks>
-        /// Change the current initiator of a process.
-        ///
-        /// Allows you to choose a user (by email or principal identifier) or an application (principal identifier).
-        /// Only one option will be necessary.
-        ///
-        /// </remarks>
-        public virtual Response<Process> ChangeProcessInitiator(Guid id, ProcessChangeInitiatorParams processChangeInitiatorParams, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.ChangeProcessInitiator");
-            scope.Start();
-            try
-            {
-                return RestClient.ChangeProcessInitiator(id, processChangeInitiatorParams, cancellationToken);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Upload and save a document in a user action. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="fileContentType"> Document content type. </param>
-        /// <param name="fileName"> Document name. </param>
-        /// <param name="userActionValueId"> User action value ID related to de document. </param>
-        /// <param name="file"> Document to save. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks>
-        /// Allow saving a user action document uploading the content.
-        ///
-        /// </remarks>
-        public virtual async Task<Response<Process>> UploadProcessUserActionDocumentAsync(Guid id, string fileContentType, string fileName, Guid userActionValueId, Stream file, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.UploadProcessUserActionDocument");
-            scope.Start();
-            try
-            {
-                return await RestClient.UploadProcessUserActionDocumentAsync(id, fileContentType, fileName, userActionValueId, file, cancellationToken).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Upload and save a document in a user action. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="fileContentType"> Document content type. </param>
-        /// <param name="fileName"> Document name. </param>
-        /// <param name="userActionValueId"> User action value ID related to de document. </param>
-        /// <param name="file"> Document to save. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks>
-        /// Allow saving a user action document uploading the content.
-        ///
-        /// </remarks>
-        public virtual Response<Process> UploadProcessUserActionDocument(Guid id, string fileContentType, string fileName, Guid userActionValueId, Stream file, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.UploadProcessUserActionDocument");
-            scope.Start();
-            try
-            {
-                return RestClient.UploadProcessUserActionDocument(id, fileContentType, fileName, userActionValueId, file, cancellationToken);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Save process metadata. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="processMetadataUpdateParams"> Params to save the metadata data. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public virtual async Task<Response<Process>> UpdateProcessMetadataAsync(Guid id, ProcessMetadataUpdateParams processMetadataUpdateParams, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.UpdateProcessMetadata");
-            scope.Start();
-            try
-            {
-                return await RestClient.UpdateProcessMetadataAsync(id, processMetadataUpdateParams, cancellationToken).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Save process metadata. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="processMetadataUpdateParams"> Params to save the metadata data. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public virtual Response<Process> UpdateProcessMetadata(Guid id, ProcessMetadataUpdateParams processMetadataUpdateParams, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.UpdateProcessMetadata");
-            scope.Start();
-            try
-            {
-                return RestClient.UpdateProcessMetadata(id, processMetadataUpdateParams, cancellationToken);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Patch JSON data. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="jsonPatch"> Params to save the JSON value. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks>
-        /// Allow to patch a JSON data validating that the data follow the related schema. If the data is invalid, then
-        /// the json is marked as invalid.
-        ///
-        /// </remarks>
-        public virtual async Task<Response<Process>> PatchProcessMetadataAsync(Guid id, IEnumerable<JsonPatchOperation> jsonPatch, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.PatchProcessMetadata");
-            scope.Start();
-            try
-            {
-                return await RestClient.PatchProcessMetadataAsync(id, jsonPatch, cancellationToken).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Patch JSON data. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="jsonPatch"> Params to save the JSON value. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks>
-        /// Allow to patch a JSON data validating that the data follow the related schema. If the data is invalid, then
-        /// the json is marked as invalid.
-        ///
-        /// </remarks>
-        public virtual Response<Process> PatchProcessMetadata(Guid id, IEnumerable<JsonPatchOperation> jsonPatch, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.PatchProcessMetadata");
-            scope.Start();
-            try
-            {
-                return RestClient.PatchProcessMetadata(id, jsonPatch, cancellationToken);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Save JSON data. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="processEntityUpdateParams"> Params to save the JSON value. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks>
-        /// Allow to save a JSON validating that the data follow the related schema. If the data is invalid, then
-        /// the json form is marked as invalid.
-        ///
-        /// </remarks>
-        public virtual async Task<Response<Process>> UpdateProcessEntityAsync(Guid id, ProcessEntityUpdateParams processEntityUpdateParams, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.UpdateProcessEntity");
-            scope.Start();
-            try
-            {
-                return await RestClient.UpdateProcessEntityAsync(id, processEntityUpdateParams, cancellationToken).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Save JSON data. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="processEntityUpdateParams"> Params to save the JSON value. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks>
-        /// Allow to save a JSON validating that the data follow the related schema. If the data is invalid, then
-        /// the json form is marked as invalid.
-        ///
-        /// </remarks>
-        public virtual Response<Process> UpdateProcessEntity(Guid id, ProcessEntityUpdateParams processEntityUpdateParams, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.UpdateProcessEntity");
-            scope.Start();
-            try
-            {
-                return RestClient.UpdateProcessEntity(id, processEntityUpdateParams, cancellationToken);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Patch JSON data. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="jsonPatch"> Params to save the JSON value. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks>
-        /// Allow to patch a JSON data validating that the data follow the related schema. If the data is invalid, then
-        /// the json is marked as invalid.
-        ///
-        /// </remarks>
-        public virtual async Task<Response<Process>> PatchProcessEntityAsync(Guid id, IEnumerable<JsonPatchOperation> jsonPatch, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.PatchProcessEntity");
-            scope.Start();
-            try
-            {
-                return await RestClient.PatchProcessEntityAsync(id, jsonPatch, cancellationToken).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Patch JSON data. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="jsonPatch"> Params to save the JSON value. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks>
-        /// Allow to patch a JSON data validating that the data follow the related schema. If the data is invalid, then
-        /// the json is marked as invalid.
-        ///
-        /// </remarks>
-        public virtual Response<Process> PatchProcessEntity(Guid id, IEnumerable<JsonPatchOperation> jsonPatch, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.PatchProcessEntity");
-            scope.Start();
-            try
-            {
-                return RestClient.PatchProcessEntity(id, jsonPatch, cancellationToken);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Upload a temporal document into the process that later on must be linked with a process domain resource. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="fileContentType"> Document content type. </param>
-        /// <param name="fileName"> Document name. </param>
-        /// <param name="file"> Document to save. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks>
-        /// Upload a temporal document into the process that later on must be linked with a process domain resource.
-        ///
-        /// Documents uploaded with this API will be deleted after 24 hours as long as they have not been linked to a
-        /// process or process item..
-        ///
-        /// </remarks>
-        public virtual async Task<Response<DocumentReference>> UploadProcessDocumentAsync(Guid id, string fileContentType, string fileName, Stream file, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.UploadProcessDocument");
-            scope.Start();
-            try
-            {
-                return await RestClient.UploadProcessDocumentAsync(id, fileContentType, fileName, file, cancellationToken).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Upload a temporal document into the process that later on must be linked with a process domain resource. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="fileContentType"> Document content type. </param>
-        /// <param name="fileName"> Document name. </param>
-        /// <param name="file"> Document to save. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks>
-        /// Upload a temporal document into the process that later on must be linked with a process domain resource.
-        ///
-        /// Documents uploaded with this API will be deleted after 24 hours as long as they have not been linked to a
-        /// process or process item..
-        ///
-        /// </remarks>
-        public virtual Response<DocumentReference> UploadProcessDocument(Guid id, string fileContentType, string fileName, Stream file, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.UploadProcessDocument");
-            scope.Start();
-            try
-            {
-                return RestClient.UploadProcessDocument(id, fileContentType, fileName, file, cancellationToken);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Download document. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="documentUri"> Document URI to download. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks> Given a document uri download a document. </remarks>
-        public virtual async Task<Response<Stream>> DownloadProcessDocumentAsync(Guid id, string documentUri, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.DownloadProcessDocument");
-            scope.Start();
-            try
-            {
-                return await RestClient.DownloadProcessDocumentAsync(id, documentUri, cancellationToken).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Download document. </summary>
-        /// <param name="id"> The resource ID. </param>
-        /// <param name="documentUri"> Document URI to download. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks> Given a document uri download a document. </remarks>
-        public virtual Response<Stream> DownloadProcessDocument(Guid id, string documentUri, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("ProcessClient.DownloadProcessDocument");
-            scope.Start();
-            try
-            {
-                return RestClient.DownloadProcessDocument(id, documentUri, cancellationToken);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
+      options ??= new KuFlowRestClientOptions();
+      _clientDiagnostics = new ClientDiagnostics(options);
+      string[] scopes = { };
+      _pipeline = HttpPipelineBuilder.Build(options, new BearerTokenAuthenticationPolicy(credential, scopes));
+      RestClient = new ProcessRestClient(_clientDiagnostics, _pipeline, endpoint);
     }
+
+    /// <summary> Initializes a new instance of ProcessClient. </summary>
+    /// <param name="clientDiagnostics"> The handler for diagnostic messaging in the client. </param>
+    /// <param name="pipeline"> The HTTP pipeline for sending and receiving REST requests and responses. </param>
+    /// <param name="endpoint"> server parameter. </param>
+    /// <exception cref="ArgumentNullException"> <paramref name="clientDiagnostics"/> or <paramref name="pipeline"/> is null. </exception>
+    internal ProcessClient(ClientDiagnostics clientDiagnostics, HttpPipeline pipeline, Uri endpoint = null)
+    {
+      RestClient = new ProcessRestClient(clientDiagnostics, pipeline, endpoint);
+      _clientDiagnostics = clientDiagnostics;
+      _pipeline = pipeline;
+    }
+
+    /// <summary> Find all accessible Processes. </summary>
+    /// <param name="size"> The number of records returned within a single API call. </param>
+    /// <param name="page"> The page number of the current page in the returned records, 0 is the first page. </param>
+    /// <param name="sort">
+    /// Sorting criteria in the format: property{,asc|desc}. Example: createdAt,desc
+    ///
+    /// Default sort order is ascending. Multiple sort criteria are supported.
+    ///
+    /// Please refer to the method description for supported properties.
+    ///
+    /// </param>
+    /// <param name="tenantId"> Filter by tenantId. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks>
+    /// List all the Processes that have been created and the credentials has access.
+    ///
+    /// Available sort query values: id, createdAt, lastModifiedAt
+    ///
+    /// </remarks>
+    internal virtual async Task<Response<ProcessPage>> FindProcessesAsync(
+      int? size = null,
+      int? page = null,
+      IEnumerable<string> sort = null,
+      IEnumerable<Guid> tenantId = null,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("ProcessClient.FindProcesses");
+      scope.Start();
+      try
+      {
+        return await RestClient.FindProcessesAsync(size, page, sort, tenantId, cancellationToken).ConfigureAwait(false);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Find all accessible Processes. </summary>
+    /// <param name="size"> The number of records returned within a single API call. </param>
+    /// <param name="page"> The page number of the current page in the returned records, 0 is the first page. </param>
+    /// <param name="sort">
+    /// Sorting criteria in the format: property{,asc|desc}. Example: createdAt,desc
+    ///
+    /// Default sort order is ascending. Multiple sort criteria are supported.
+    ///
+    /// Please refer to the method description for supported properties.
+    ///
+    /// </param>
+    /// <param name="tenantId"> Filter by tenantId. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks>
+    /// List all the Processes that have been created and the credentials has access.
+    ///
+    /// Available sort query values: id, createdAt, lastModifiedAt
+    ///
+    /// </remarks>
+    internal virtual Response<ProcessPage> FindProcesses(
+      int? size = null,
+      int? page = null,
+      IEnumerable<string> sort = null,
+      IEnumerable<Guid> tenantId = null,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("ProcessClient.FindProcesses");
+      scope.Start();
+      try
+      {
+        return RestClient.FindProcesses(size, page, sort, tenantId, cancellationToken);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Create a new process. </summary>
+    /// <param name="processCreateParams"> Process to create. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks>
+    /// Creates a process. This option has direct correspondence to the action of starting a process in the Kuflow GUI.
+    ///
+    /// If you want the method to be idempotent, please specify the `id` field in the request body.
+    ///
+    /// </remarks>
+    public virtual async Task<Response<Process>> CreateProcessAsync(
+      ProcessCreateParams processCreateParams,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("ProcessClient.CreateProcess");
+      scope.Start();
+      try
+      {
+        return await RestClient.CreateProcessAsync(processCreateParams, cancellationToken).ConfigureAwait(false);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Create a new process. </summary>
+    /// <param name="processCreateParams"> Process to create. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks>
+    /// Creates a process. This option has direct correspondence to the action of starting a process in the Kuflow GUI.
+    ///
+    /// If you want the method to be idempotent, please specify the `id` field in the request body.
+    ///
+    /// </remarks>
+    public virtual Response<Process> CreateProcess(
+      ProcessCreateParams processCreateParams,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("ProcessClient.CreateProcess");
+      scope.Start();
+      try
+      {
+        return RestClient.CreateProcess(processCreateParams, cancellationToken);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Get a Process by ID. </summary>
+    /// <param name="id"> The resource ID. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks> Returns the requested Process when has access to do it. </remarks>
+    public virtual async Task<Response<Process>> RetrieveProcessAsync(
+      Guid id,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("ProcessClient.RetrieveProcess");
+      scope.Start();
+      try
+      {
+        return await RestClient.RetrieveProcessAsync(id, cancellationToken).ConfigureAwait(false);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Get a Process by ID. </summary>
+    /// <param name="id"> The resource ID. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks> Returns the requested Process when has access to do it. </remarks>
+    public virtual Response<Process> RetrieveProcess(Guid id, CancellationToken cancellationToken = default)
+    {
+      using var scope = _clientDiagnostics.CreateScope("ProcessClient.RetrieveProcess");
+      scope.Start();
+      try
+      {
+        return RestClient.RetrieveProcess(id, cancellationToken);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Complete a Process. </summary>
+    /// <param name="id"> The resource ID. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks>
+    /// Complete a Process. The state of Process is set to 'completed'.
+    ///
+    /// If you are already in this state, no action is taken.
+    ///
+    /// </remarks>
+    public virtual async Task<Response<Process>> CompleteProcessAsync(
+      Guid id,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("ProcessClient.CompleteProcess");
+      scope.Start();
+      try
+      {
+        return await RestClient.CompleteProcessAsync(id, cancellationToken).ConfigureAwait(false);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Complete a Process. </summary>
+    /// <param name="id"> The resource ID. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks>
+    /// Complete a Process. The state of Process is set to 'completed'.
+    ///
+    /// If you are already in this state, no action is taken.
+    ///
+    /// </remarks>
+    public virtual Response<Process> CompleteProcess(Guid id, CancellationToken cancellationToken = default)
+    {
+      using var scope = _clientDiagnostics.CreateScope("ProcessClient.CompleteProcess");
+      scope.Start();
+      try
+      {
+        return RestClient.CompleteProcess(id, cancellationToken);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Cancel a Process. </summary>
+    /// <param name="id"> The resource ID. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks>
+    /// Cancel a Process. The Process state is set to 'cancelled'.
+    ///
+    /// All the active process items will be marked as cancelled too.
+    ///
+    /// If you are already in this state, no action is taken.
+    ///
+    /// </remarks>
+    public virtual async Task<Response<Process>> CancelProcessAsync(
+      Guid id,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("ProcessClient.CancelProcess");
+      scope.Start();
+      try
+      {
+        return await RestClient.CancelProcessAsync(id, cancellationToken).ConfigureAwait(false);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Cancel a Process. </summary>
+    /// <param name="id"> The resource ID. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks>
+    /// Cancel a Process. The Process state is set to 'cancelled'.
+    ///
+    /// All the active process items will be marked as cancelled too.
+    ///
+    /// If you are already in this state, no action is taken.
+    ///
+    /// </remarks>
+    public virtual Response<Process> CancelProcess(Guid id, CancellationToken cancellationToken = default)
+    {
+      using var scope = _clientDiagnostics.CreateScope("ProcessClient.CancelProcess");
+      scope.Start();
+      try
+      {
+        return RestClient.CancelProcess(id, cancellationToken);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Change process initiator. </summary>
+    /// <param name="id"> The resource ID. </param>
+    /// <param name="processChangeInitiatorParams"> Params to change the process initiator. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks>
+    /// Change the current initiator of a process.
+    ///
+    /// Allows you to choose a user (by email or principal identifier) or an application (principal identifier).
+    /// Only one option will be necessary.
+    ///
+    /// </remarks>
+    public virtual async Task<Response<Process>> ChangeProcessInitiatorAsync(
+      Guid id,
+      ProcessChangeInitiatorParams processChangeInitiatorParams,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("ProcessClient.ChangeProcessInitiator");
+      scope.Start();
+      try
+      {
+        return await RestClient
+          .ChangeProcessInitiatorAsync(id, processChangeInitiatorParams, cancellationToken)
+          .ConfigureAwait(false);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Change process initiator. </summary>
+    /// <param name="id"> The resource ID. </param>
+    /// <param name="processChangeInitiatorParams"> Params to change the process initiator. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks>
+    /// Change the current initiator of a process.
+    ///
+    /// Allows you to choose a user (by email or principal identifier) or an application (principal identifier).
+    /// Only one option will be necessary.
+    ///
+    /// </remarks>
+    public virtual Response<Process> ChangeProcessInitiator(
+      Guid id,
+      ProcessChangeInitiatorParams processChangeInitiatorParams,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("ProcessClient.ChangeProcessInitiator");
+      scope.Start();
+      try
+      {
+        return RestClient.ChangeProcessInitiator(id, processChangeInitiatorParams, cancellationToken);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Upload and save a document in a user action. </summary>
+    /// <param name="id"> The resource ID. </param>
+    /// <param name="fileContentType"> Document content type. </param>
+    /// <param name="fileName"> Document name. </param>
+    /// <param name="userActionValueId"> User action value ID related to de document. </param>
+    /// <param name="file"> Document to save. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks>
+    /// Allow saving a user action document uploading the content.
+    ///
+    /// </remarks>
+    public virtual async Task<Response<Process>> UploadProcessUserActionDocumentAsync(
+      Guid id,
+      string fileContentType,
+      string fileName,
+      Guid userActionValueId,
+      Stream file,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("ProcessClient.UploadProcessUserActionDocument");
+      scope.Start();
+      try
+      {
+        return await RestClient
+          .UploadProcessUserActionDocumentAsync(
+            id,
+            fileContentType,
+            fileName,
+            userActionValueId,
+            file,
+            cancellationToken
+          )
+          .ConfigureAwait(false);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Upload and save a document in a user action. </summary>
+    /// <param name="id"> The resource ID. </param>
+    /// <param name="fileContentType"> Document content type. </param>
+    /// <param name="fileName"> Document name. </param>
+    /// <param name="userActionValueId"> User action value ID related to de document. </param>
+    /// <param name="file"> Document to save. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks>
+    /// Allow saving a user action document uploading the content.
+    ///
+    /// </remarks>
+    public virtual Response<Process> UploadProcessUserActionDocument(
+      Guid id,
+      string fileContentType,
+      string fileName,
+      Guid userActionValueId,
+      Stream file,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("ProcessClient.UploadProcessUserActionDocument");
+      scope.Start();
+      try
+      {
+        return RestClient.UploadProcessUserActionDocument(
+          id,
+          fileContentType,
+          fileName,
+          userActionValueId,
+          file,
+          cancellationToken
+        );
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Save process metadata. </summary>
+    /// <param name="id"> The resource ID. </param>
+    /// <param name="processMetadataUpdateParams"> Params to save the metadata data. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    public virtual async Task<Response<Process>> UpdateProcessMetadataAsync(
+      Guid id,
+      ProcessMetadataUpdateParams processMetadataUpdateParams,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("ProcessClient.UpdateProcessMetadata");
+      scope.Start();
+      try
+      {
+        return await RestClient
+          .UpdateProcessMetadataAsync(id, processMetadataUpdateParams, cancellationToken)
+          .ConfigureAwait(false);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Save process metadata. </summary>
+    /// <param name="id"> The resource ID. </param>
+    /// <param name="processMetadataUpdateParams"> Params to save the metadata data. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    public virtual Response<Process> UpdateProcessMetadata(
+      Guid id,
+      ProcessMetadataUpdateParams processMetadataUpdateParams,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("ProcessClient.UpdateProcessMetadata");
+      scope.Start();
+      try
+      {
+        return RestClient.UpdateProcessMetadata(id, processMetadataUpdateParams, cancellationToken);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Patch JSON data. </summary>
+    /// <param name="id"> The resource ID. </param>
+    /// <param name="jsonPatch"> Params to save the JSON value. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks>
+    /// Allow to patch a JSON data validating that the data follow the related schema. If the data is invalid, then
+    /// the json is marked as invalid.
+    ///
+    /// </remarks>
+    public virtual async Task<Response<Process>> PatchProcessMetadataAsync(
+      Guid id,
+      IEnumerable<JsonPatchOperation> jsonPatch,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("ProcessClient.PatchProcessMetadata");
+      scope.Start();
+      try
+      {
+        return await RestClient.PatchProcessMetadataAsync(id, jsonPatch, cancellationToken).ConfigureAwait(false);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Patch JSON data. </summary>
+    /// <param name="id"> The resource ID. </param>
+    /// <param name="jsonPatch"> Params to save the JSON value. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks>
+    /// Allow to patch a JSON data validating that the data follow the related schema. If the data is invalid, then
+    /// the json is marked as invalid.
+    ///
+    /// </remarks>
+    public virtual Response<Process> PatchProcessMetadata(
+      Guid id,
+      IEnumerable<JsonPatchOperation> jsonPatch,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("ProcessClient.PatchProcessMetadata");
+      scope.Start();
+      try
+      {
+        return RestClient.PatchProcessMetadata(id, jsonPatch, cancellationToken);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Save JSON data. </summary>
+    /// <param name="id"> The resource ID. </param>
+    /// <param name="processEntityUpdateParams"> Params to save the JSON value. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks>
+    /// Allow to save a JSON validating that the data follow the related schema. If the data is invalid, then
+    /// the json form is marked as invalid.
+    ///
+    /// </remarks>
+    public virtual async Task<Response<Process>> UpdateProcessEntityAsync(
+      Guid id,
+      ProcessEntityUpdateParams processEntityUpdateParams,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("ProcessClient.UpdateProcessEntity");
+      scope.Start();
+      try
+      {
+        return await RestClient
+          .UpdateProcessEntityAsync(id, processEntityUpdateParams, cancellationToken)
+          .ConfigureAwait(false);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Save JSON data. </summary>
+    /// <param name="id"> The resource ID. </param>
+    /// <param name="processEntityUpdateParams"> Params to save the JSON value. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks>
+    /// Allow to save a JSON validating that the data follow the related schema. If the data is invalid, then
+    /// the json form is marked as invalid.
+    ///
+    /// </remarks>
+    public virtual Response<Process> UpdateProcessEntity(
+      Guid id,
+      ProcessEntityUpdateParams processEntityUpdateParams,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("ProcessClient.UpdateProcessEntity");
+      scope.Start();
+      try
+      {
+        return RestClient.UpdateProcessEntity(id, processEntityUpdateParams, cancellationToken);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Patch JSON data. </summary>
+    /// <param name="id"> The resource ID. </param>
+    /// <param name="jsonPatch"> Params to save the JSON value. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks>
+    /// Allow to patch a JSON data validating that the data follow the related schema. If the data is invalid, then
+    /// the json is marked as invalid.
+    ///
+    /// </remarks>
+    public virtual async Task<Response<Process>> PatchProcessEntityAsync(
+      Guid id,
+      IEnumerable<JsonPatchOperation> jsonPatch,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("ProcessClient.PatchProcessEntity");
+      scope.Start();
+      try
+      {
+        return await RestClient.PatchProcessEntityAsync(id, jsonPatch, cancellationToken).ConfigureAwait(false);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Patch JSON data. </summary>
+    /// <param name="id"> The resource ID. </param>
+    /// <param name="jsonPatch"> Params to save the JSON value. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks>
+    /// Allow to patch a JSON data validating that the data follow the related schema. If the data is invalid, then
+    /// the json is marked as invalid.
+    ///
+    /// </remarks>
+    public virtual Response<Process> PatchProcessEntity(
+      Guid id,
+      IEnumerable<JsonPatchOperation> jsonPatch,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("ProcessClient.PatchProcessEntity");
+      scope.Start();
+      try
+      {
+        return RestClient.PatchProcessEntity(id, jsonPatch, cancellationToken);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Upload a temporal document into the process that later on must be linked with a process domain resource. </summary>
+    /// <param name="id"> The resource ID. </param>
+    /// <param name="fileContentType"> Document content type. </param>
+    /// <param name="fileName"> Document name. </param>
+    /// <param name="file"> Document to save. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks>
+    /// Upload a temporal document into the process that later on must be linked with a process domain resource.
+    ///
+    /// Documents uploaded with this API will be deleted after 24 hours as long as they have not been linked to a
+    /// process or process item..
+    ///
+    /// </remarks>
+    public virtual async Task<Response<DocumentReference>> UploadProcessDocumentAsync(
+      Guid id,
+      string fileContentType,
+      string fileName,
+      Stream file,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("ProcessClient.UploadProcessDocument");
+      scope.Start();
+      try
+      {
+        return await RestClient
+          .UploadProcessDocumentAsync(id, fileContentType, fileName, file, cancellationToken)
+          .ConfigureAwait(false);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Upload a temporal document into the process that later on must be linked with a process domain resource. </summary>
+    /// <param name="id"> The resource ID. </param>
+    /// <param name="fileContentType"> Document content type. </param>
+    /// <param name="fileName"> Document name. </param>
+    /// <param name="file"> Document to save. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks>
+    /// Upload a temporal document into the process that later on must be linked with a process domain resource.
+    ///
+    /// Documents uploaded with this API will be deleted after 24 hours as long as they have not been linked to a
+    /// process or process item..
+    ///
+    /// </remarks>
+    public virtual Response<DocumentReference> UploadProcessDocument(
+      Guid id,
+      string fileContentType,
+      string fileName,
+      Stream file,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("ProcessClient.UploadProcessDocument");
+      scope.Start();
+      try
+      {
+        return RestClient.UploadProcessDocument(id, fileContentType, fileName, file, cancellationToken);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Download document. </summary>
+    /// <param name="id"> The resource ID. </param>
+    /// <param name="documentUri"> Document URI to download. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks> Given a document uri download a document. </remarks>
+    public virtual async Task<Response<Stream>> DownloadProcessDocumentAsync(
+      Guid id,
+      string documentUri,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("ProcessClient.DownloadProcessDocument");
+      scope.Start();
+      try
+      {
+        return await RestClient.DownloadProcessDocumentAsync(id, documentUri, cancellationToken).ConfigureAwait(false);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Download document. </summary>
+    /// <param name="id"> The resource ID. </param>
+    /// <param name="documentUri"> Document URI to download. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks> Given a document uri download a document. </remarks>
+    public virtual Response<Stream> DownloadProcessDocument(
+      Guid id,
+      string documentUri,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("ProcessClient.DownloadProcessDocument");
+      scope.Start();
+      try
+      {
+        return RestClient.DownloadProcessDocument(id, documentUri, cancellationToken);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+  }
 }

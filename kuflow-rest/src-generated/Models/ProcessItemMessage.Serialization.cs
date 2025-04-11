@@ -10,48 +10,48 @@ using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class ProcessItemMessage
+  public partial class ProcessItemMessage
+  {
+    internal static ProcessItemMessage DeserializeProcessItemMessage(JsonElement element)
     {
-        internal static ProcessItemMessage DeserializeProcessItemMessage(JsonElement element)
+      if (element.ValueKind == JsonValueKind.Null)
+      {
+        return null;
+      }
+      string text = default;
+      JsonValue data = default;
+      string dataStructureDataDefinitionCode = default;
+      foreach (var property in element.EnumerateObject())
+      {
+        if (property.NameEquals("text"u8))
         {
-            if (element.ValueKind == JsonValueKind.Null)
-            {
-                return null;
-            }
-            string text = default;
-            JsonValue data = default;
-            string dataStructureDataDefinitionCode = default;
-            foreach (var property in element.EnumerateObject())
-            {
-                if (property.NameEquals("text"u8))
-                {
-                    text = property.Value.GetString();
-                    continue;
-                }
-                if (property.NameEquals("data"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    data = JsonValue.DeserializeJsonValue(property.Value);
-                    continue;
-                }
-                if (property.NameEquals("dataStructureDataDefinitionCode"u8))
-                {
-                    dataStructureDataDefinitionCode = property.Value.GetString();
-                    continue;
-                }
-            }
-            return new ProcessItemMessage(text, data, dataStructureDataDefinitionCode);
+          text = property.Value.GetString();
+          continue;
         }
-
-        /// <summary> Deserializes the model from a raw response. </summary>
-        /// <param name="response"> The response to deserialize the model from. </param>
-        internal static ProcessItemMessage FromResponse(Response response)
+        if (property.NameEquals("data"u8))
         {
-            using var document = JsonDocument.Parse(response.Content);
-            return DeserializeProcessItemMessage(document.RootElement);
+          if (property.Value.ValueKind == JsonValueKind.Null)
+          {
+            continue;
+          }
+          data = JsonValue.DeserializeJsonValue(property.Value);
+          continue;
         }
+        if (property.NameEquals("dataStructureDataDefinitionCode"u8))
+        {
+          dataStructureDataDefinitionCode = property.Value.GetString();
+          continue;
+        }
+      }
+      return new ProcessItemMessage(text, data, dataStructureDataDefinitionCode);
     }
+
+    /// <summary> Deserializes the model from a raw response. </summary>
+    /// <param name="response"> The response to deserialize the model from. </param>
+    internal static ProcessItemMessage FromResponse(Response response)
+    {
+      using var document = JsonDocument.Parse(response.Content);
+      return DeserializeProcessItemMessage(document.RootElement);
+    }
+  }
 }

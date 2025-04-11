@@ -10,32 +10,32 @@ using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class ProcessItemTaskPageItem
+  public partial class ProcessItemTaskPageItem
+  {
+    internal static ProcessItemTaskPageItem DeserializeProcessItemTaskPageItem(JsonElement element)
     {
-        internal static ProcessItemTaskPageItem DeserializeProcessItemTaskPageItem(JsonElement element)
+      if (element.ValueKind == JsonValueKind.Null)
+      {
+        return null;
+      }
+      ProcessItemTaskState state = default;
+      foreach (var property in element.EnumerateObject())
+      {
+        if (property.NameEquals("state"u8))
         {
-            if (element.ValueKind == JsonValueKind.Null)
-            {
-                return null;
-            }
-            ProcessItemTaskState state = default;
-            foreach (var property in element.EnumerateObject())
-            {
-                if (property.NameEquals("state"u8))
-                {
-                    state = new ProcessItemTaskState(property.Value.GetString());
-                    continue;
-                }
-            }
-            return new ProcessItemTaskPageItem(state);
+          state = new ProcessItemTaskState(property.Value.GetString());
+          continue;
         }
-
-        /// <summary> Deserializes the model from a raw response. </summary>
-        /// <param name="response"> The response to deserialize the model from. </param>
-        internal static ProcessItemTaskPageItem FromResponse(Response response)
-        {
-            using var document = JsonDocument.Parse(response.Content);
-            return DeserializeProcessItemTaskPageItem(document.RootElement);
-        }
+      }
+      return new ProcessItemTaskPageItem(state);
     }
+
+    /// <summary> Deserializes the model from a raw response. </summary>
+    /// <param name="response"> The response to deserialize the model from. </param>
+    internal static ProcessItemTaskPageItem FromResponse(Response response)
+    {
+      using var document = JsonDocument.Parse(response.Content);
+      return DeserializeProcessItemTaskPageItem(document.RootElement);
+    }
+  }
 }

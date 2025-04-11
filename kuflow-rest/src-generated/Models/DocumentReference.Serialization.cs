@@ -10,32 +10,32 @@ using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class DocumentReference
+  public partial class DocumentReference
+  {
+    internal static DocumentReference DeserializeDocumentReference(JsonElement element)
     {
-        internal static DocumentReference DeserializeDocumentReference(JsonElement element)
+      if (element.ValueKind == JsonValueKind.Null)
+      {
+        return null;
+      }
+      string documentUri = default;
+      foreach (var property in element.EnumerateObject())
+      {
+        if (property.NameEquals("documentUri"u8))
         {
-            if (element.ValueKind == JsonValueKind.Null)
-            {
-                return null;
-            }
-            string documentUri = default;
-            foreach (var property in element.EnumerateObject())
-            {
-                if (property.NameEquals("documentUri"u8))
-                {
-                    documentUri = property.Value.GetString();
-                    continue;
-                }
-            }
-            return new DocumentReference(documentUri);
+          documentUri = property.Value.GetString();
+          continue;
         }
-
-        /// <summary> Deserializes the model from a raw response. </summary>
-        /// <param name="response"> The response to deserialize the model from. </param>
-        internal static DocumentReference FromResponse(Response response)
-        {
-            using var document = JsonDocument.Parse(response.Content);
-            return DeserializeDocumentReference(document.RootElement);
-        }
+      }
+      return new DocumentReference(documentUri);
     }
+
+    /// <summary> Deserializes the model from a raw response. </summary>
+    /// <param name="response"> The response to deserialize the model from. </param>
+    internal static DocumentReference FromResponse(Response response)
+    {
+      using var document = JsonDocument.Parse(response.Content);
+      return DeserializeDocumentReference(document.RootElement);
+    }
+  }
 }

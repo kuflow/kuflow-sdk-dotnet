@@ -9,24 +9,25 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The ProcessItemTaskAppendLogParams. </summary>
-    public partial class ProcessItemTaskAppendLogParams
+  /// <summary> The ProcessItemTaskAppendLogParams. </summary>
+  public partial class ProcessItemTaskAppendLogParams
+  {
+    /// <summary> Initializes a new instance of <see cref="ProcessItemTaskAppendLogParams"/>. </summary>
+    /// <param name="message"></param>
+    /// <param name="level"></param>
+    /// <exception cref="ArgumentNullException"> <paramref name="message"/> is null. </exception>
+    public ProcessItemTaskAppendLogParams(string message, ProcessItemTaskLogLevel level)
     {
-        /// <summary> Initializes a new instance of <see cref="ProcessItemTaskAppendLogParams"/>. </summary>
-        /// <param name="message"></param>
-        /// <param name="level"></param>
-        /// <exception cref="ArgumentNullException"> <paramref name="message"/> is null. </exception>
-        public ProcessItemTaskAppendLogParams(string message, ProcessItemTaskLogLevel level)
-        {
-            Argument.AssertNotNull(message, nameof(message));
+      Argument.AssertNotNull(message, nameof(message));
 
-            Message = message;
-            Level = level;
-        }
-
-        /// <summary> Gets the message. </summary>
-        public string Message { get; }
-        /// <summary> Gets the level. </summary>
-        public ProcessItemTaskLogLevel Level { get; }
+      Message = message;
+      Level = level;
     }
+
+    /// <summary> Gets the message. </summary>
+    public string Message { get; }
+
+    /// <summary> Gets the level. </summary>
+    public ProcessItemTaskLogLevel Level { get; }
+  }
 }

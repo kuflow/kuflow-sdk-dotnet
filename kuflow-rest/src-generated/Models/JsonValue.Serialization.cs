@@ -12,96 +12,96 @@ using Azure.Core;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class JsonValue : IUtf8JsonSerializable
+  public partial class JsonValue : IUtf8JsonSerializable
+  {
+    void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
     {
-        void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
+      writer.WriteStartObject();
+      writer.WritePropertyName("value"u8);
+      writer.WriteStartObject();
+      foreach (var item in Value)
+      {
+        writer.WritePropertyName(item.Key);
+        if (item.Value == null)
         {
-            writer.WriteStartObject();
-            writer.WritePropertyName("value"u8);
-            writer.WriteStartObject();
-            foreach (var item in Value)
-            {
-                writer.WritePropertyName(item.Key);
-                if (item.Value == null)
-                {
-                    writer.WriteNullValue();
-                    continue;
-                }
-                writer.WriteObjectValue<object>(item.Value);
-            }
-            writer.WriteEndObject();
-            writer.WriteEndObject();
+          writer.WriteNullValue();
+          continue;
         }
-
-        internal static JsonValue DeserializeJsonValue(JsonElement element)
-        {
-            if (element.ValueKind == JsonValueKind.Null)
-            {
-                return null;
-            }
-            bool? valid = default;
-            IDictionary<string, object> value = default;
-            IReadOnlyList<JsonValueError> errors = default;
-            foreach (var property in element.EnumerateObject())
-            {
-                if (property.NameEquals("valid"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    valid = property.Value.GetBoolean();
-                    continue;
-                }
-                if (property.NameEquals("value"u8))
-                {
-                    Dictionary<string, object> dictionary = new Dictionary<string, object>();
-                    foreach (var property0 in property.Value.EnumerateObject())
-                    {
-                        if (property0.Value.ValueKind == JsonValueKind.Null)
-                        {
-                            dictionary.Add(property0.Name, null);
-                        }
-                        else
-                        {
-                            dictionary.Add(property0.Name, property0.Value.GetObject());
-                        }
-                    }
-                    value = dictionary;
-                    continue;
-                }
-                if (property.NameEquals("errors"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    List<JsonValueError> array = new List<JsonValueError>();
-                    foreach (var item in property.Value.EnumerateArray())
-                    {
-                        array.Add(JsonValueError.DeserializeJsonValueError(item));
-                    }
-                    errors = array;
-                    continue;
-                }
-            }
-            return new JsonValue(valid, value, errors ?? new ChangeTrackingList<JsonValueError>());
-        }
-
-        /// <summary> Deserializes the model from a raw response. </summary>
-        /// <param name="response"> The response to deserialize the model from. </param>
-        internal static JsonValue FromResponse(Response response)
-        {
-            using var document = JsonDocument.Parse(response.Content);
-            return DeserializeJsonValue(document.RootElement);
-        }
-
-        /// <summary> Convert into a <see cref="RequestContent"/>. </summary>
-        internal virtual RequestContent ToRequestContent()
-        {
-            var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(this);
-            return content;
-        }
+        writer.WriteObjectValue<object>(item.Value);
+      }
+      writer.WriteEndObject();
+      writer.WriteEndObject();
     }
+
+    internal static JsonValue DeserializeJsonValue(JsonElement element)
+    {
+      if (element.ValueKind == JsonValueKind.Null)
+      {
+        return null;
+      }
+      bool? valid = default;
+      IDictionary<string, object> value = default;
+      IReadOnlyList<JsonValueError> errors = default;
+      foreach (var property in element.EnumerateObject())
+      {
+        if (property.NameEquals("valid"u8))
+        {
+          if (property.Value.ValueKind == JsonValueKind.Null)
+          {
+            continue;
+          }
+          valid = property.Value.GetBoolean();
+          continue;
+        }
+        if (property.NameEquals("value"u8))
+        {
+          Dictionary<string, object> dictionary = new Dictionary<string, object>();
+          foreach (var property0 in property.Value.EnumerateObject())
+          {
+            if (property0.Value.ValueKind == JsonValueKind.Null)
+            {
+              dictionary.Add(property0.Name, null);
+            }
+            else
+            {
+              dictionary.Add(property0.Name, property0.Value.GetObject());
+            }
+          }
+          value = dictionary;
+          continue;
+        }
+        if (property.NameEquals("errors"u8))
+        {
+          if (property.Value.ValueKind == JsonValueKind.Null)
+          {
+            continue;
+          }
+          List<JsonValueError> array = new List<JsonValueError>();
+          foreach (var item in property.Value.EnumerateArray())
+          {
+            array.Add(JsonValueError.DeserializeJsonValueError(item));
+          }
+          errors = array;
+          continue;
+        }
+      }
+      return new JsonValue(valid, value, errors ?? new ChangeTrackingList<JsonValueError>());
+    }
+
+    /// <summary> Deserializes the model from a raw response. </summary>
+    /// <param name="response"> The response to deserialize the model from. </param>
+    internal static JsonValue FromResponse(Response response)
+    {
+      using var document = JsonDocument.Parse(response.Content);
+      return DeserializeJsonValue(document.RootElement);
+    }
+
+    /// <summary> Convert into a <see cref="RequestContent"/>. </summary>
+    internal virtual RequestContent ToRequestContent()
+    {
+      var content = new Utf8JsonRequestContent();
+      content.JsonWriter.WriteObjectValue(this);
+      return content;
+    }
+  }
 }
