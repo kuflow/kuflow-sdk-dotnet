@@ -10,47 +10,55 @@ using System.ComponentModel;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary>
-    /// Robot filter context:
-    /// * READY: filters out robots ready for execution for the current credentials
-    /// * DEFAULT: filters out robots accessible for the current credentials (if no set this is the default option)
-    ///
-    /// </summary>
-    public readonly partial struct RobotFilterContext : IEquatable<RobotFilterContext>
+  /// <summary>
+  /// Robot filter context:
+  /// * READY: filters out robots ready for execution for the current credentials
+  /// * DEFAULT: filters out robots accessible for the current credentials (if no set this is the default option)
+  ///
+  /// </summary>
+  public readonly partial struct RobotFilterContext : IEquatable<RobotFilterContext>
+  {
+    private readonly string _value;
+
+    /// <summary> Initializes a new instance of <see cref="RobotFilterContext"/>. </summary>
+    /// <exception cref="ArgumentNullException"> <paramref name="value"/> is null. </exception>
+    public RobotFilterContext(string value)
     {
-        private readonly string _value;
-
-        /// <summary> Initializes a new instance of <see cref="RobotFilterContext"/>. </summary>
-        /// <exception cref="ArgumentNullException"> <paramref name="value"/> is null. </exception>
-        public RobotFilterContext(string value)
-        {
-            _value = value ?? throw new ArgumentNullException(nameof(value));
-        }
-
-        private const string ReadyValue = "READY";
-        private const string DefaultValue = "DEFAULT";
-
-        /// <summary> READY. </summary>
-        public static RobotFilterContext Ready { get; } = new RobotFilterContext(ReadyValue);
-        /// <summary> DEFAULT. </summary>
-        public static RobotFilterContext Default { get; } = new RobotFilterContext(DefaultValue);
-        /// <summary> Determines if two <see cref="RobotFilterContext"/> values are the same. </summary>
-        public static bool operator ==(RobotFilterContext left, RobotFilterContext right) => left.Equals(right);
-        /// <summary> Determines if two <see cref="RobotFilterContext"/> values are not the same. </summary>
-        public static bool operator !=(RobotFilterContext left, RobotFilterContext right) => !left.Equals(right);
-        /// <summary> Converts a <see cref="string"/> to a <see cref="RobotFilterContext"/>. </summary>
-        public static implicit operator RobotFilterContext(string value) => new RobotFilterContext(value);
-
-        /// <inheritdoc />
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public override bool Equals(object obj) => obj is RobotFilterContext other && Equals(other);
-        /// <inheritdoc />
-        public bool Equals(RobotFilterContext other) => string.Equals(_value, other._value, StringComparison.InvariantCultureIgnoreCase);
-
-        /// <inheritdoc />
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public override int GetHashCode() => _value != null ? StringComparer.InvariantCultureIgnoreCase.GetHashCode(_value) : 0;
-        /// <inheritdoc />
-        public override string ToString() => _value;
+      _value = value ?? throw new ArgumentNullException(nameof(value));
     }
+
+    private const string ReadyValue = "READY";
+    private const string DefaultValue = "DEFAULT";
+
+    /// <summary> READY. </summary>
+    public static RobotFilterContext Ready { get; } = new RobotFilterContext(ReadyValue);
+
+    /// <summary> DEFAULT. </summary>
+    public static RobotFilterContext Default { get; } = new RobotFilterContext(DefaultValue);
+
+    /// <summary> Determines if two <see cref="RobotFilterContext"/> values are the same. </summary>
+    public static bool operator ==(RobotFilterContext left, RobotFilterContext right) => left.Equals(right);
+
+    /// <summary> Determines if two <see cref="RobotFilterContext"/> values are not the same. </summary>
+    public static bool operator !=(RobotFilterContext left, RobotFilterContext right) => !left.Equals(right);
+
+    /// <summary> Converts a <see cref="string"/> to a <see cref="RobotFilterContext"/>. </summary>
+    public static implicit operator RobotFilterContext(string value) => new RobotFilterContext(value);
+
+    /// <inheritdoc />
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override bool Equals(object obj) => obj is RobotFilterContext other && Equals(other);
+
+    /// <inheritdoc />
+    public bool Equals(RobotFilterContext other) =>
+      string.Equals(_value, other._value, StringComparison.InvariantCultureIgnoreCase);
+
+    /// <inheritdoc />
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override int GetHashCode() =>
+      _value != null ? StringComparer.InvariantCultureIgnoreCase.GetHashCode(_value) : 0;
+
+    /// <inheritdoc />
+    public override string ToString() => _value;
+  }
 }

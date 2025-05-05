@@ -11,33 +11,35 @@ using System.Linq;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The TenantUserPage. </summary>
-    public partial class TenantUserPage : Page
+  /// <summary> The TenantUserPage. </summary>
+  public partial class TenantUserPage : Page
+  {
+    /// <summary> Initializes a new instance of <see cref="TenantUserPage"/>. </summary>
+    /// <param name="metadata"></param>
+    /// <param name="content"></param>
+    /// <exception cref="ArgumentNullException"> <paramref name="metadata"/> or <paramref name="content"/> is null. </exception>
+    internal TenantUserPage(PageMetadata metadata, IEnumerable<TenantUserPageItem> content)
+      : base(metadata)
     {
-        /// <summary> Initializes a new instance of <see cref="TenantUserPage"/>. </summary>
-        /// <param name="metadata"></param>
-        /// <param name="content"></param>
-        /// <exception cref="ArgumentNullException"> <paramref name="metadata"/> or <paramref name="content"/> is null. </exception>
-        internal TenantUserPage(PageMetadata metadata, IEnumerable<TenantUserPageItem> content) : base(metadata)
-        {
-            Argument.AssertNotNull(metadata, nameof(metadata));
-            Argument.AssertNotNull(content, nameof(content));
+      Argument.AssertNotNull(metadata, nameof(metadata));
+      Argument.AssertNotNull(content, nameof(content));
 
-            Content = content.ToList();
-        }
-
-        /// <summary> Initializes a new instance of <see cref="TenantUserPage"/>. </summary>
-        /// <param name="metadata"></param>
-        /// <param name="content"></param>
-        /// <exception cref="ArgumentNullException"> <paramref name="metadata"/> is null. </exception>
-        internal TenantUserPage(PageMetadata metadata, IReadOnlyList<TenantUserPageItem> content) : base(metadata)
-        {
-            Argument.AssertNotNull(metadata, nameof(metadata));
-
-            Content = content;
-        }
-
-        /// <summary> Gets the content. </summary>
-        public IReadOnlyList<TenantUserPageItem> Content { get; }
+      Content = content.ToList();
     }
+
+    /// <summary> Initializes a new instance of <see cref="TenantUserPage"/>. </summary>
+    /// <param name="metadata"></param>
+    /// <param name="content"></param>
+    /// <exception cref="ArgumentNullException"> <paramref name="metadata"/> is null. </exception>
+    internal TenantUserPage(PageMetadata metadata, IReadOnlyList<TenantUserPageItem> content)
+      : base(metadata)
+    {
+      Argument.AssertNotNull(metadata, nameof(metadata));
+
+      Content = content;
+    }
+
+    /// <summary> Gets the content. </summary>
+    public IReadOnlyList<TenantUserPageItem> Content { get; }
+  }
 }

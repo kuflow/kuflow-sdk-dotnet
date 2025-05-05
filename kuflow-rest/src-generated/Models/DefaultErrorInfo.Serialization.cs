@@ -10,50 +10,50 @@ using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    internal partial class DefaultErrorInfo
+  internal partial class DefaultErrorInfo
+  {
+    internal static DefaultErrorInfo DeserializeDefaultErrorInfo(JsonElement element)
     {
-        internal static DefaultErrorInfo DeserializeDefaultErrorInfo(JsonElement element)
+      if (element.ValueKind == JsonValueKind.Null)
+      {
+        return null;
+      }
+      string code = default;
+      string message = default;
+      string location = default;
+      string locationType = default;
+      foreach (var property in element.EnumerateObject())
+      {
+        if (property.NameEquals("code"u8))
         {
-            if (element.ValueKind == JsonValueKind.Null)
-            {
-                return null;
-            }
-            string code = default;
-            string message = default;
-            string location = default;
-            string locationType = default;
-            foreach (var property in element.EnumerateObject())
-            {
-                if (property.NameEquals("code"u8))
-                {
-                    code = property.Value.GetString();
-                    continue;
-                }
-                if (property.NameEquals("message"u8))
-                {
-                    message = property.Value.GetString();
-                    continue;
-                }
-                if (property.NameEquals("location"u8))
-                {
-                    location = property.Value.GetString();
-                    continue;
-                }
-                if (property.NameEquals("locationType"u8))
-                {
-                    locationType = property.Value.GetString();
-                    continue;
-                }
-            }
-            return new DefaultErrorInfo(code, message, location, locationType);
+          code = property.Value.GetString();
+          continue;
         }
-
-        /// <summary> Deserializes the model from a raw response. </summary>
-        /// <param name="response"> The response to deserialize the model from. </param>
-        internal static DefaultErrorInfo FromResponse(Response response)
+        if (property.NameEquals("message"u8))
         {
-            using var document = JsonDocument.Parse(response.Content);
-            return DeserializeDefaultErrorInfo(document.RootElement);
+          message = property.Value.GetString();
+          continue;
         }
+        if (property.NameEquals("location"u8))
+        {
+          location = property.Value.GetString();
+          continue;
+        }
+        if (property.NameEquals("locationType"u8))
+        {
+          locationType = property.Value.GetString();
+          continue;
+        }
+      }
+      return new DefaultErrorInfo(code, message, location, locationType);
     }
+
+    /// <summary> Deserializes the model from a raw response. </summary>
+    /// <param name="response"> The response to deserialize the model from. </param>
+    internal static DefaultErrorInfo FromResponse(Response response)
+    {
+      using var document = JsonDocument.Parse(response.Content);
+      return DeserializeDefaultErrorInfo(document.RootElement);
+    }
+  }
 }

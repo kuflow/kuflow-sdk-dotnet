@@ -7,17 +7,17 @@
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The ProcessItemTaskPageItem. </summary>
-    public partial class ProcessItemTaskPageItem
+  /// <summary> The ProcessItemTaskPageItem. </summary>
+  public partial class ProcessItemTaskPageItem
+  {
+    /// <summary> Initializes a new instance of <see cref="ProcessItemTaskPageItem"/>. </summary>
+    /// <param name="state"> Process Item Task state. </param>
+    internal ProcessItemTaskPageItem(ProcessItemTaskState state)
     {
-        /// <summary> Initializes a new instance of <see cref="ProcessItemTaskPageItem"/>. </summary>
-        /// <param name="state"> Process Item Task state. </param>
-        internal ProcessItemTaskPageItem(ProcessItemTaskState state)
-        {
-            State = state;
-        }
-
-        /// <summary> Process Item Task state. </summary>
-        public ProcessItemTaskState State { get; }
+      State = state;
     }
+
+    /// <summary> Process Item Task state. </summary>
+    public ProcessItemTaskState State { get; }
+  }
 }

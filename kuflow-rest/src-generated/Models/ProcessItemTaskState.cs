@@ -10,48 +10,58 @@ using System.ComponentModel;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> Process Item Task state. </summary>
-    public readonly partial struct ProcessItemTaskState : IEquatable<ProcessItemTaskState>
+  /// <summary> Process Item Task state. </summary>
+  public readonly partial struct ProcessItemTaskState : IEquatable<ProcessItemTaskState>
+  {
+    private readonly string _value;
+
+    /// <summary> Initializes a new instance of <see cref="ProcessItemTaskState"/>. </summary>
+    /// <exception cref="ArgumentNullException"> <paramref name="value"/> is null. </exception>
+    public ProcessItemTaskState(string value)
     {
-        private readonly string _value;
-
-        /// <summary> Initializes a new instance of <see cref="ProcessItemTaskState"/>. </summary>
-        /// <exception cref="ArgumentNullException"> <paramref name="value"/> is null. </exception>
-        public ProcessItemTaskState(string value)
-        {
-            _value = value ?? throw new ArgumentNullException(nameof(value));
-        }
-
-        private const string ReadyValue = "READY";
-        private const string ClaimedValue = "CLAIMED";
-        private const string CompletedValue = "COMPLETED";
-        private const string CancelledValue = "CANCELLED";
-
-        /// <summary> READY. </summary>
-        public static ProcessItemTaskState Ready { get; } = new ProcessItemTaskState(ReadyValue);
-        /// <summary> CLAIMED. </summary>
-        public static ProcessItemTaskState Claimed { get; } = new ProcessItemTaskState(ClaimedValue);
-        /// <summary> COMPLETED. </summary>
-        public static ProcessItemTaskState Completed { get; } = new ProcessItemTaskState(CompletedValue);
-        /// <summary> CANCELLED. </summary>
-        public static ProcessItemTaskState Cancelled { get; } = new ProcessItemTaskState(CancelledValue);
-        /// <summary> Determines if two <see cref="ProcessItemTaskState"/> values are the same. </summary>
-        public static bool operator ==(ProcessItemTaskState left, ProcessItemTaskState right) => left.Equals(right);
-        /// <summary> Determines if two <see cref="ProcessItemTaskState"/> values are not the same. </summary>
-        public static bool operator !=(ProcessItemTaskState left, ProcessItemTaskState right) => !left.Equals(right);
-        /// <summary> Converts a <see cref="string"/> to a <see cref="ProcessItemTaskState"/>. </summary>
-        public static implicit operator ProcessItemTaskState(string value) => new ProcessItemTaskState(value);
-
-        /// <inheritdoc />
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public override bool Equals(object obj) => obj is ProcessItemTaskState other && Equals(other);
-        /// <inheritdoc />
-        public bool Equals(ProcessItemTaskState other) => string.Equals(_value, other._value, StringComparison.InvariantCultureIgnoreCase);
-
-        /// <inheritdoc />
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public override int GetHashCode() => _value != null ? StringComparer.InvariantCultureIgnoreCase.GetHashCode(_value) : 0;
-        /// <inheritdoc />
-        public override string ToString() => _value;
+      _value = value ?? throw new ArgumentNullException(nameof(value));
     }
+
+    private const string ReadyValue = "READY";
+    private const string ClaimedValue = "CLAIMED";
+    private const string CompletedValue = "COMPLETED";
+    private const string CancelledValue = "CANCELLED";
+
+    /// <summary> READY. </summary>
+    public static ProcessItemTaskState Ready { get; } = new ProcessItemTaskState(ReadyValue);
+
+    /// <summary> CLAIMED. </summary>
+    public static ProcessItemTaskState Claimed { get; } = new ProcessItemTaskState(ClaimedValue);
+
+    /// <summary> COMPLETED. </summary>
+    public static ProcessItemTaskState Completed { get; } = new ProcessItemTaskState(CompletedValue);
+
+    /// <summary> CANCELLED. </summary>
+    public static ProcessItemTaskState Cancelled { get; } = new ProcessItemTaskState(CancelledValue);
+
+    /// <summary> Determines if two <see cref="ProcessItemTaskState"/> values are the same. </summary>
+    public static bool operator ==(ProcessItemTaskState left, ProcessItemTaskState right) => left.Equals(right);
+
+    /// <summary> Determines if two <see cref="ProcessItemTaskState"/> values are not the same. </summary>
+    public static bool operator !=(ProcessItemTaskState left, ProcessItemTaskState right) => !left.Equals(right);
+
+    /// <summary> Converts a <see cref="string"/> to a <see cref="ProcessItemTaskState"/>. </summary>
+    public static implicit operator ProcessItemTaskState(string value) => new ProcessItemTaskState(value);
+
+    /// <inheritdoc />
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override bool Equals(object obj) => obj is ProcessItemTaskState other && Equals(other);
+
+    /// <inheritdoc />
+    public bool Equals(ProcessItemTaskState other) =>
+      string.Equals(_value, other._value, StringComparison.InvariantCultureIgnoreCase);
+
+    /// <inheritdoc />
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override int GetHashCode() =>
+      _value != null ? StringComparer.InvariantCultureIgnoreCase.GetHashCode(_value) : 0;
+
+    /// <inheritdoc />
+    public override string ToString() => _value;
+  }
 }

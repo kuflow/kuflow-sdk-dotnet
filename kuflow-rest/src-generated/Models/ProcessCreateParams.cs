@@ -9,40 +9,50 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The ProcessCreateParams. </summary>
-    public partial class ProcessCreateParams
+  /// <summary> The ProcessCreateParams. </summary>
+  public partial class ProcessCreateParams
+  {
+    /// <summary> Initializes a new instance of <see cref="ProcessCreateParams"/>. </summary>
+    /// <param name="processDefinitionId"></param>
+    public ProcessCreateParams(Guid processDefinitionId)
     {
-        /// <summary> Initializes a new instance of <see cref="ProcessCreateParams"/>. </summary>
-        /// <param name="processDefinitionId"></param>
-        public ProcessCreateParams(Guid processDefinitionId)
-        {
-            ProcessDefinitionId = processDefinitionId;
-        }
-
-        /// <summary> Initializes a new instance of <see cref="ProcessCreateParams"/>. </summary>
-        /// <param name="id"></param>
-        /// <param name="processDefinitionId"></param>
-        /// <param name="metadata"> Json value. </param>
-        /// <param name="initiatorId"></param>
-        /// <param name="initiatorEmail"></param>
-        internal ProcessCreateParams(Guid? id, Guid processDefinitionId, JsonValue metadata, Guid? initiatorId, string initiatorEmail)
-        {
-            Id = id;
-            ProcessDefinitionId = processDefinitionId;
-            Metadata = metadata;
-            InitiatorId = initiatorId;
-            InitiatorEmail = initiatorEmail;
-        }
-
-        /// <summary> Gets or sets the id. </summary>
-        public Guid? Id { get; set; }
-        /// <summary> Gets the process definition id. </summary>
-        public Guid ProcessDefinitionId { get; }
-        /// <summary> Json value. </summary>
-        public JsonValue Metadata { get; set; }
-        /// <summary> Gets or sets the initiator id. </summary>
-        public Guid? InitiatorId { get; set; }
-        /// <summary> Gets or sets the initiator email. </summary>
-        public string InitiatorEmail { get; set; }
+      ProcessDefinitionId = processDefinitionId;
     }
+
+    /// <summary> Initializes a new instance of <see cref="ProcessCreateParams"/>. </summary>
+    /// <param name="id"></param>
+    /// <param name="processDefinitionId"></param>
+    /// <param name="metadata"> Json value. </param>
+    /// <param name="initiatorId"></param>
+    /// <param name="initiatorEmail"></param>
+    internal ProcessCreateParams(
+      Guid? id,
+      Guid processDefinitionId,
+      JsonValue metadata,
+      Guid? initiatorId,
+      string initiatorEmail
+    )
+    {
+      Id = id;
+      ProcessDefinitionId = processDefinitionId;
+      Metadata = metadata;
+      InitiatorId = initiatorId;
+      InitiatorEmail = initiatorEmail;
+    }
+
+    /// <summary> Gets or sets the id. </summary>
+    public Guid? Id { get; set; }
+
+    /// <summary> Gets the process definition id. </summary>
+    public Guid ProcessDefinitionId { get; }
+
+    /// <summary> Json value. </summary>
+    public JsonValue Metadata { get; set; }
+
+    /// <summary> Gets or sets the initiator id. </summary>
+    public Guid? InitiatorId { get; set; }
+
+    /// <summary> Gets or sets the initiator email. </summary>
+    public string InitiatorEmail { get; set; }
+  }
 }

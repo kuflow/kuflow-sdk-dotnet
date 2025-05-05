@@ -9,42 +9,55 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The Authentication. </summary>
-    public partial class Authentication : AbstractAudited
+  /// <summary> The Authentication. </summary>
+  public partial class Authentication : AbstractAudited
+  {
+    /// <summary> Initializes a new instance of <see cref="Authentication"/>. </summary>
+    internal Authentication() { }
+
+    /// <summary> Initializes a new instance of <see cref="Authentication"/>. </summary>
+    /// <param name="createdBy"> Who create this model. </param>
+    /// <param name="createdAt"> When this model was created. </param>
+    /// <param name="lastModifiedBy"> Who was last update this model. </param>
+    /// <param name="lastModifiedAt"> When this model type was last updated. </param>
+    /// <param name="id"></param>
+    /// <param name="type"></param>
+    /// <param name="tenantId"> Tenant id. This attribute is required when an OAuth2 authentication is used. </param>
+    /// <param name="engineToken"></param>
+    /// <param name="engineCertificate"></param>
+    internal Authentication(
+      Guid? createdBy,
+      DateTimeOffset? createdAt,
+      Guid? lastModifiedBy,
+      DateTimeOffset? lastModifiedAt,
+      Guid? id,
+      AuthenticationType? type,
+      Guid? tenantId,
+      AuthenticationEngineToken engineToken,
+      AuthenticationEngineCertificate engineCertificate
+    )
+      : base(createdBy, createdAt, lastModifiedBy, lastModifiedAt)
     {
-        /// <summary> Initializes a new instance of <see cref="Authentication"/>. </summary>
-        internal Authentication()
-        {
-        }
-
-        /// <summary> Initializes a new instance of <see cref="Authentication"/>. </summary>
-        /// <param name="createdBy"> Who create this model. </param>
-        /// <param name="createdAt"> When this model was created. </param>
-        /// <param name="lastModifiedBy"> Who was last update this model. </param>
-        /// <param name="lastModifiedAt"> When this model type was last updated. </param>
-        /// <param name="id"></param>
-        /// <param name="type"></param>
-        /// <param name="tenantId"> Tenant id. This attribute is required when an OAuth2 authentication is used. </param>
-        /// <param name="engineToken"></param>
-        /// <param name="engineCertificate"></param>
-        internal Authentication(Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid? id, AuthenticationType? type, Guid? tenantId, AuthenticationEngineToken engineToken, AuthenticationEngineCertificate engineCertificate) : base(createdBy, createdAt, lastModifiedBy, lastModifiedAt)
-        {
-            Id = id;
-            Type = type;
-            TenantId = tenantId;
-            EngineToken = engineToken;
-            EngineCertificate = engineCertificate;
-        }
-
-        /// <summary> Gets the id. </summary>
-        public Guid? Id { get; }
-        /// <summary> Gets the type. </summary>
-        public AuthenticationType? Type { get; }
-        /// <summary> Tenant id. This attribute is required when an OAuth2 authentication is used. </summary>
-        public Guid? TenantId { get; }
-        /// <summary> Gets the engine token. </summary>
-        public AuthenticationEngineToken EngineToken { get; }
-        /// <summary> Gets the engine certificate. </summary>
-        public AuthenticationEngineCertificate EngineCertificate { get; }
+      Id = id;
+      Type = type;
+      TenantId = tenantId;
+      EngineToken = engineToken;
+      EngineCertificate = engineCertificate;
     }
+
+    /// <summary> Gets the id. </summary>
+    public Guid? Id { get; }
+
+    /// <summary> Gets the type. </summary>
+    public AuthenticationType? Type { get; }
+
+    /// <summary> Tenant id. This attribute is required when an OAuth2 authentication is used. </summary>
+    public Guid? TenantId { get; }
+
+    /// <summary> Gets the engine token. </summary>
+    public AuthenticationEngineToken EngineToken { get; }
+
+    /// <summary> Gets the engine certificate. </summary>
+    public AuthenticationEngineCertificate EngineCertificate { get; }
+  }
 }

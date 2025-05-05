@@ -9,62 +9,83 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The ProcessItemPageItem. </summary>
-    public partial class ProcessItemPageItem : AbstractAudited
+  /// <summary> The ProcessItemPageItem. </summary>
+  public partial class ProcessItemPageItem : AbstractAudited
+  {
+    /// <summary> Initializes a new instance of <see cref="ProcessItemPageItem"/>. </summary>
+    /// <param name="id"></param>
+    /// <param name="type"> Process Item Type. </param>
+    /// <param name="processId"></param>
+    /// <param name="tenantId"> Tenant ID. </param>
+    internal ProcessItemPageItem(Guid id, ProcessItemType type, Guid processId, Guid tenantId)
     {
-        /// <summary> Initializes a new instance of <see cref="ProcessItemPageItem"/>. </summary>
-        /// <param name="id"></param>
-        /// <param name="type"> Process Item Type. </param>
-        /// <param name="processId"></param>
-        /// <param name="tenantId"> Tenant ID. </param>
-        internal ProcessItemPageItem(Guid id, ProcessItemType type, Guid processId, Guid tenantId)
-        {
-            Id = id;
-            Type = type;
-            ProcessId = processId;
-            TenantId = tenantId;
-        }
-
-        /// <summary> Initializes a new instance of <see cref="ProcessItemPageItem"/>. </summary>
-        /// <param name="createdBy"> Who create this model. </param>
-        /// <param name="createdAt"> When this model was created. </param>
-        /// <param name="lastModifiedBy"> Who was last update this model. </param>
-        /// <param name="lastModifiedAt"> When this model type was last updated. </param>
-        /// <param name="id"></param>
-        /// <param name="type"> Process Item Type. </param>
-        /// <param name="processId"></param>
-        /// <param name="ownerId"> Principal ID. </param>
-        /// <param name="tenantId"> Tenant ID. </param>
-        /// <param name="processItemDefinitionRef"></param>
-        /// <param name="task"></param>
-        /// <param name="message"></param>
-        internal ProcessItemPageItem(Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid id, ProcessItemType type, Guid processId, Guid? ownerId, Guid tenantId, ProcessItemDefinitionRef processItemDefinitionRef, ProcessItemTaskPageItem task, ProcessItemMessagePageItem message) : base(createdBy, createdAt, lastModifiedBy, lastModifiedAt)
-        {
-            Id = id;
-            Type = type;
-            ProcessId = processId;
-            OwnerId = ownerId;
-            TenantId = tenantId;
-            ProcessItemDefinitionRef = processItemDefinitionRef;
-            Task = task;
-            Message = message;
-        }
-
-        /// <summary> Gets the id. </summary>
-        public Guid Id { get; }
-        /// <summary> Process Item Type. </summary>
-        public ProcessItemType Type { get; }
-        /// <summary> Gets the process id. </summary>
-        public Guid ProcessId { get; }
-        /// <summary> Principal ID. </summary>
-        public Guid? OwnerId { get; }
-        /// <summary> Tenant ID. </summary>
-        public Guid TenantId { get; }
-        /// <summary> Gets the process item definition ref. </summary>
-        public ProcessItemDefinitionRef ProcessItemDefinitionRef { get; }
-        /// <summary> Gets the task. </summary>
-        public ProcessItemTaskPageItem Task { get; }
-        /// <summary> Gets the message. </summary>
-        public ProcessItemMessagePageItem Message { get; }
+      Id = id;
+      Type = type;
+      ProcessId = processId;
+      TenantId = tenantId;
     }
+
+    /// <summary> Initializes a new instance of <see cref="ProcessItemPageItem"/>. </summary>
+    /// <param name="createdBy"> Who create this model. </param>
+    /// <param name="createdAt"> When this model was created. </param>
+    /// <param name="lastModifiedBy"> Who was last update this model. </param>
+    /// <param name="lastModifiedAt"> When this model type was last updated. </param>
+    /// <param name="id"></param>
+    /// <param name="type"> Process Item Type. </param>
+    /// <param name="processId"></param>
+    /// <param name="ownerId"> Principal ID. </param>
+    /// <param name="tenantId"> Tenant ID. </param>
+    /// <param name="processItemDefinitionRef"></param>
+    /// <param name="task"></param>
+    /// <param name="message"></param>
+    internal ProcessItemPageItem(
+      Guid? createdBy,
+      DateTimeOffset? createdAt,
+      Guid? lastModifiedBy,
+      DateTimeOffset? lastModifiedAt,
+      Guid id,
+      ProcessItemType type,
+      Guid processId,
+      Guid? ownerId,
+      Guid tenantId,
+      ProcessItemDefinitionRef processItemDefinitionRef,
+      ProcessItemTaskPageItem task,
+      ProcessItemMessagePageItem message
+    )
+      : base(createdBy, createdAt, lastModifiedBy, lastModifiedAt)
+    {
+      Id = id;
+      Type = type;
+      ProcessId = processId;
+      OwnerId = ownerId;
+      TenantId = tenantId;
+      ProcessItemDefinitionRef = processItemDefinitionRef;
+      Task = task;
+      Message = message;
+    }
+
+    /// <summary> Gets the id. </summary>
+    public Guid Id { get; }
+
+    /// <summary> Process Item Type. </summary>
+    public ProcessItemType Type { get; }
+
+    /// <summary> Gets the process id. </summary>
+    public Guid ProcessId { get; }
+
+    /// <summary> Principal ID. </summary>
+    public Guid? OwnerId { get; }
+
+    /// <summary> Tenant ID. </summary>
+    public Guid TenantId { get; }
+
+    /// <summary> Gets the process item definition ref. </summary>
+    public ProcessItemDefinitionRef ProcessItemDefinitionRef { get; }
+
+    /// <summary> Gets the task. </summary>
+    public ProcessItemTaskPageItem Task { get; }
+
+    /// <summary> Gets the message. </summary>
+    public ProcessItemMessagePageItem Message { get; }
+  }
 }

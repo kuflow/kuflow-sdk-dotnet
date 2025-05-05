@@ -7,36 +7,35 @@
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> Json value. </summary>
-    public partial class JsonValueError
+  /// <summary> Json value. </summary>
+  public partial class JsonValueError
+  {
+    /// <summary> Initializes a new instance of <see cref="JsonValueError"/>. </summary>
+    internal JsonValueError() { }
+
+    /// <summary> Initializes a new instance of <see cref="JsonValueError"/>. </summary>
+    /// <param name="propertyPath">
+    /// JSON pointer to the property with the error. See: https://datatracker.ietf.org/doc/html/rfc6901
+    ///
+    /// ie: /user/name or /users/1/name
+    ///
+    /// </param>
+    /// <param name="type"> Error type. </param>
+    internal JsonValueError(string propertyPath, string type)
     {
-        /// <summary> Initializes a new instance of <see cref="JsonValueError"/>. </summary>
-        internal JsonValueError()
-        {
-        }
-
-        /// <summary> Initializes a new instance of <see cref="JsonValueError"/>. </summary>
-        /// <param name="propertyPath">
-        /// JSON pointer to the property with the error. See: https://datatracker.ietf.org/doc/html/rfc6901
-        ///
-        /// ie: /user/name or /users/1/name
-        ///
-        /// </param>
-        /// <param name="type"> Error type. </param>
-        internal JsonValueError(string propertyPath, string type)
-        {
-            PropertyPath = propertyPath;
-            Type = type;
-        }
-
-        /// <summary>
-        /// JSON pointer to the property with the error. See: https://datatracker.ietf.org/doc/html/rfc6901
-        ///
-        /// ie: /user/name or /users/1/name
-        ///
-        /// </summary>
-        public string PropertyPath { get; }
-        /// <summary> Error type. </summary>
-        public string Type { get; }
+      PropertyPath = propertyPath;
+      Type = type;
     }
+
+    /// <summary>
+    /// JSON pointer to the property with the error. See: https://datatracker.ietf.org/doc/html/rfc6901
+    ///
+    /// ie: /user/name or /users/1/name
+    ///
+    /// </summary>
+    public string PropertyPath { get; }
+
+    /// <summary> Error type. </summary>
+    public string Type { get; }
+  }
 }

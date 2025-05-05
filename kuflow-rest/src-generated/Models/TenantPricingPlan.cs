@@ -10,45 +10,54 @@ using System.ComponentModel;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> Tenant pricing plan. </summary>
-    public readonly partial struct TenantPricingPlan : IEquatable<TenantPricingPlan>
+  /// <summary> Tenant pricing plan. </summary>
+  public readonly partial struct TenantPricingPlan : IEquatable<TenantPricingPlan>
+  {
+    private readonly string _value;
+
+    /// <summary> Initializes a new instance of <see cref="TenantPricingPlan"/>. </summary>
+    /// <exception cref="ArgumentNullException"> <paramref name="value"/> is null. </exception>
+    public TenantPricingPlan(string value)
     {
-        private readonly string _value;
-
-        /// <summary> Initializes a new instance of <see cref="TenantPricingPlan"/>. </summary>
-        /// <exception cref="ArgumentNullException"> <paramref name="value"/> is null. </exception>
-        public TenantPricingPlan(string value)
-        {
-            _value = value ?? throw new ArgumentNullException(nameof(value));
-        }
-
-        private const string FreeValue = "FREE";
-        private const string PremiumValue = "PREMIUM";
-        private const string UnlimitedValue = "UNLIMITED";
-
-        /// <summary> FREE. </summary>
-        public static TenantPricingPlan Free { get; } = new TenantPricingPlan(FreeValue);
-        /// <summary> PREMIUM. </summary>
-        public static TenantPricingPlan Premium { get; } = new TenantPricingPlan(PremiumValue);
-        /// <summary> UNLIMITED. </summary>
-        public static TenantPricingPlan Unlimited { get; } = new TenantPricingPlan(UnlimitedValue);
-        /// <summary> Determines if two <see cref="TenantPricingPlan"/> values are the same. </summary>
-        public static bool operator ==(TenantPricingPlan left, TenantPricingPlan right) => left.Equals(right);
-        /// <summary> Determines if two <see cref="TenantPricingPlan"/> values are not the same. </summary>
-        public static bool operator !=(TenantPricingPlan left, TenantPricingPlan right) => !left.Equals(right);
-        /// <summary> Converts a <see cref="string"/> to a <see cref="TenantPricingPlan"/>. </summary>
-        public static implicit operator TenantPricingPlan(string value) => new TenantPricingPlan(value);
-
-        /// <inheritdoc />
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public override bool Equals(object obj) => obj is TenantPricingPlan other && Equals(other);
-        /// <inheritdoc />
-        public bool Equals(TenantPricingPlan other) => string.Equals(_value, other._value, StringComparison.InvariantCultureIgnoreCase);
-
-        /// <inheritdoc />
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public override int GetHashCode() => _value != null ? StringComparer.InvariantCultureIgnoreCase.GetHashCode(_value) : 0;
-        /// <inheritdoc />
-        public override string ToString() => _value;
+      _value = value ?? throw new ArgumentNullException(nameof(value));
     }
+
+    private const string FreeValue = "FREE";
+    private const string PremiumValue = "PREMIUM";
+    private const string UnlimitedValue = "UNLIMITED";
+
+    /// <summary> FREE. </summary>
+    public static TenantPricingPlan Free { get; } = new TenantPricingPlan(FreeValue);
+
+    /// <summary> PREMIUM. </summary>
+    public static TenantPricingPlan Premium { get; } = new TenantPricingPlan(PremiumValue);
+
+    /// <summary> UNLIMITED. </summary>
+    public static TenantPricingPlan Unlimited { get; } = new TenantPricingPlan(UnlimitedValue);
+
+    /// <summary> Determines if two <see cref="TenantPricingPlan"/> values are the same. </summary>
+    public static bool operator ==(TenantPricingPlan left, TenantPricingPlan right) => left.Equals(right);
+
+    /// <summary> Determines if two <see cref="TenantPricingPlan"/> values are not the same. </summary>
+    public static bool operator !=(TenantPricingPlan left, TenantPricingPlan right) => !left.Equals(right);
+
+    /// <summary> Converts a <see cref="string"/> to a <see cref="TenantPricingPlan"/>. </summary>
+    public static implicit operator TenantPricingPlan(string value) => new TenantPricingPlan(value);
+
+    /// <inheritdoc />
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override bool Equals(object obj) => obj is TenantPricingPlan other && Equals(other);
+
+    /// <inheritdoc />
+    public bool Equals(TenantPricingPlan other) =>
+      string.Equals(_value, other._value, StringComparison.InvariantCultureIgnoreCase);
+
+    /// <inheritdoc />
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override int GetHashCode() =>
+      _value != null ? StringComparer.InvariantCultureIgnoreCase.GetHashCode(_value) : 0;
+
+    /// <inheritdoc />
+    public override string ToString() => _value;
+  }
 }

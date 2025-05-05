@@ -10,28 +10,29 @@ using System.Collections.Generic;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The ProcessRelated. </summary>
-    public partial class ProcessRelated
+  /// <summary> The ProcessRelated. </summary>
+  public partial class ProcessRelated
+  {
+    /// <summary> Initializes a new instance of <see cref="ProcessRelated"/>. </summary>
+    internal ProcessRelated()
     {
-        /// <summary> Initializes a new instance of <see cref="ProcessRelated"/>. </summary>
-        internal ProcessRelated()
-        {
-            Incoming = new ChangeTrackingList<Guid>();
-            Outcoming = new ChangeTrackingList<Guid>();
-        }
-
-        /// <summary> Initializes a new instance of <see cref="ProcessRelated"/>. </summary>
-        /// <param name="incoming"> Processes whose relationship target is the current process. </param>
-        /// <param name="outcoming"> Processes to which the current process relates. </param>
-        internal ProcessRelated(IReadOnlyList<Guid> incoming, IReadOnlyList<Guid> outcoming)
-        {
-            Incoming = incoming;
-            Outcoming = outcoming;
-        }
-
-        /// <summary> Processes whose relationship target is the current process. </summary>
-        public IReadOnlyList<Guid> Incoming { get; }
-        /// <summary> Processes to which the current process relates. </summary>
-        public IReadOnlyList<Guid> Outcoming { get; }
+      Incoming = new ChangeTrackingList<Guid>();
+      Outcoming = new ChangeTrackingList<Guid>();
     }
+
+    /// <summary> Initializes a new instance of <see cref="ProcessRelated"/>. </summary>
+    /// <param name="incoming"> Processes whose relationship target is the current process. </param>
+    /// <param name="outcoming"> Processes to which the current process relates. </param>
+    internal ProcessRelated(IReadOnlyList<Guid> incoming, IReadOnlyList<Guid> outcoming)
+    {
+      Incoming = incoming;
+      Outcoming = outcoming;
+    }
+
+    /// <summary> Processes whose relationship target is the current process. </summary>
+    public IReadOnlyList<Guid> Incoming { get; }
+
+    /// <summary> Processes to which the current process relates. </summary>
+    public IReadOnlyList<Guid> Outcoming { get; }
+  }
 }

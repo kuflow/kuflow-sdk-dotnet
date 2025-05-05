@@ -11,44 +11,44 @@ using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class ProcessItemDefinitionRef
+  public partial class ProcessItemDefinitionRef
+  {
+    internal static ProcessItemDefinitionRef DeserializeProcessItemDefinitionRef(JsonElement element)
     {
-        internal static ProcessItemDefinitionRef DeserializeProcessItemDefinitionRef(JsonElement element)
+      if (element.ValueKind == JsonValueKind.Null)
+      {
+        return null;
+      }
+      Guid id = default;
+      Guid version = default;
+      string code = default;
+      foreach (var property in element.EnumerateObject())
+      {
+        if (property.NameEquals("id"u8))
         {
-            if (element.ValueKind == JsonValueKind.Null)
-            {
-                return null;
-            }
-            Guid id = default;
-            Guid version = default;
-            string code = default;
-            foreach (var property in element.EnumerateObject())
-            {
-                if (property.NameEquals("id"u8))
-                {
-                    id = property.Value.GetGuid();
-                    continue;
-                }
-                if (property.NameEquals("version"u8))
-                {
-                    version = property.Value.GetGuid();
-                    continue;
-                }
-                if (property.NameEquals("code"u8))
-                {
-                    code = property.Value.GetString();
-                    continue;
-                }
-            }
-            return new ProcessItemDefinitionRef(id, version, code);
+          id = property.Value.GetGuid();
+          continue;
         }
-
-        /// <summary> Deserializes the model from a raw response. </summary>
-        /// <param name="response"> The response to deserialize the model from. </param>
-        internal static ProcessItemDefinitionRef FromResponse(Response response)
+        if (property.NameEquals("version"u8))
         {
-            using var document = JsonDocument.Parse(response.Content);
-            return DeserializeProcessItemDefinitionRef(document.RootElement);
+          version = property.Value.GetGuid();
+          continue;
         }
+        if (property.NameEquals("code"u8))
+        {
+          code = property.Value.GetString();
+          continue;
+        }
+      }
+      return new ProcessItemDefinitionRef(id, version, code);
     }
+
+    /// <summary> Deserializes the model from a raw response. </summary>
+    /// <param name="response"> The response to deserialize the model from. </param>
+    internal static ProcessItemDefinitionRef FromResponse(Response response)
+    {
+      using var document = JsonDocument.Parse(response.Content);
+      return DeserializeProcessItemDefinitionRef(document.RootElement);
+    }
+  }
 }

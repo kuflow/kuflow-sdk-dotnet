@@ -9,34 +9,40 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The AbstractAudited. </summary>
-    public partial class AbstractAudited
+  /// <summary> The AbstractAudited. </summary>
+  public partial class AbstractAudited
+  {
+    /// <summary> Initializes a new instance of <see cref="AbstractAudited"/>. </summary>
+    internal AbstractAudited() { }
+
+    /// <summary> Initializes a new instance of <see cref="AbstractAudited"/>. </summary>
+    /// <param name="createdBy"> Who create this model. </param>
+    /// <param name="createdAt"> When this model was created. </param>
+    /// <param name="lastModifiedBy"> Who was last update this model. </param>
+    /// <param name="lastModifiedAt"> When this model type was last updated. </param>
+    internal AbstractAudited(
+      Guid? createdBy,
+      DateTimeOffset? createdAt,
+      Guid? lastModifiedBy,
+      DateTimeOffset? lastModifiedAt
+    )
     {
-        /// <summary> Initializes a new instance of <see cref="AbstractAudited"/>. </summary>
-        internal AbstractAudited()
-        {
-        }
-
-        /// <summary> Initializes a new instance of <see cref="AbstractAudited"/>. </summary>
-        /// <param name="createdBy"> Who create this model. </param>
-        /// <param name="createdAt"> When this model was created. </param>
-        /// <param name="lastModifiedBy"> Who was last update this model. </param>
-        /// <param name="lastModifiedAt"> When this model type was last updated. </param>
-        internal AbstractAudited(Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt)
-        {
-            CreatedBy = createdBy;
-            CreatedAt = createdAt;
-            LastModifiedBy = lastModifiedBy;
-            LastModifiedAt = lastModifiedAt;
-        }
-
-        /// <summary> Who create this model. </summary>
-        public Guid? CreatedBy { get; }
-        /// <summary> When this model was created. </summary>
-        public DateTimeOffset? CreatedAt { get; }
-        /// <summary> Who was last update this model. </summary>
-        public Guid? LastModifiedBy { get; }
-        /// <summary> When this model type was last updated. </summary>
-        public DateTimeOffset? LastModifiedAt { get; }
+      CreatedBy = createdBy;
+      CreatedAt = createdAt;
+      LastModifiedBy = lastModifiedBy;
+      LastModifiedAt = lastModifiedAt;
     }
+
+    /// <summary> Who create this model. </summary>
+    public Guid? CreatedBy { get; }
+
+    /// <summary> When this model was created. </summary>
+    public DateTimeOffset? CreatedAt { get; }
+
+    /// <summary> Who was last update this model. </summary>
+    public Guid? LastModifiedBy { get; }
+
+    /// <summary> When this model type was last updated. </summary>
+    public DateTimeOffset? LastModifiedAt { get; }
+  }
 }

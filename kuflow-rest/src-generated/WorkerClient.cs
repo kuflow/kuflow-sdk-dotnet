@@ -15,95 +15,99 @@ using KuFlow.Rest.Models;
 
 namespace KuFlow.Rest
 {
-    /// <summary> The Worker service client. </summary>
-    public partial class WorkerClient
+  /// <summary> The Worker service client. </summary>
+  public partial class WorkerClient
+  {
+    private readonly ClientDiagnostics _clientDiagnostics;
+    private readonly HttpPipeline _pipeline;
+    internal WorkerRestClient RestClient { get; }
+
+    /// <summary> Initializes a new instance of WorkerClient for mocking. </summary>
+    protected WorkerClient() { }
+
+    /// <summary> Initializes a new instance of WorkerClient. </summary>
+    /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
+    /// <param name="endpoint"> server parameter. </param>
+    /// <param name="options"> The options for configuring the client. </param>
+    public WorkerClient(TokenCredential credential, Uri endpoint = null, KuFlowRestClientOptions options = null)
     {
-        private readonly ClientDiagnostics _clientDiagnostics;
-        private readonly HttpPipeline _pipeline;
-        internal WorkerRestClient RestClient { get; }
+      if (credential == null)
+      {
+        throw new ArgumentNullException(nameof(credential));
+      }
+      endpoint ??= new Uri("https://api.kuflow.com/v2024-06-14");
 
-        /// <summary> Initializes a new instance of WorkerClient for mocking. </summary>
-        protected WorkerClient()
-        {
-        }
-
-        /// <summary> Initializes a new instance of WorkerClient. </summary>
-        /// <param name="credential"> A credential used to authenticate to an Azure Service. </param>
-        /// <param name="endpoint"> server parameter. </param>
-        /// <param name="options"> The options for configuring the client. </param>
-        public WorkerClient(TokenCredential credential, Uri endpoint = null, KuFlowRestClientOptions options = null)
-        {
-            if (credential == null)
-            {
-                throw new ArgumentNullException(nameof(credential));
-            }
-            endpoint ??= new Uri("https://api.kuflow.com/v2024-06-14");
-
-            options ??= new KuFlowRestClientOptions();
-            _clientDiagnostics = new ClientDiagnostics(options);
-            string[] scopes = { };
-            _pipeline = HttpPipelineBuilder.Build(options, new BearerTokenAuthenticationPolicy(credential, scopes));
-            RestClient = new WorkerRestClient(_clientDiagnostics, _pipeline, endpoint);
-        }
-
-        /// <summary> Initializes a new instance of WorkerClient. </summary>
-        /// <param name="clientDiagnostics"> The handler for diagnostic messaging in the client. </param>
-        /// <param name="pipeline"> The HTTP pipeline for sending and receiving REST requests and responses. </param>
-        /// <param name="endpoint"> server parameter. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="clientDiagnostics"/> or <paramref name="pipeline"/> is null. </exception>
-        internal WorkerClient(ClientDiagnostics clientDiagnostics, HttpPipeline pipeline, Uri endpoint = null)
-        {
-            RestClient = new WorkerRestClient(clientDiagnostics, pipeline, endpoint);
-            _clientDiagnostics = clientDiagnostics;
-            _pipeline = pipeline;
-        }
-
-        /// <summary> Create or update a worker. </summary>
-        /// <param name="workerCreateParams"> Worker to create or update. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks>
-        /// Register a worker in KuFlow, this allows the platform to have a catalogue of all registered workers.
-        ///
-        /// If already exist a worker for the same identity, the worker will be updated.
-        ///
-        /// </remarks>
-        public virtual async Task<Response<Worker>> CreateWorkerAsync(WorkerCreateParams workerCreateParams, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("WorkerClient.CreateWorker");
-            scope.Start();
-            try
-            {
-                return await RestClient.CreateWorkerAsync(workerCreateParams, cancellationToken).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary> Create or update a worker. </summary>
-        /// <param name="workerCreateParams"> Worker to create or update. </param>
-        /// <param name="cancellationToken"> The cancellation token to use. </param>
-        /// <remarks>
-        /// Register a worker in KuFlow, this allows the platform to have a catalogue of all registered workers.
-        ///
-        /// If already exist a worker for the same identity, the worker will be updated.
-        ///
-        /// </remarks>
-        public virtual Response<Worker> CreateWorker(WorkerCreateParams workerCreateParams, CancellationToken cancellationToken = default)
-        {
-            using var scope = _clientDiagnostics.CreateScope("WorkerClient.CreateWorker");
-            scope.Start();
-            try
-            {
-                return RestClient.CreateWorker(workerCreateParams, cancellationToken);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
+      options ??= new KuFlowRestClientOptions();
+      _clientDiagnostics = new ClientDiagnostics(options);
+      string[] scopes = { };
+      _pipeline = HttpPipelineBuilder.Build(options, new BearerTokenAuthenticationPolicy(credential, scopes));
+      RestClient = new WorkerRestClient(_clientDiagnostics, _pipeline, endpoint);
     }
+
+    /// <summary> Initializes a new instance of WorkerClient. </summary>
+    /// <param name="clientDiagnostics"> The handler for diagnostic messaging in the client. </param>
+    /// <param name="pipeline"> The HTTP pipeline for sending and receiving REST requests and responses. </param>
+    /// <param name="endpoint"> server parameter. </param>
+    /// <exception cref="ArgumentNullException"> <paramref name="clientDiagnostics"/> or <paramref name="pipeline"/> is null. </exception>
+    internal WorkerClient(ClientDiagnostics clientDiagnostics, HttpPipeline pipeline, Uri endpoint = null)
+    {
+      RestClient = new WorkerRestClient(clientDiagnostics, pipeline, endpoint);
+      _clientDiagnostics = clientDiagnostics;
+      _pipeline = pipeline;
+    }
+
+    /// <summary> Create or update a worker. </summary>
+    /// <param name="workerCreateParams"> Worker to create or update. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks>
+    /// Register a worker in KuFlow, this allows the platform to have a catalogue of all registered workers.
+    ///
+    /// If already exist a worker for the same identity, the worker will be updated.
+    ///
+    /// </remarks>
+    public virtual async Task<Response<Worker>> CreateWorkerAsync(
+      WorkerCreateParams workerCreateParams,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("WorkerClient.CreateWorker");
+      scope.Start();
+      try
+      {
+        return await RestClient.CreateWorkerAsync(workerCreateParams, cancellationToken).ConfigureAwait(false);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+
+    /// <summary> Create or update a worker. </summary>
+    /// <param name="workerCreateParams"> Worker to create or update. </param>
+    /// <param name="cancellationToken"> The cancellation token to use. </param>
+    /// <remarks>
+    /// Register a worker in KuFlow, this allows the platform to have a catalogue of all registered workers.
+    ///
+    /// If already exist a worker for the same identity, the worker will be updated.
+    ///
+    /// </remarks>
+    public virtual Response<Worker> CreateWorker(
+      WorkerCreateParams workerCreateParams,
+      CancellationToken cancellationToken = default
+    )
+    {
+      using var scope = _clientDiagnostics.CreateScope("WorkerClient.CreateWorker");
+      scope.Start();
+      try
+      {
+        return RestClient.CreateWorker(workerCreateParams, cancellationToken);
+      }
+      catch (Exception e)
+      {
+        scope.Failed(e);
+        throw;
+      }
+    }
+  }
 }

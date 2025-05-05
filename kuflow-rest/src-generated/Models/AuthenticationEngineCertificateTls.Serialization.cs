@@ -10,44 +10,46 @@ using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class AuthenticationEngineCertificateTls
+  public partial class AuthenticationEngineCertificateTls
+  {
+    internal static AuthenticationEngineCertificateTls DeserializeAuthenticationEngineCertificateTls(
+      JsonElement element
+    )
     {
-        internal static AuthenticationEngineCertificateTls DeserializeAuthenticationEngineCertificateTls(JsonElement element)
+      if (element.ValueKind == JsonValueKind.Null)
+      {
+        return null;
+      }
+      string serverRootCaCertificate = default;
+      string clientCertificate = default;
+      string clientPrivateKey = default;
+      foreach (var property in element.EnumerateObject())
+      {
+        if (property.NameEquals("serverRootCaCertificate"u8))
         {
-            if (element.ValueKind == JsonValueKind.Null)
-            {
-                return null;
-            }
-            string serverRootCaCertificate = default;
-            string clientCertificate = default;
-            string clientPrivateKey = default;
-            foreach (var property in element.EnumerateObject())
-            {
-                if (property.NameEquals("serverRootCaCertificate"u8))
-                {
-                    serverRootCaCertificate = property.Value.GetString();
-                    continue;
-                }
-                if (property.NameEquals("clientCertificate"u8))
-                {
-                    clientCertificate = property.Value.GetString();
-                    continue;
-                }
-                if (property.NameEquals("clientPrivateKey"u8))
-                {
-                    clientPrivateKey = property.Value.GetString();
-                    continue;
-                }
-            }
-            return new AuthenticationEngineCertificateTls(serverRootCaCertificate, clientCertificate, clientPrivateKey);
+          serverRootCaCertificate = property.Value.GetString();
+          continue;
         }
-
-        /// <summary> Deserializes the model from a raw response. </summary>
-        /// <param name="response"> The response to deserialize the model from. </param>
-        internal static AuthenticationEngineCertificateTls FromResponse(Response response)
+        if (property.NameEquals("clientCertificate"u8))
         {
-            using var document = JsonDocument.Parse(response.Content);
-            return DeserializeAuthenticationEngineCertificateTls(document.RootElement);
+          clientCertificate = property.Value.GetString();
+          continue;
         }
+        if (property.NameEquals("clientPrivateKey"u8))
+        {
+          clientPrivateKey = property.Value.GetString();
+          continue;
+        }
+      }
+      return new AuthenticationEngineCertificateTls(serverRootCaCertificate, clientCertificate, clientPrivateKey);
     }
+
+    /// <summary> Deserializes the model from a raw response. </summary>
+    /// <param name="response"> The response to deserialize the model from. </param>
+    internal static AuthenticationEngineCertificateTls FromResponse(Response response)
+    {
+      using var document = JsonDocument.Parse(response.Content);
+      return DeserializeAuthenticationEngineCertificateTls(document.RootElement);
+    }
+  }
 }

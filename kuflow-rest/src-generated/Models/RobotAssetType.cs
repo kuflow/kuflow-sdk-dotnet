@@ -10,45 +10,54 @@ using System.ComponentModel;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> Robot asset type. </summary>
-    public readonly partial struct RobotAssetType : IEquatable<RobotAssetType>
+  /// <summary> Robot asset type. </summary>
+  public readonly partial struct RobotAssetType : IEquatable<RobotAssetType>
+  {
+    private readonly string _value;
+
+    /// <summary> Initializes a new instance of <see cref="RobotAssetType"/>. </summary>
+    /// <exception cref="ArgumentNullException"> <paramref name="value"/> is null. </exception>
+    public RobotAssetType(string value)
     {
-        private readonly string _value;
-
-        /// <summary> Initializes a new instance of <see cref="RobotAssetType"/>. </summary>
-        /// <exception cref="ArgumentNullException"> <paramref name="value"/> is null. </exception>
-        public RobotAssetType(string value)
-        {
-            _value = value ?? throw new ArgumentNullException(nameof(value));
-        }
-
-        private const string PythonValue = "PYTHON";
-        private const string PythonPIPValue = "PYTHON_PIP";
-        private const string NodejsValue = "NODEJS";
-
-        /// <summary> PYTHON. </summary>
-        public static RobotAssetType Python { get; } = new RobotAssetType(PythonValue);
-        /// <summary> PYTHON_PIP. </summary>
-        public static RobotAssetType PythonPIP { get; } = new RobotAssetType(PythonPIPValue);
-        /// <summary> NODEJS. </summary>
-        public static RobotAssetType Nodejs { get; } = new RobotAssetType(NodejsValue);
-        /// <summary> Determines if two <see cref="RobotAssetType"/> values are the same. </summary>
-        public static bool operator ==(RobotAssetType left, RobotAssetType right) => left.Equals(right);
-        /// <summary> Determines if two <see cref="RobotAssetType"/> values are not the same. </summary>
-        public static bool operator !=(RobotAssetType left, RobotAssetType right) => !left.Equals(right);
-        /// <summary> Converts a <see cref="string"/> to a <see cref="RobotAssetType"/>. </summary>
-        public static implicit operator RobotAssetType(string value) => new RobotAssetType(value);
-
-        /// <inheritdoc />
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public override bool Equals(object obj) => obj is RobotAssetType other && Equals(other);
-        /// <inheritdoc />
-        public bool Equals(RobotAssetType other) => string.Equals(_value, other._value, StringComparison.InvariantCultureIgnoreCase);
-
-        /// <inheritdoc />
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public override int GetHashCode() => _value != null ? StringComparer.InvariantCultureIgnoreCase.GetHashCode(_value) : 0;
-        /// <inheritdoc />
-        public override string ToString() => _value;
+      _value = value ?? throw new ArgumentNullException(nameof(value));
     }
+
+    private const string PythonValue = "PYTHON";
+    private const string PythonPIPValue = "PYTHON_PIP";
+    private const string NodejsValue = "NODEJS";
+
+    /// <summary> PYTHON. </summary>
+    public static RobotAssetType Python { get; } = new RobotAssetType(PythonValue);
+
+    /// <summary> PYTHON_PIP. </summary>
+    public static RobotAssetType PythonPIP { get; } = new RobotAssetType(PythonPIPValue);
+
+    /// <summary> NODEJS. </summary>
+    public static RobotAssetType Nodejs { get; } = new RobotAssetType(NodejsValue);
+
+    /// <summary> Determines if two <see cref="RobotAssetType"/> values are the same. </summary>
+    public static bool operator ==(RobotAssetType left, RobotAssetType right) => left.Equals(right);
+
+    /// <summary> Determines if two <see cref="RobotAssetType"/> values are not the same. </summary>
+    public static bool operator !=(RobotAssetType left, RobotAssetType right) => !left.Equals(right);
+
+    /// <summary> Converts a <see cref="string"/> to a <see cref="RobotAssetType"/>. </summary>
+    public static implicit operator RobotAssetType(string value) => new RobotAssetType(value);
+
+    /// <inheritdoc />
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override bool Equals(object obj) => obj is RobotAssetType other && Equals(other);
+
+    /// <inheritdoc />
+    public bool Equals(RobotAssetType other) =>
+      string.Equals(_value, other._value, StringComparison.InvariantCultureIgnoreCase);
+
+    /// <inheritdoc />
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override int GetHashCode() =>
+      _value != null ? StringComparer.InvariantCultureIgnoreCase.GetHashCode(_value) : 0;
+
+    /// <inheritdoc />
+    public override string ToString() => _value;
+  }
 }

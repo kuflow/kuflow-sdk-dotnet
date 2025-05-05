@@ -9,24 +9,25 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The AuthenticationEngineToken. </summary>
-    public partial class AuthenticationEngineToken
+  /// <summary> The AuthenticationEngineToken. </summary>
+  public partial class AuthenticationEngineToken
+  {
+    /// <summary> Initializes a new instance of <see cref="AuthenticationEngineToken"/>. </summary>
+    /// <param name="token"> Engine authentication token. </param>
+    /// <param name="expiredAt"></param>
+    /// <exception cref="ArgumentNullException"> <paramref name="token"/> is null. </exception>
+    internal AuthenticationEngineToken(string token, DateTimeOffset expiredAt)
     {
-        /// <summary> Initializes a new instance of <see cref="AuthenticationEngineToken"/>. </summary>
-        /// <param name="token"> Engine authentication token. </param>
-        /// <param name="expiredAt"></param>
-        /// <exception cref="ArgumentNullException"> <paramref name="token"/> is null. </exception>
-        internal AuthenticationEngineToken(string token, DateTimeOffset expiredAt)
-        {
-            Argument.AssertNotNull(token, nameof(token));
+      Argument.AssertNotNull(token, nameof(token));
 
-            Token = token;
-            ExpiredAt = expiredAt;
-        }
-
-        /// <summary> Engine authentication token. </summary>
-        public string Token { get; }
-        /// <summary> Gets the expired at. </summary>
-        public DateTimeOffset ExpiredAt { get; }
+      Token = token;
+      ExpiredAt = expiredAt;
     }
+
+    /// <summary> Engine authentication token. </summary>
+    public string Token { get; }
+
+    /// <summary> Gets the expired at. </summary>
+    public DateTimeOffset ExpiredAt { get; }
+  }
 }

@@ -9,43 +9,54 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The Tenant. </summary>
-    public partial class Tenant : AbstractAudited
+  /// <summary> The Tenant. </summary>
+  public partial class Tenant : AbstractAudited
+  {
+    /// <summary> Initializes a new instance of <see cref="Tenant"/>. </summary>
+    /// <param name="id"></param>
+    /// <param name="name"></param>
+    /// <param name="plan"> Tenant pricing plan. </param>
+    /// <exception cref="ArgumentNullException"> <paramref name="name"/> is null. </exception>
+    internal Tenant(Guid id, string name, TenantPricingPlan plan)
     {
-        /// <summary> Initializes a new instance of <see cref="Tenant"/>. </summary>
-        /// <param name="id"></param>
-        /// <param name="name"></param>
-        /// <param name="plan"> Tenant pricing plan. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="name"/> is null. </exception>
-        internal Tenant(Guid id, string name, TenantPricingPlan plan)
-        {
-            Argument.AssertNotNull(name, nameof(name));
+      Argument.AssertNotNull(name, nameof(name));
 
-            Id = id;
-            Name = name;
-            Plan = plan;
-        }
-
-        /// <summary> Initializes a new instance of <see cref="Tenant"/>. </summary>
-        /// <param name="createdBy"> Who create this model. </param>
-        /// <param name="createdAt"> When this model was created. </param>
-        /// <param name="lastModifiedBy"> Who was last update this model. </param>
-        /// <param name="lastModifiedAt"> When this model type was last updated. </param>
-        /// <param name="id"></param>
-        /// <param name="name"></param>
-        /// <param name="plan"> Tenant pricing plan. </param>
-        internal Tenant(Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid id, string name, TenantPricingPlan plan) : base(createdBy, createdAt, lastModifiedBy, lastModifiedAt)
-        {
-            Id = id;
-            Name = name;
-            Plan = plan;
-        }
-
-        /// <summary> Gets the id. </summary>
-        public Guid Id { get; }
-        /// <summary> Gets the name. </summary>
-        public string Name { get; }
-        /// <summary> Tenant pricing plan. </summary>
-        public TenantPricingPlan Plan { get; }
+      Id = id;
+      Name = name;
+      Plan = plan;
     }
+
+    /// <summary> Initializes a new instance of <see cref="Tenant"/>. </summary>
+    /// <param name="createdBy"> Who create this model. </param>
+    /// <param name="createdAt"> When this model was created. </param>
+    /// <param name="lastModifiedBy"> Who was last update this model. </param>
+    /// <param name="lastModifiedAt"> When this model type was last updated. </param>
+    /// <param name="id"></param>
+    /// <param name="name"></param>
+    /// <param name="plan"> Tenant pricing plan. </param>
+    internal Tenant(
+      Guid? createdBy,
+      DateTimeOffset? createdAt,
+      Guid? lastModifiedBy,
+      DateTimeOffset? lastModifiedAt,
+      Guid id,
+      string name,
+      TenantPricingPlan plan
+    )
+      : base(createdBy, createdAt, lastModifiedBy, lastModifiedAt)
+    {
+      Id = id;
+      Name = name;
+      Plan = plan;
+    }
+
+    /// <summary> Gets the id. </summary>
+    public Guid Id { get; }
+
+    /// <summary> Gets the name. </summary>
+    public string Name { get; }
+
+    /// <summary> Tenant pricing plan. </summary>
+    public TenantPricingPlan Plan { get; }
+  }
 }

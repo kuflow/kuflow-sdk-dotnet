@@ -9,22 +9,20 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The PrincipalApplication. </summary>
-    public partial class PrincipalApplication
+  /// <summary> The PrincipalApplication. </summary>
+  public partial class PrincipalApplication
+  {
+    /// <summary> Initializes a new instance of <see cref="PrincipalApplication"/>. </summary>
+    internal PrincipalApplication() { }
+
+    /// <summary> Initializes a new instance of <see cref="PrincipalApplication"/>. </summary>
+    /// <param name="id"></param>
+    internal PrincipalApplication(Guid? id)
     {
-        /// <summary> Initializes a new instance of <see cref="PrincipalApplication"/>. </summary>
-        internal PrincipalApplication()
-        {
-        }
-
-        /// <summary> Initializes a new instance of <see cref="PrincipalApplication"/>. </summary>
-        /// <param name="id"></param>
-        internal PrincipalApplication(Guid? id)
-        {
-            Id = id;
-        }
-
-        /// <summary> Gets the id. </summary>
-        public Guid? Id { get; }
+      Id = id;
     }
+
+    /// <summary> Gets the id. </summary>
+    public Guid? Id { get; }
+  }
 }

@@ -9,38 +9,40 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The Principal. </summary>
-    public partial class Principal
+  /// <summary> The Principal. </summary>
+  public partial class Principal
+  {
+    /// <summary> Initializes a new instance of <see cref="Principal"/>. </summary>
+    internal Principal() { }
+
+    /// <summary> Initializes a new instance of <see cref="Principal"/>. </summary>
+    /// <param name="id"></param>
+    /// <param name="type"></param>
+    /// <param name="name"></param>
+    /// <param name="user"></param>
+    /// <param name="application"></param>
+    internal Principal(Guid? id, PrincipalType? type, string name, PrincipalUser user, PrincipalApplication application)
     {
-        /// <summary> Initializes a new instance of <see cref="Principal"/>. </summary>
-        internal Principal()
-        {
-        }
-
-        /// <summary> Initializes a new instance of <see cref="Principal"/>. </summary>
-        /// <param name="id"></param>
-        /// <param name="type"></param>
-        /// <param name="name"></param>
-        /// <param name="user"></param>
-        /// <param name="application"></param>
-        internal Principal(Guid? id, PrincipalType? type, string name, PrincipalUser user, PrincipalApplication application)
-        {
-            Id = id;
-            Type = type;
-            Name = name;
-            User = user;
-            Application = application;
-        }
-
-        /// <summary> Gets the id. </summary>
-        public Guid? Id { get; }
-        /// <summary> Gets the type. </summary>
-        public PrincipalType? Type { get; }
-        /// <summary> Gets the name. </summary>
-        public string Name { get; }
-        /// <summary> Gets the user. </summary>
-        public PrincipalUser User { get; }
-        /// <summary> Gets the application. </summary>
-        public PrincipalApplication Application { get; }
+      Id = id;
+      Type = type;
+      Name = name;
+      User = user;
+      Application = application;
     }
+
+    /// <summary> Gets the id. </summary>
+    public Guid? Id { get; }
+
+    /// <summary> Gets the type. </summary>
+    public PrincipalType? Type { get; }
+
+    /// <summary> Gets the name. </summary>
+    public string Name { get; }
+
+    /// <summary> Gets the user. </summary>
+    public PrincipalUser User { get; }
+
+    /// <summary> Gets the application. </summary>
+    public PrincipalApplication Application { get; }
+  }
 }

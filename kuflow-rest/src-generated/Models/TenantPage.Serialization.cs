@@ -11,43 +11,43 @@ using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class TenantPage
+  public partial class TenantPage
+  {
+    internal static TenantPage DeserializeTenantPage(JsonElement element)
     {
-        internal static TenantPage DeserializeTenantPage(JsonElement element)
+      if (element.ValueKind == JsonValueKind.Null)
+      {
+        return null;
+      }
+      IReadOnlyList<TenantPageItem> content = default;
+      PageMetadata metadata = default;
+      foreach (var property in element.EnumerateObject())
+      {
+        if (property.NameEquals("content"u8))
         {
-            if (element.ValueKind == JsonValueKind.Null)
-            {
-                return null;
-            }
-            IReadOnlyList<TenantPageItem> content = default;
-            PageMetadata metadata = default;
-            foreach (var property in element.EnumerateObject())
-            {
-                if (property.NameEquals("content"u8))
-                {
-                    List<TenantPageItem> array = new List<TenantPageItem>();
-                    foreach (var item in property.Value.EnumerateArray())
-                    {
-                        array.Add(TenantPageItem.DeserializeTenantPageItem(item));
-                    }
-                    content = array;
-                    continue;
-                }
-                if (property.NameEquals("metadata"u8))
-                {
-                    metadata = PageMetadata.DeserializePageMetadata(property.Value);
-                    continue;
-                }
-            }
-            return new TenantPage(metadata, content);
+          List<TenantPageItem> array = new List<TenantPageItem>();
+          foreach (var item in property.Value.EnumerateArray())
+          {
+            array.Add(TenantPageItem.DeserializeTenantPageItem(item));
+          }
+          content = array;
+          continue;
         }
-
-        /// <summary> Deserializes the model from a raw response. </summary>
-        /// <param name="response"> The response to deserialize the model from. </param>
-        internal static new TenantPage FromResponse(Response response)
+        if (property.NameEquals("metadata"u8))
         {
-            using var document = JsonDocument.Parse(response.Content);
-            return DeserializeTenantPage(document.RootElement);
+          metadata = PageMetadata.DeserializePageMetadata(property.Value);
+          continue;
         }
+      }
+      return new TenantPage(metadata, content);
     }
+
+    /// <summary> Deserializes the model from a raw response. </summary>
+    /// <param name="response"> The response to deserialize the model from. </param>
+    internal static new TenantPage FromResponse(Response response)
+    {
+      using var document = JsonDocument.Parse(response.Content);
+      return DeserializeTenantPage(document.RootElement);
+    }
+  }
 }

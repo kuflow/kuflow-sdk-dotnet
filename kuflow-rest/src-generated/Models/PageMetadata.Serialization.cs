@@ -10,50 +10,50 @@ using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class PageMetadata
+  public partial class PageMetadata
+  {
+    internal static PageMetadata DeserializePageMetadata(JsonElement element)
     {
-        internal static PageMetadata DeserializePageMetadata(JsonElement element)
+      if (element.ValueKind == JsonValueKind.Null)
+      {
+        return null;
+      }
+      int size = default;
+      int page = default;
+      long totalElements = default;
+      int totalPages = default;
+      foreach (var property in element.EnumerateObject())
+      {
+        if (property.NameEquals("size"u8))
         {
-            if (element.ValueKind == JsonValueKind.Null)
-            {
-                return null;
-            }
-            int size = default;
-            int page = default;
-            long totalElements = default;
-            int totalPages = default;
-            foreach (var property in element.EnumerateObject())
-            {
-                if (property.NameEquals("size"u8))
-                {
-                    size = property.Value.GetInt32();
-                    continue;
-                }
-                if (property.NameEquals("page"u8))
-                {
-                    page = property.Value.GetInt32();
-                    continue;
-                }
-                if (property.NameEquals("totalElements"u8))
-                {
-                    totalElements = property.Value.GetInt64();
-                    continue;
-                }
-                if (property.NameEquals("totalPages"u8))
-                {
-                    totalPages = property.Value.GetInt32();
-                    continue;
-                }
-            }
-            return new PageMetadata(size, page, totalElements, totalPages);
+          size = property.Value.GetInt32();
+          continue;
         }
-
-        /// <summary> Deserializes the model from a raw response. </summary>
-        /// <param name="response"> The response to deserialize the model from. </param>
-        internal static PageMetadata FromResponse(Response response)
+        if (property.NameEquals("page"u8))
         {
-            using var document = JsonDocument.Parse(response.Content);
-            return DeserializePageMetadata(document.RootElement);
+          page = property.Value.GetInt32();
+          continue;
         }
+        if (property.NameEquals("totalElements"u8))
+        {
+          totalElements = property.Value.GetInt64();
+          continue;
+        }
+        if (property.NameEquals("totalPages"u8))
+        {
+          totalPages = property.Value.GetInt32();
+          continue;
+        }
+      }
+      return new PageMetadata(size, page, totalElements, totalPages);
     }
+
+    /// <summary> Deserializes the model from a raw response. </summary>
+    /// <param name="response"> The response to deserialize the model from. </param>
+    internal static PageMetadata FromResponse(Response response)
+    {
+      using var document = JsonDocument.Parse(response.Content);
+      return DeserializePageMetadata(document.RootElement);
+    }
+  }
 }

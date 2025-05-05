@@ -9,26 +9,25 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> Params to assign a process item task, only one option is required. </summary>
-    public partial class ProcessItemTaskAssignParams
+  /// <summary> Params to assign a process item task, only one option is required. </summary>
+  public partial class ProcessItemTaskAssignParams
+  {
+    /// <summary> Initializes a new instance of <see cref="ProcessItemTaskAssignParams"/>. </summary>
+    public ProcessItemTaskAssignParams() { }
+
+    /// <summary> Initializes a new instance of <see cref="ProcessItemTaskAssignParams"/>. </summary>
+    /// <param name="ownerId"></param>
+    /// <param name="ownerEmail"></param>
+    internal ProcessItemTaskAssignParams(Guid? ownerId, string ownerEmail)
     {
-        /// <summary> Initializes a new instance of <see cref="ProcessItemTaskAssignParams"/>. </summary>
-        public ProcessItemTaskAssignParams()
-        {
-        }
-
-        /// <summary> Initializes a new instance of <see cref="ProcessItemTaskAssignParams"/>. </summary>
-        /// <param name="ownerId"></param>
-        /// <param name="ownerEmail"></param>
-        internal ProcessItemTaskAssignParams(Guid? ownerId, string ownerEmail)
-        {
-            OwnerId = ownerId;
-            OwnerEmail = ownerEmail;
-        }
-
-        /// <summary> Gets or sets the owner id. </summary>
-        public Guid? OwnerId { get; set; }
-        /// <summary> Gets or sets the owner email. </summary>
-        public string OwnerEmail { get; set; }
+      OwnerId = ownerId;
+      OwnerEmail = ownerEmail;
     }
+
+    /// <summary> Gets or sets the owner id. </summary>
+    public Guid? OwnerId { get; set; }
+
+    /// <summary> Gets or sets the owner email. </summary>
+    public string OwnerEmail { get; set; }
+  }
 }

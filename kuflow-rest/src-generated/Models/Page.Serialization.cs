@@ -10,32 +10,32 @@ using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class Page
+  public partial class Page
+  {
+    internal static Page DeserializePage(JsonElement element)
     {
-        internal static Page DeserializePage(JsonElement element)
+      if (element.ValueKind == JsonValueKind.Null)
+      {
+        return null;
+      }
+      PageMetadata metadata = default;
+      foreach (var property in element.EnumerateObject())
+      {
+        if (property.NameEquals("metadata"u8))
         {
-            if (element.ValueKind == JsonValueKind.Null)
-            {
-                return null;
-            }
-            PageMetadata metadata = default;
-            foreach (var property in element.EnumerateObject())
-            {
-                if (property.NameEquals("metadata"u8))
-                {
-                    metadata = PageMetadata.DeserializePageMetadata(property.Value);
-                    continue;
-                }
-            }
-            return new Page(metadata);
+          metadata = PageMetadata.DeserializePageMetadata(property.Value);
+          continue;
         }
-
-        /// <summary> Deserializes the model from a raw response. </summary>
-        /// <param name="response"> The response to deserialize the model from. </param>
-        internal static Page FromResponse(Response response)
-        {
-            using var document = JsonDocument.Parse(response.Content);
-            return DeserializePage(document.RootElement);
-        }
+      }
+      return new Page(metadata);
     }
+
+    /// <summary> Deserializes the model from a raw response. </summary>
+    /// <param name="response"> The response to deserialize the model from. </param>
+    internal static Page FromResponse(Response response)
+    {
+      using var document = JsonDocument.Parse(response.Content);
+      return DeserializePage(document.RootElement);
+    }
+  }
 }

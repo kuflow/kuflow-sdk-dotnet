@@ -11,50 +11,50 @@ using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class ProcessItemTaskLog
+  public partial class ProcessItemTaskLog
+  {
+    internal static ProcessItemTaskLog DeserializeProcessItemTaskLog(JsonElement element)
     {
-        internal static ProcessItemTaskLog DeserializeProcessItemTaskLog(JsonElement element)
+      if (element.ValueKind == JsonValueKind.Null)
+      {
+        return null;
+      }
+      Guid id = default;
+      DateTimeOffset timestamp = default;
+      string message = default;
+      ProcessItemTaskLogLevel level = default;
+      foreach (var property in element.EnumerateObject())
+      {
+        if (property.NameEquals("id"u8))
         {
-            if (element.ValueKind == JsonValueKind.Null)
-            {
-                return null;
-            }
-            Guid id = default;
-            DateTimeOffset timestamp = default;
-            string message = default;
-            ProcessItemTaskLogLevel level = default;
-            foreach (var property in element.EnumerateObject())
-            {
-                if (property.NameEquals("id"u8))
-                {
-                    id = property.Value.GetGuid();
-                    continue;
-                }
-                if (property.NameEquals("timestamp"u8))
-                {
-                    timestamp = property.Value.GetDateTimeOffset("O");
-                    continue;
-                }
-                if (property.NameEquals("message"u8))
-                {
-                    message = property.Value.GetString();
-                    continue;
-                }
-                if (property.NameEquals("level"u8))
-                {
-                    level = new ProcessItemTaskLogLevel(property.Value.GetString());
-                    continue;
-                }
-            }
-            return new ProcessItemTaskLog(id, timestamp, message, level);
+          id = property.Value.GetGuid();
+          continue;
         }
-
-        /// <summary> Deserializes the model from a raw response. </summary>
-        /// <param name="response"> The response to deserialize the model from. </param>
-        internal static ProcessItemTaskLog FromResponse(Response response)
+        if (property.NameEquals("timestamp"u8))
         {
-            using var document = JsonDocument.Parse(response.Content);
-            return DeserializeProcessItemTaskLog(document.RootElement);
+          timestamp = property.Value.GetDateTimeOffset("O");
+          continue;
         }
+        if (property.NameEquals("message"u8))
+        {
+          message = property.Value.GetString();
+          continue;
+        }
+        if (property.NameEquals("level"u8))
+        {
+          level = new ProcessItemTaskLogLevel(property.Value.GetString());
+          continue;
+        }
+      }
+      return new ProcessItemTaskLog(id, timestamp, message, level);
     }
+
+    /// <summary> Deserializes the model from a raw response. </summary>
+    /// <param name="response"> The response to deserialize the model from. </param>
+    internal static ProcessItemTaskLog FromResponse(Response response)
+    {
+      using var document = JsonDocument.Parse(response.Content);
+      return DeserializeProcessItemTaskLog(document.RootElement);
+    }
+  }
 }

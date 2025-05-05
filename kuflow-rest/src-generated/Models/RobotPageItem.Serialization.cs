@@ -11,119 +11,120 @@ using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class RobotPageItem
+  public partial class RobotPageItem
+  {
+    internal static RobotPageItem DeserializeRobotPageItem(JsonElement element)
     {
-        internal static RobotPageItem DeserializeRobotPageItem(JsonElement element)
+      if (element.ValueKind == JsonValueKind.Null)
+      {
+        return null;
+      }
+      Guid id = default;
+      string code = default;
+      string name = default;
+      string description = default;
+      RobotSourceType sourceType = default;
+      RobotSourceFile sourceFile = default;
+      Guid tenantId = default;
+      Guid? createdBy = default;
+      DateTimeOffset? createdAt = default;
+      Guid? lastModifiedBy = default;
+      DateTimeOffset? lastModifiedAt = default;
+      foreach (var property in element.EnumerateObject())
+      {
+        if (property.NameEquals("id"u8))
         {
-            if (element.ValueKind == JsonValueKind.Null)
-            {
-                return null;
-            }
-            Guid id = default;
-            string code = default;
-            string name = default;
-            string description = default;
-            RobotSourceType sourceType = default;
-            RobotSourceFile sourceFile = default;
-            Guid tenantId = default;
-            Guid? createdBy = default;
-            DateTimeOffset? createdAt = default;
-            Guid? lastModifiedBy = default;
-            DateTimeOffset? lastModifiedAt = default;
-            foreach (var property in element.EnumerateObject())
-            {
-                if (property.NameEquals("id"u8))
-                {
-                    id = property.Value.GetGuid();
-                    continue;
-                }
-                if (property.NameEquals("code"u8))
-                {
-                    code = property.Value.GetString();
-                    continue;
-                }
-                if (property.NameEquals("name"u8))
-                {
-                    name = property.Value.GetString();
-                    continue;
-                }
-                if (property.NameEquals("description"u8))
-                {
-                    description = property.Value.GetString();
-                    continue;
-                }
-                if (property.NameEquals("sourceType"u8))
-                {
-                    sourceType = new RobotSourceType(property.Value.GetString());
-                    continue;
-                }
-                if (property.NameEquals("sourceFile"u8))
-                {
-                    sourceFile = RobotSourceFile.DeserializeRobotSourceFile(property.Value);
-                    continue;
-                }
-                if (property.NameEquals("tenantId"u8))
-                {
-                    tenantId = property.Value.GetGuid();
-                    continue;
-                }
-                if (property.NameEquals("createdBy"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    createdBy = property.Value.GetGuid();
-                    continue;
-                }
-                if (property.NameEquals("createdAt"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    createdAt = property.Value.GetDateTimeOffset("O");
-                    continue;
-                }
-                if (property.NameEquals("lastModifiedBy"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    lastModifiedBy = property.Value.GetGuid();
-                    continue;
-                }
-                if (property.NameEquals("lastModifiedAt"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    lastModifiedAt = property.Value.GetDateTimeOffset("O");
-                    continue;
-                }
-            }
-            return new RobotPageItem(
-                createdBy,
-                createdAt,
-                lastModifiedBy,
-                lastModifiedAt,
-                id,
-                code,
-                name,
-                description,
-                sourceType,
-                sourceFile,
-                tenantId);
+          id = property.Value.GetGuid();
+          continue;
         }
-
-        /// <summary> Deserializes the model from a raw response. </summary>
-        /// <param name="response"> The response to deserialize the model from. </param>
-        internal static new RobotPageItem FromResponse(Response response)
+        if (property.NameEquals("code"u8))
         {
-            using var document = JsonDocument.Parse(response.Content);
-            return DeserializeRobotPageItem(document.RootElement);
+          code = property.Value.GetString();
+          continue;
         }
+        if (property.NameEquals("name"u8))
+        {
+          name = property.Value.GetString();
+          continue;
+        }
+        if (property.NameEquals("description"u8))
+        {
+          description = property.Value.GetString();
+          continue;
+        }
+        if (property.NameEquals("sourceType"u8))
+        {
+          sourceType = new RobotSourceType(property.Value.GetString());
+          continue;
+        }
+        if (property.NameEquals("sourceFile"u8))
+        {
+          sourceFile = RobotSourceFile.DeserializeRobotSourceFile(property.Value);
+          continue;
+        }
+        if (property.NameEquals("tenantId"u8))
+        {
+          tenantId = property.Value.GetGuid();
+          continue;
+        }
+        if (property.NameEquals("createdBy"u8))
+        {
+          if (property.Value.ValueKind == JsonValueKind.Null)
+          {
+            continue;
+          }
+          createdBy = property.Value.GetGuid();
+          continue;
+        }
+        if (property.NameEquals("createdAt"u8))
+        {
+          if (property.Value.ValueKind == JsonValueKind.Null)
+          {
+            continue;
+          }
+          createdAt = property.Value.GetDateTimeOffset("O");
+          continue;
+        }
+        if (property.NameEquals("lastModifiedBy"u8))
+        {
+          if (property.Value.ValueKind == JsonValueKind.Null)
+          {
+            continue;
+          }
+          lastModifiedBy = property.Value.GetGuid();
+          continue;
+        }
+        if (property.NameEquals("lastModifiedAt"u8))
+        {
+          if (property.Value.ValueKind == JsonValueKind.Null)
+          {
+            continue;
+          }
+          lastModifiedAt = property.Value.GetDateTimeOffset("O");
+          continue;
+        }
+      }
+      return new RobotPageItem(
+        createdBy,
+        createdAt,
+        lastModifiedBy,
+        lastModifiedAt,
+        id,
+        code,
+        name,
+        description,
+        sourceType,
+        sourceFile,
+        tenantId
+      );
     }
+
+    /// <summary> Deserializes the model from a raw response. </summary>
+    /// <param name="response"> The response to deserialize the model from. </param>
+    internal static new RobotPageItem FromResponse(Response response)
+    {
+      using var document = JsonDocument.Parse(response.Content);
+      return DeserializeRobotPageItem(document.RootElement);
+    }
+  }
 }

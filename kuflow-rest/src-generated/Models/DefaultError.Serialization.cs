@@ -12,59 +12,59 @@ using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    internal partial class DefaultError
+  internal partial class DefaultError
+  {
+    internal static DefaultError DeserializeDefaultError(JsonElement element)
     {
-        internal static DefaultError DeserializeDefaultError(JsonElement element)
+      if (element.ValueKind == JsonValueKind.Null)
+      {
+        return null;
+      }
+      DateTimeOffset timestamp = default;
+      int status = default;
+      string message = default;
+      IReadOnlyList<DefaultErrorInfo> errors = default;
+      foreach (var property in element.EnumerateObject())
+      {
+        if (property.NameEquals("timestamp"u8))
         {
-            if (element.ValueKind == JsonValueKind.Null)
-            {
-                return null;
-            }
-            DateTimeOffset timestamp = default;
-            int status = default;
-            string message = default;
-            IReadOnlyList<DefaultErrorInfo> errors = default;
-            foreach (var property in element.EnumerateObject())
-            {
-                if (property.NameEquals("timestamp"u8))
-                {
-                    timestamp = property.Value.GetDateTimeOffset("O");
-                    continue;
-                }
-                if (property.NameEquals("status"u8))
-                {
-                    status = property.Value.GetInt32();
-                    continue;
-                }
-                if (property.NameEquals("message"u8))
-                {
-                    message = property.Value.GetString();
-                    continue;
-                }
-                if (property.NameEquals("errors"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    List<DefaultErrorInfo> array = new List<DefaultErrorInfo>();
-                    foreach (var item in property.Value.EnumerateArray())
-                    {
-                        array.Add(DefaultErrorInfo.DeserializeDefaultErrorInfo(item));
-                    }
-                    errors = array;
-                    continue;
-                }
-            }
-            return new DefaultError(timestamp, status, message, errors ?? new ChangeTrackingList<DefaultErrorInfo>());
+          timestamp = property.Value.GetDateTimeOffset("O");
+          continue;
         }
-
-        /// <summary> Deserializes the model from a raw response. </summary>
-        /// <param name="response"> The response to deserialize the model from. </param>
-        internal static DefaultError FromResponse(Response response)
+        if (property.NameEquals("status"u8))
         {
-            using var document = JsonDocument.Parse(response.Content);
-            return DeserializeDefaultError(document.RootElement);
+          status = property.Value.GetInt32();
+          continue;
         }
+        if (property.NameEquals("message"u8))
+        {
+          message = property.Value.GetString();
+          continue;
+        }
+        if (property.NameEquals("errors"u8))
+        {
+          if (property.Value.ValueKind == JsonValueKind.Null)
+          {
+            continue;
+          }
+          List<DefaultErrorInfo> array = new List<DefaultErrorInfo>();
+          foreach (var item in property.Value.EnumerateArray())
+          {
+            array.Add(DefaultErrorInfo.DeserializeDefaultErrorInfo(item));
+          }
+          errors = array;
+          continue;
+        }
+      }
+      return new DefaultError(timestamp, status, message, errors ?? new ChangeTrackingList<DefaultErrorInfo>());
     }
+
+    /// <summary> Deserializes the model from a raw response. </summary>
+    /// <param name="response"> The response to deserialize the model from. </param>
+    internal static DefaultError FromResponse(Response response)
+    {
+      using var document = JsonDocument.Parse(response.Content);
+      return DeserializeDefaultError(document.RootElement);
+    }
+  }
 }

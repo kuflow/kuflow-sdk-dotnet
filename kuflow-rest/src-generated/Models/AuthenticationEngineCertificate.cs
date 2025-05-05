@@ -9,25 +9,26 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The AuthenticationEngineCertificate. </summary>
-    public partial class AuthenticationEngineCertificate
+  /// <summary> The AuthenticationEngineCertificate. </summary>
+  public partial class AuthenticationEngineCertificate
+  {
+    /// <summary> Initializes a new instance of <see cref="AuthenticationEngineCertificate"/>. </summary>
+    /// <param name="namespace"></param>
+    /// <param name="tls"></param>
+    /// <exception cref="ArgumentNullException"> <paramref name="namespace"/> or <paramref name="tls"/> is null. </exception>
+    internal AuthenticationEngineCertificate(string @namespace, AuthenticationEngineCertificateTls tls)
     {
-        /// <summary> Initializes a new instance of <see cref="AuthenticationEngineCertificate"/>. </summary>
-        /// <param name="namespace"></param>
-        /// <param name="tls"></param>
-        /// <exception cref="ArgumentNullException"> <paramref name="namespace"/> or <paramref name="tls"/> is null. </exception>
-        internal AuthenticationEngineCertificate(string @namespace, AuthenticationEngineCertificateTls tls)
-        {
-            Argument.AssertNotNull(@namespace, nameof(@namespace));
-            Argument.AssertNotNull(tls, nameof(tls));
+      Argument.AssertNotNull(@namespace, nameof(@namespace));
+      Argument.AssertNotNull(tls, nameof(tls));
 
-            Namespace = @namespace;
-            Tls = tls;
-        }
-
-        /// <summary> Gets the namespace. </summary>
-        public string Namespace { get; }
-        /// <summary> Gets the tls. </summary>
-        public AuthenticationEngineCertificateTls Tls { get; }
+      Namespace = @namespace;
+      Tls = tls;
     }
+
+    /// <summary> Gets the namespace. </summary>
+    public string Namespace { get; }
+
+    /// <summary> Gets the tls. </summary>
+    public AuthenticationEngineCertificateTls Tls { get; }
+  }
 }

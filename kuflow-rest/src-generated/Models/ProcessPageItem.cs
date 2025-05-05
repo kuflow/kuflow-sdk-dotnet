@@ -9,53 +9,68 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The ProcessPageItem. </summary>
-    public partial class ProcessPageItem : AbstractAudited
+  /// <summary> The ProcessPageItem. </summary>
+  public partial class ProcessPageItem : AbstractAudited
+  {
+    /// <summary> Initializes a new instance of <see cref="ProcessPageItem"/>. </summary>
+    /// <param name="id"> Process ID. </param>
+    /// <param name="state"> Process state. </param>
+    /// <param name="processDefinitionRef"></param>
+    /// <param name="tenantId"> Tenant ID. </param>
+    /// <exception cref="ArgumentNullException"> <paramref name="processDefinitionRef"/> is null. </exception>
+    internal ProcessPageItem(Guid id, ProcessState state, ProcessDefinitionRef processDefinitionRef, Guid tenantId)
     {
-        /// <summary> Initializes a new instance of <see cref="ProcessPageItem"/>. </summary>
-        /// <param name="id"> Process ID. </param>
-        /// <param name="state"> Process state. </param>
-        /// <param name="processDefinitionRef"></param>
-        /// <param name="tenantId"> Tenant ID. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="processDefinitionRef"/> is null. </exception>
-        internal ProcessPageItem(Guid id, ProcessState state, ProcessDefinitionRef processDefinitionRef, Guid tenantId)
-        {
-            Argument.AssertNotNull(processDefinitionRef, nameof(processDefinitionRef));
+      Argument.AssertNotNull(processDefinitionRef, nameof(processDefinitionRef));
 
-            Id = id;
-            State = state;
-            ProcessDefinitionRef = processDefinitionRef;
-            TenantId = tenantId;
-        }
-
-        /// <summary> Initializes a new instance of <see cref="ProcessPageItem"/>. </summary>
-        /// <param name="createdBy"> Who create this model. </param>
-        /// <param name="createdAt"> When this model was created. </param>
-        /// <param name="lastModifiedBy"> Who was last update this model. </param>
-        /// <param name="lastModifiedAt"> When this model type was last updated. </param>
-        /// <param name="id"> Process ID. </param>
-        /// <param name="state"> Process state. </param>
-        /// <param name="processDefinitionRef"></param>
-        /// <param name="initiatorId"> Principal ID. </param>
-        /// <param name="tenantId"> Tenant ID. </param>
-        internal ProcessPageItem(Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid id, ProcessState state, ProcessDefinitionRef processDefinitionRef, Guid? initiatorId, Guid tenantId) : base(createdBy, createdAt, lastModifiedBy, lastModifiedAt)
-        {
-            Id = id;
-            State = state;
-            ProcessDefinitionRef = processDefinitionRef;
-            InitiatorId = initiatorId;
-            TenantId = tenantId;
-        }
-
-        /// <summary> Process ID. </summary>
-        public Guid Id { get; }
-        /// <summary> Process state. </summary>
-        public ProcessState State { get; }
-        /// <summary> Gets the process definition ref. </summary>
-        public ProcessDefinitionRef ProcessDefinitionRef { get; }
-        /// <summary> Principal ID. </summary>
-        public Guid? InitiatorId { get; }
-        /// <summary> Tenant ID. </summary>
-        public Guid TenantId { get; }
+      Id = id;
+      State = state;
+      ProcessDefinitionRef = processDefinitionRef;
+      TenantId = tenantId;
     }
+
+    /// <summary> Initializes a new instance of <see cref="ProcessPageItem"/>. </summary>
+    /// <param name="createdBy"> Who create this model. </param>
+    /// <param name="createdAt"> When this model was created. </param>
+    /// <param name="lastModifiedBy"> Who was last update this model. </param>
+    /// <param name="lastModifiedAt"> When this model type was last updated. </param>
+    /// <param name="id"> Process ID. </param>
+    /// <param name="state"> Process state. </param>
+    /// <param name="processDefinitionRef"></param>
+    /// <param name="initiatorId"> Principal ID. </param>
+    /// <param name="tenantId"> Tenant ID. </param>
+    internal ProcessPageItem(
+      Guid? createdBy,
+      DateTimeOffset? createdAt,
+      Guid? lastModifiedBy,
+      DateTimeOffset? lastModifiedAt,
+      Guid id,
+      ProcessState state,
+      ProcessDefinitionRef processDefinitionRef,
+      Guid? initiatorId,
+      Guid tenantId
+    )
+      : base(createdBy, createdAt, lastModifiedBy, lastModifiedAt)
+    {
+      Id = id;
+      State = state;
+      ProcessDefinitionRef = processDefinitionRef;
+      InitiatorId = initiatorId;
+      TenantId = tenantId;
+    }
+
+    /// <summary> Process ID. </summary>
+    public Guid Id { get; }
+
+    /// <summary> Process state. </summary>
+    public ProcessState State { get; }
+
+    /// <summary> Gets the process definition ref. </summary>
+    public ProcessDefinitionRef ProcessDefinitionRef { get; }
+
+    /// <summary> Principal ID. </summary>
+    public Guid? InitiatorId { get; }
+
+    /// <summary> Tenant ID. </summary>
+    public Guid TenantId { get; }
+  }
 }

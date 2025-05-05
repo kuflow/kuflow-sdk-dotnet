@@ -9,21 +9,22 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The ProcessDefinitionRef. </summary>
-    public partial class ProcessDefinitionRef
+  /// <summary> The ProcessDefinitionRef. </summary>
+  public partial class ProcessDefinitionRef
+  {
+    /// <summary> Initializes a new instance of <see cref="ProcessDefinitionRef"/>. </summary>
+    /// <param name="id"></param>
+    /// <param name="version"></param>
+    internal ProcessDefinitionRef(Guid id, Guid version)
     {
-        /// <summary> Initializes a new instance of <see cref="ProcessDefinitionRef"/>. </summary>
-        /// <param name="id"></param>
-        /// <param name="version"></param>
-        internal ProcessDefinitionRef(Guid id, Guid version)
-        {
-            Id = id;
-            Version = version;
-        }
-
-        /// <summary> Gets the id. </summary>
-        public Guid Id { get; }
-        /// <summary> Gets the version. </summary>
-        public Guid Version { get; }
+      Id = id;
+      Version = version;
     }
+
+    /// <summary> Gets the id. </summary>
+    public Guid Id { get; }
+
+    /// <summary> Gets the version. </summary>
+    public Guid Version { get; }
+  }
 }

@@ -11,57 +11,57 @@ using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class ProcessItemTask
+  public partial class ProcessItemTask
+  {
+    internal static ProcessItemTask DeserializeProcessItemTask(JsonElement element)
     {
-        internal static ProcessItemTask DeserializeProcessItemTask(JsonElement element)
+      if (element.ValueKind == JsonValueKind.Null)
+      {
+        return null;
+      }
+      ProcessItemTaskState state = default;
+      JsonValue data = default;
+      IReadOnlyList<ProcessItemTaskLog> logs = default;
+      foreach (var property in element.EnumerateObject())
+      {
+        if (property.NameEquals("state"u8))
         {
-            if (element.ValueKind == JsonValueKind.Null)
-            {
-                return null;
-            }
-            ProcessItemTaskState state = default;
-            JsonValue data = default;
-            IReadOnlyList<ProcessItemTaskLog> logs = default;
-            foreach (var property in element.EnumerateObject())
-            {
-                if (property.NameEquals("state"u8))
-                {
-                    state = new ProcessItemTaskState(property.Value.GetString());
-                    continue;
-                }
-                if (property.NameEquals("data"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    data = JsonValue.DeserializeJsonValue(property.Value);
-                    continue;
-                }
-                if (property.NameEquals("logs"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    List<ProcessItemTaskLog> array = new List<ProcessItemTaskLog>();
-                    foreach (var item in property.Value.EnumerateArray())
-                    {
-                        array.Add(ProcessItemTaskLog.DeserializeProcessItemTaskLog(item));
-                    }
-                    logs = array;
-                    continue;
-                }
-            }
-            return new ProcessItemTask(state, data, logs ?? new ChangeTrackingList<ProcessItemTaskLog>());
+          state = new ProcessItemTaskState(property.Value.GetString());
+          continue;
         }
-
-        /// <summary> Deserializes the model from a raw response. </summary>
-        /// <param name="response"> The response to deserialize the model from. </param>
-        internal static ProcessItemTask FromResponse(Response response)
+        if (property.NameEquals("data"u8))
         {
-            using var document = JsonDocument.Parse(response.Content);
-            return DeserializeProcessItemTask(document.RootElement);
+          if (property.Value.ValueKind == JsonValueKind.Null)
+          {
+            continue;
+          }
+          data = JsonValue.DeserializeJsonValue(property.Value);
+          continue;
         }
+        if (property.NameEquals("logs"u8))
+        {
+          if (property.Value.ValueKind == JsonValueKind.Null)
+          {
+            continue;
+          }
+          List<ProcessItemTaskLog> array = new List<ProcessItemTaskLog>();
+          foreach (var item in property.Value.EnumerateArray())
+          {
+            array.Add(ProcessItemTaskLog.DeserializeProcessItemTaskLog(item));
+          }
+          logs = array;
+          continue;
+        }
+      }
+      return new ProcessItemTask(state, data, logs ?? new ChangeTrackingList<ProcessItemTaskLog>());
     }
+
+    /// <summary> Deserializes the model from a raw response. </summary>
+    /// <param name="response"> The response to deserialize the model from. </param>
+    internal static ProcessItemTask FromResponse(Response response)
+    {
+      using var document = JsonDocument.Parse(response.Content);
+      return DeserializeProcessItemTask(document.RootElement);
+    }
+  }
 }

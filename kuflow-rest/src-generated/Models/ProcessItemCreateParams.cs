@@ -9,54 +9,70 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The ProcessItemCreateParams. </summary>
-    public partial class ProcessItemCreateParams
+  /// <summary> The ProcessItemCreateParams. </summary>
+  public partial class ProcessItemCreateParams
+  {
+    /// <summary> Initializes a new instance of <see cref="ProcessItemCreateParams"/>. </summary>
+    /// <param name="type"> Process Item Type. </param>
+    /// <param name="processId"></param>
+    public ProcessItemCreateParams(ProcessItemType type, Guid processId)
     {
-        /// <summary> Initializes a new instance of <see cref="ProcessItemCreateParams"/>. </summary>
-        /// <param name="type"> Process Item Type. </param>
-        /// <param name="processId"></param>
-        public ProcessItemCreateParams(ProcessItemType type, Guid processId)
-        {
-            Type = type;
-            ProcessId = processId;
-        }
-
-        /// <summary> Initializes a new instance of <see cref="ProcessItemCreateParams"/>. </summary>
-        /// <param name="id"></param>
-        /// <param name="type"> Process Item Type. </param>
-        /// <param name="processId"></param>
-        /// <param name="ownerId"></param>
-        /// <param name="ownerEmail"></param>
-        /// <param name="processItemDefinitionCode"></param>
-        /// <param name="task"></param>
-        /// <param name="message"></param>
-        internal ProcessItemCreateParams(Guid? id, ProcessItemType type, Guid processId, Guid? ownerId, string ownerEmail, string processItemDefinitionCode, ProcessItemTaskCreateParams task, ProcessItemMessageCreateParams message)
-        {
-            Id = id;
-            Type = type;
-            ProcessId = processId;
-            OwnerId = ownerId;
-            OwnerEmail = ownerEmail;
-            ProcessItemDefinitionCode = processItemDefinitionCode;
-            Task = task;
-            Message = message;
-        }
-
-        /// <summary> Gets or sets the id. </summary>
-        public Guid? Id { get; set; }
-        /// <summary> Process Item Type. </summary>
-        public ProcessItemType Type { get; }
-        /// <summary> Gets the process id. </summary>
-        public Guid ProcessId { get; }
-        /// <summary> Gets or sets the owner id. </summary>
-        public Guid? OwnerId { get; set; }
-        /// <summary> Gets or sets the owner email. </summary>
-        public string OwnerEmail { get; set; }
-        /// <summary> Gets or sets the process item definition code. </summary>
-        public string ProcessItemDefinitionCode { get; set; }
-        /// <summary> Gets or sets the task. </summary>
-        public ProcessItemTaskCreateParams Task { get; set; }
-        /// <summary> Gets or sets the message. </summary>
-        public ProcessItemMessageCreateParams Message { get; set; }
+      Type = type;
+      ProcessId = processId;
     }
+
+    /// <summary> Initializes a new instance of <see cref="ProcessItemCreateParams"/>. </summary>
+    /// <param name="id"></param>
+    /// <param name="type"> Process Item Type. </param>
+    /// <param name="processId"></param>
+    /// <param name="ownerId"></param>
+    /// <param name="ownerEmail"></param>
+    /// <param name="processItemDefinitionCode"></param>
+    /// <param name="task"></param>
+    /// <param name="message"></param>
+    internal ProcessItemCreateParams(
+      Guid? id,
+      ProcessItemType type,
+      Guid processId,
+      Guid? ownerId,
+      string ownerEmail,
+      string processItemDefinitionCode,
+      ProcessItemTaskCreateParams task,
+      ProcessItemMessageCreateParams message
+    )
+    {
+      Id = id;
+      Type = type;
+      ProcessId = processId;
+      OwnerId = ownerId;
+      OwnerEmail = ownerEmail;
+      ProcessItemDefinitionCode = processItemDefinitionCode;
+      Task = task;
+      Message = message;
+    }
+
+    /// <summary> Gets or sets the id. </summary>
+    public Guid? Id { get; set; }
+
+    /// <summary> Process Item Type. </summary>
+    public ProcessItemType Type { get; }
+
+    /// <summary> Gets the process id. </summary>
+    public Guid ProcessId { get; }
+
+    /// <summary> Gets or sets the owner id. </summary>
+    public Guid? OwnerId { get; set; }
+
+    /// <summary> Gets or sets the owner email. </summary>
+    public string OwnerEmail { get; set; }
+
+    /// <summary> Gets or sets the process item definition code. </summary>
+    public string ProcessItemDefinitionCode { get; set; }
+
+    /// <summary> Gets or sets the task. </summary>
+    public ProcessItemTaskCreateParams Task { get; set; }
+
+    /// <summary> Gets or sets the message. </summary>
+    public ProcessItemMessageCreateParams Message { get; set; }
+  }
 }

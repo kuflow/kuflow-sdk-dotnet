@@ -7,29 +7,32 @@
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The PageMetadata. </summary>
-    public partial class PageMetadata
+  /// <summary> The PageMetadata. </summary>
+  public partial class PageMetadata
+  {
+    /// <summary> Initializes a new instance of <see cref="PageMetadata"/>. </summary>
+    /// <param name="size"></param>
+    /// <param name="page"></param>
+    /// <param name="totalElements"></param>
+    /// <param name="totalPages"></param>
+    internal PageMetadata(int size, int page, long totalElements, int totalPages)
     {
-        /// <summary> Initializes a new instance of <see cref="PageMetadata"/>. </summary>
-        /// <param name="size"></param>
-        /// <param name="page"></param>
-        /// <param name="totalElements"></param>
-        /// <param name="totalPages"></param>
-        internal PageMetadata(int size, int page, long totalElements, int totalPages)
-        {
-            Size = size;
-            Page = page;
-            TotalElements = totalElements;
-            TotalPages = totalPages;
-        }
-
-        /// <summary> Gets the size. </summary>
-        public int Size { get; }
-        /// <summary> Gets the page. </summary>
-        public int Page { get; }
-        /// <summary> Gets the total elements. </summary>
-        public long TotalElements { get; }
-        /// <summary> Gets the total pages. </summary>
-        public int TotalPages { get; }
+      Size = size;
+      Page = page;
+      TotalElements = totalElements;
+      TotalPages = totalPages;
     }
+
+    /// <summary> Gets the size. </summary>
+    public int Size { get; }
+
+    /// <summary> Gets the page. </summary>
+    public int Page { get; }
+
+    /// <summary> Gets the total elements. </summary>
+    public long TotalElements { get; }
+
+    /// <summary> Gets the total pages. </summary>
+    public int TotalPages { get; }
+  }
 }

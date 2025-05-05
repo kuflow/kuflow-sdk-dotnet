@@ -9,26 +9,25 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The PrincipalUser. </summary>
-    public partial class PrincipalUser
+  /// <summary> The PrincipalUser. </summary>
+  public partial class PrincipalUser
+  {
+    /// <summary> Initializes a new instance of <see cref="PrincipalUser"/>. </summary>
+    internal PrincipalUser() { }
+
+    /// <summary> Initializes a new instance of <see cref="PrincipalUser"/>. </summary>
+    /// <param name="id"></param>
+    /// <param name="email"></param>
+    internal PrincipalUser(Guid? id, string email)
     {
-        /// <summary> Initializes a new instance of <see cref="PrincipalUser"/>. </summary>
-        internal PrincipalUser()
-        {
-        }
-
-        /// <summary> Initializes a new instance of <see cref="PrincipalUser"/>. </summary>
-        /// <param name="id"></param>
-        /// <param name="email"></param>
-        internal PrincipalUser(Guid? id, string email)
-        {
-            Id = id;
-            Email = email;
-        }
-
-        /// <summary> Gets the id. </summary>
-        public Guid? Id { get; }
-        /// <summary> Gets the email. </summary>
-        public string Email { get; }
+      Id = id;
+      Email = email;
     }
+
+    /// <summary> Gets the id. </summary>
+    public Guid? Id { get; }
+
+    /// <summary> Gets the email. </summary>
+    public string Email { get; }
+  }
 }

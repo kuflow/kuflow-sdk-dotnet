@@ -10,30 +10,30 @@ using Azure.Core;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class ProcessItemTaskAssignParams : IUtf8JsonSerializable
+  public partial class ProcessItemTaskAssignParams : IUtf8JsonSerializable
+  {
+    void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
     {
-        void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
-        {
-            writer.WriteStartObject();
-            if (Optional.IsDefined(OwnerId))
-            {
-                writer.WritePropertyName("ownerId"u8);
-                writer.WriteStringValue(OwnerId.Value);
-            }
-            if (Optional.IsDefined(OwnerEmail))
-            {
-                writer.WritePropertyName("ownerEmail"u8);
-                writer.WriteStringValue(OwnerEmail);
-            }
-            writer.WriteEndObject();
-        }
-
-        /// <summary> Convert into a <see cref="RequestContent"/>. </summary>
-        internal virtual RequestContent ToRequestContent()
-        {
-            var content = new Utf8JsonRequestContent();
-            content.JsonWriter.WriteObjectValue(this);
-            return content;
-        }
+      writer.WriteStartObject();
+      if (Optional.IsDefined(OwnerId))
+      {
+        writer.WritePropertyName("ownerId"u8);
+        writer.WriteStringValue(OwnerId.Value);
+      }
+      if (Optional.IsDefined(OwnerEmail))
+      {
+        writer.WritePropertyName("ownerEmail"u8);
+        writer.WriteStringValue(OwnerEmail);
+      }
+      writer.WriteEndObject();
     }
+
+    /// <summary> Convert into a <see cref="RequestContent"/>. </summary>
+    internal virtual RequestContent ToRequestContent()
+    {
+      var content = new Utf8JsonRequestContent();
+      content.JsonWriter.WriteObjectValue(this);
+      return content;
+    }
+  }
 }

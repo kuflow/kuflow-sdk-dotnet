@@ -9,30 +9,36 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The AuthenticationEngineCertificateTls. </summary>
-    public partial class AuthenticationEngineCertificateTls
+  /// <summary> The AuthenticationEngineCertificateTls. </summary>
+  public partial class AuthenticationEngineCertificateTls
+  {
+    /// <summary> Initializes a new instance of <see cref="AuthenticationEngineCertificateTls"/>. </summary>
+    /// <param name="serverRootCaCertificate"></param>
+    /// <param name="clientCertificate"></param>
+    /// <param name="clientPrivateKey"></param>
+    /// <exception cref="ArgumentNullException"> <paramref name="serverRootCaCertificate"/>, <paramref name="clientCertificate"/> or <paramref name="clientPrivateKey"/> is null. </exception>
+    internal AuthenticationEngineCertificateTls(
+      string serverRootCaCertificate,
+      string clientCertificate,
+      string clientPrivateKey
+    )
     {
-        /// <summary> Initializes a new instance of <see cref="AuthenticationEngineCertificateTls"/>. </summary>
-        /// <param name="serverRootCaCertificate"></param>
-        /// <param name="clientCertificate"></param>
-        /// <param name="clientPrivateKey"></param>
-        /// <exception cref="ArgumentNullException"> <paramref name="serverRootCaCertificate"/>, <paramref name="clientCertificate"/> or <paramref name="clientPrivateKey"/> is null. </exception>
-        internal AuthenticationEngineCertificateTls(string serverRootCaCertificate, string clientCertificate, string clientPrivateKey)
-        {
-            Argument.AssertNotNull(serverRootCaCertificate, nameof(serverRootCaCertificate));
-            Argument.AssertNotNull(clientCertificate, nameof(clientCertificate));
-            Argument.AssertNotNull(clientPrivateKey, nameof(clientPrivateKey));
+      Argument.AssertNotNull(serverRootCaCertificate, nameof(serverRootCaCertificate));
+      Argument.AssertNotNull(clientCertificate, nameof(clientCertificate));
+      Argument.AssertNotNull(clientPrivateKey, nameof(clientPrivateKey));
 
-            ServerRootCaCertificate = serverRootCaCertificate;
-            ClientCertificate = clientCertificate;
-            ClientPrivateKey = clientPrivateKey;
-        }
-
-        /// <summary> Gets the server root ca certificate. </summary>
-        public string ServerRootCaCertificate { get; }
-        /// <summary> Gets the client certificate. </summary>
-        public string ClientCertificate { get; }
-        /// <summary> Gets the client private key. </summary>
-        public string ClientPrivateKey { get; }
+      ServerRootCaCertificate = serverRootCaCertificate;
+      ClientCertificate = clientCertificate;
+      ClientPrivateKey = clientPrivateKey;
     }
+
+    /// <summary> Gets the server root ca certificate. </summary>
+    public string ServerRootCaCertificate { get; }
+
+    /// <summary> Gets the client certificate. </summary>
+    public string ClientCertificate { get; }
+
+    /// <summary> Gets the client private key. </summary>
+    public string ClientPrivateKey { get; }
+  }
 }

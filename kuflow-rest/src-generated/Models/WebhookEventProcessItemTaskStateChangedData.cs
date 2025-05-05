@@ -9,36 +9,46 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The WebhookEventProcessItemTaskStateChangedData. </summary>
-    internal partial class WebhookEventProcessItemTaskStateChangedData
+  /// <summary> The WebhookEventProcessItemTaskStateChangedData. </summary>
+  internal partial class WebhookEventProcessItemTaskStateChangedData
+  {
+    /// <summary> Initializes a new instance of <see cref="WebhookEventProcessItemTaskStateChangedData"/>. </summary>
+    /// <param name="processId"></param>
+    /// <param name="processItemId"></param>
+    /// <param name="processItemType"> Process Item Type. </param>
+    /// <param name="processItemState"> Process Item Task state. </param>
+    /// <param name="processItemDefinitionCode"></param>
+    /// <exception cref="ArgumentNullException"> <paramref name="processItemDefinitionCode"/> is null. </exception>
+    internal WebhookEventProcessItemTaskStateChangedData(
+      Guid processId,
+      Guid processItemId,
+      ProcessItemType processItemType,
+      ProcessItemTaskState processItemState,
+      string processItemDefinitionCode
+    )
     {
-        /// <summary> Initializes a new instance of <see cref="WebhookEventProcessItemTaskStateChangedData"/>. </summary>
-        /// <param name="processId"></param>
-        /// <param name="processItemId"></param>
-        /// <param name="processItemType"> Process Item Type. </param>
-        /// <param name="processItemState"> Process Item Task state. </param>
-        /// <param name="processItemDefinitionCode"></param>
-        /// <exception cref="ArgumentNullException"> <paramref name="processItemDefinitionCode"/> is null. </exception>
-        internal WebhookEventProcessItemTaskStateChangedData(Guid processId, Guid processItemId, ProcessItemType processItemType, ProcessItemTaskState processItemState, string processItemDefinitionCode)
-        {
-            Argument.AssertNotNull(processItemDefinitionCode, nameof(processItemDefinitionCode));
+      Argument.AssertNotNull(processItemDefinitionCode, nameof(processItemDefinitionCode));
 
-            ProcessId = processId;
-            ProcessItemId = processItemId;
-            ProcessItemType = processItemType;
-            ProcessItemState = processItemState;
-            ProcessItemDefinitionCode = processItemDefinitionCode;
-        }
-
-        /// <summary> Gets the process id. </summary>
-        public Guid ProcessId { get; }
-        /// <summary> Gets the process item id. </summary>
-        public Guid ProcessItemId { get; }
-        /// <summary> Process Item Type. </summary>
-        public ProcessItemType ProcessItemType { get; }
-        /// <summary> Process Item Task state. </summary>
-        public ProcessItemTaskState ProcessItemState { get; }
-        /// <summary> Gets the process item definition code. </summary>
-        public string ProcessItemDefinitionCode { get; }
+      ProcessId = processId;
+      ProcessItemId = processItemId;
+      ProcessItemType = processItemType;
+      ProcessItemState = processItemState;
+      ProcessItemDefinitionCode = processItemDefinitionCode;
     }
+
+    /// <summary> Gets the process id. </summary>
+    public Guid ProcessId { get; }
+
+    /// <summary> Gets the process item id. </summary>
+    public Guid ProcessItemId { get; }
+
+    /// <summary> Process Item Type. </summary>
+    public ProcessItemType ProcessItemType { get; }
+
+    /// <summary> Process Item Task state. </summary>
+    public ProcessItemTaskState ProcessItemState { get; }
+
+    /// <summary> Gets the process item definition code. </summary>
+    public string ProcessItemDefinitionCode { get; }
+  }
 }

@@ -12,56 +12,59 @@ using Azure;
 
 namespace KuFlow.Rest.Models
 {
-    public partial class ProcessRelated
+  public partial class ProcessRelated
+  {
+    internal static ProcessRelated DeserializeProcessRelated(JsonElement element)
     {
-        internal static ProcessRelated DeserializeProcessRelated(JsonElement element)
+      if (element.ValueKind == JsonValueKind.Null)
+      {
+        return null;
+      }
+      IReadOnlyList<Guid> incoming = default;
+      IReadOnlyList<Guid> outcoming = default;
+      foreach (var property in element.EnumerateObject())
+      {
+        if (property.NameEquals("incoming"u8))
         {
-            if (element.ValueKind == JsonValueKind.Null)
-            {
-                return null;
-            }
-            IReadOnlyList<Guid> incoming = default;
-            IReadOnlyList<Guid> outcoming = default;
-            foreach (var property in element.EnumerateObject())
-            {
-                if (property.NameEquals("incoming"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    List<Guid> array = new List<Guid>();
-                    foreach (var item in property.Value.EnumerateArray())
-                    {
-                        array.Add(item.GetGuid());
-                    }
-                    incoming = array;
-                    continue;
-                }
-                if (property.NameEquals("outcoming"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
-                    List<Guid> array = new List<Guid>();
-                    foreach (var item in property.Value.EnumerateArray())
-                    {
-                        array.Add(item.GetGuid());
-                    }
-                    outcoming = array;
-                    continue;
-                }
-            }
-            return new ProcessRelated(incoming ?? new ChangeTrackingList<Guid>(), outcoming ?? new ChangeTrackingList<Guid>());
+          if (property.Value.ValueKind == JsonValueKind.Null)
+          {
+            continue;
+          }
+          List<Guid> array = new List<Guid>();
+          foreach (var item in property.Value.EnumerateArray())
+          {
+            array.Add(item.GetGuid());
+          }
+          incoming = array;
+          continue;
         }
-
-        /// <summary> Deserializes the model from a raw response. </summary>
-        /// <param name="response"> The response to deserialize the model from. </param>
-        internal static ProcessRelated FromResponse(Response response)
+        if (property.NameEquals("outcoming"u8))
         {
-            using var document = JsonDocument.Parse(response.Content);
-            return DeserializeProcessRelated(document.RootElement);
+          if (property.Value.ValueKind == JsonValueKind.Null)
+          {
+            continue;
+          }
+          List<Guid> array = new List<Guid>();
+          foreach (var item in property.Value.EnumerateArray())
+          {
+            array.Add(item.GetGuid());
+          }
+          outcoming = array;
+          continue;
         }
+      }
+      return new ProcessRelated(
+        incoming ?? new ChangeTrackingList<Guid>(),
+        outcoming ?? new ChangeTrackingList<Guid>()
+      );
     }
+
+    /// <summary> Deserializes the model from a raw response. </summary>
+    /// <param name="response"> The response to deserialize the model from. </param>
+    internal static ProcessRelated FromResponse(Response response)
+    {
+      using var document = JsonDocument.Parse(response.Content);
+      return DeserializeProcessRelated(document.RootElement);
+    }
+  }
 }

@@ -88,6 +88,7 @@ namespace KuFlow.Rest
 
       AuthenticationClient = new AuthenticationClient(policy, new Uri(endpoint), options);
       PrincipalClient = new PrincipalClient(policy, new Uri(endpoint), options);
+      GroupClient = new GroupClient(policy, new Uri(endpoint), options);
       ProcessClient = new ProcessClient(policy, new Uri(endpoint), options);
       ProcessItemClient = new ProcessItemClient(policy, new Uri(endpoint), options);
       WorkerClient = new WorkerClient(policy, new Uri(endpoint), options);
@@ -127,6 +128,9 @@ namespace KuFlow.Rest
 
     /// <summary> Get client to operate with principals. </summary>
     public PrincipalClient PrincipalClient { get; }
+
+    /// <summary> Get client to operate with groups. </summary>
+    public GroupClient GroupClient { get; }
 
     /// <summary> Get client to operate with processes. </summary>
     public ProcessClient ProcessClient { get; }

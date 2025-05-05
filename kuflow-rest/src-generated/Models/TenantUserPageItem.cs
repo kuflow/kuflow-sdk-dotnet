@@ -9,40 +9,51 @@ using System;
 
 namespace KuFlow.Rest.Models
 {
-    /// <summary> The TenantUserPageItem. </summary>
-    public partial class TenantUserPageItem : AbstractAudited
+  /// <summary> The TenantUserPageItem. </summary>
+  public partial class TenantUserPageItem : AbstractAudited
+  {
+    /// <summary> Initializes a new instance of <see cref="TenantUserPageItem"/>. </summary>
+    /// <param name="id"></param>
+    /// <param name="principalId"></param>
+    /// <param name="tenantId"></param>
+    internal TenantUserPageItem(Guid id, Guid principalId, Guid tenantId)
     {
-        /// <summary> Initializes a new instance of <see cref="TenantUserPageItem"/>. </summary>
-        /// <param name="id"></param>
-        /// <param name="principalId"></param>
-        /// <param name="tenantId"></param>
-        internal TenantUserPageItem(Guid id, Guid principalId, Guid tenantId)
-        {
-            Id = id;
-            PrincipalId = principalId;
-            TenantId = tenantId;
-        }
-
-        /// <summary> Initializes a new instance of <see cref="TenantUserPageItem"/>. </summary>
-        /// <param name="createdBy"> Who create this model. </param>
-        /// <param name="createdAt"> When this model was created. </param>
-        /// <param name="lastModifiedBy"> Who was last update this model. </param>
-        /// <param name="lastModifiedAt"> When this model type was last updated. </param>
-        /// <param name="id"></param>
-        /// <param name="principalId"></param>
-        /// <param name="tenantId"></param>
-        internal TenantUserPageItem(Guid? createdBy, DateTimeOffset? createdAt, Guid? lastModifiedBy, DateTimeOffset? lastModifiedAt, Guid id, Guid principalId, Guid tenantId) : base(createdBy, createdAt, lastModifiedBy, lastModifiedAt)
-        {
-            Id = id;
-            PrincipalId = principalId;
-            TenantId = tenantId;
-        }
-
-        /// <summary> Gets the id. </summary>
-        public Guid Id { get; }
-        /// <summary> Gets the principal id. </summary>
-        public Guid PrincipalId { get; }
-        /// <summary> Gets the tenant id. </summary>
-        public Guid TenantId { get; }
+      Id = id;
+      PrincipalId = principalId;
+      TenantId = tenantId;
     }
+
+    /// <summary> Initializes a new instance of <see cref="TenantUserPageItem"/>. </summary>
+    /// <param name="createdBy"> Who create this model. </param>
+    /// <param name="createdAt"> When this model was created. </param>
+    /// <param name="lastModifiedBy"> Who was last update this model. </param>
+    /// <param name="lastModifiedAt"> When this model type was last updated. </param>
+    /// <param name="id"></param>
+    /// <param name="principalId"></param>
+    /// <param name="tenantId"></param>
+    internal TenantUserPageItem(
+      Guid? createdBy,
+      DateTimeOffset? createdAt,
+      Guid? lastModifiedBy,
+      DateTimeOffset? lastModifiedAt,
+      Guid id,
+      Guid principalId,
+      Guid tenantId
+    )
+      : base(createdBy, createdAt, lastModifiedBy, lastModifiedAt)
+    {
+      Id = id;
+      PrincipalId = principalId;
+      TenantId = tenantId;
+    }
+
+    /// <summary> Gets the id. </summary>
+    public Guid Id { get; }
+
+    /// <summary> Gets the principal id. </summary>
+    public Guid PrincipalId { get; }
+
+    /// <summary> Gets the tenant id. </summary>
+    public Guid TenantId { get; }
+  }
 }
