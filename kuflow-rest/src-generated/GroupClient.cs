@@ -70,6 +70,7 @@ namespace KuFlow.Rest
     /// </param>
     /// <param name="tenantId"> Filter by tenantId. </param>
     /// <param name="principalId"> Filter by principalId. </param>
+    /// <param name="groupId"> Filter by group ids. </param>
     /// <param name="cancellationToken"> The cancellation token to use. </param>
     /// <remarks>
     /// List all the Groups that have been created and the used credentials has access.
@@ -83,6 +84,7 @@ namespace KuFlow.Rest
       IEnumerable<string> sort = null,
       IEnumerable<Guid> tenantId = null,
       Guid? principalId = null,
+      IEnumerable<Guid> groupId = null,
       CancellationToken cancellationToken = default
     )
     {
@@ -91,7 +93,7 @@ namespace KuFlow.Rest
       try
       {
         return await RestClient
-          .FindGroupsAsync(size, page, sort, tenantId, principalId, cancellationToken)
+          .FindGroupsAsync(size, page, sort, tenantId, principalId, groupId, cancellationToken)
           .ConfigureAwait(false);
       }
       catch (Exception e)
@@ -114,6 +116,7 @@ namespace KuFlow.Rest
     /// </param>
     /// <param name="tenantId"> Filter by tenantId. </param>
     /// <param name="principalId"> Filter by principalId. </param>
+    /// <param name="groupId"> Filter by group ids. </param>
     /// <param name="cancellationToken"> The cancellation token to use. </param>
     /// <remarks>
     /// List all the Groups that have been created and the used credentials has access.
@@ -127,6 +130,7 @@ namespace KuFlow.Rest
       IEnumerable<string> sort = null,
       IEnumerable<Guid> tenantId = null,
       Guid? principalId = null,
+      IEnumerable<Guid> groupId = null,
       CancellationToken cancellationToken = default
     )
     {
@@ -134,7 +138,7 @@ namespace KuFlow.Rest
       scope.Start();
       try
       {
-        return RestClient.FindGroups(size, page, sort, tenantId, principalId, cancellationToken);
+        return RestClient.FindGroups(size, page, sort, tenantId, principalId, groupId, cancellationToken);
       }
       catch (Exception e)
       {
