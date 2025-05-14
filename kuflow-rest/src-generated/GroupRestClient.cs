@@ -42,7 +42,8 @@ namespace KuFlow.Rest
       int? page,
       IEnumerable<string> sort,
       IEnumerable<Guid> tenantId,
-      Guid? principalId
+      Guid? principalId,
+      IEnumerable<Guid> groupId
     )
     {
       var message = _pipeline.CreateMessage();
@@ -80,6 +81,16 @@ namespace KuFlow.Rest
       {
         uri.AppendQuery("principalId", principalId.Value, true);
       }
+      if (
+        groupId != null
+        && !(groupId is ChangeTrackingList<Guid> changeTrackingList1 && changeTrackingList1.IsUndefined)
+      )
+      {
+        foreach (var param in groupId)
+        {
+          uri.AppendQuery("groupId", param, true);
+        }
+      }
       request.Uri = uri;
       request.Headers.Add("Accept", "application/json");
       return message;
@@ -98,6 +109,7 @@ namespace KuFlow.Rest
     /// </param>
     /// <param name="tenantId"> Filter by tenantId. </param>
     /// <param name="principalId"> Filter by principalId. </param>
+    /// <param name="groupId"> Filter by group ids. </param>
     /// <param name="cancellationToken"> The cancellation token to use. </param>
     /// <remarks>
     /// List all the Groups that have been created and the used credentials has access.
@@ -111,10 +123,11 @@ namespace KuFlow.Rest
       IEnumerable<string> sort = null,
       IEnumerable<Guid> tenantId = null,
       Guid? principalId = null,
+      IEnumerable<Guid> groupId = null,
       CancellationToken cancellationToken = default
     )
     {
-      using var message = CreateFindGroupsRequest(size, page, sort, tenantId, principalId);
+      using var message = CreateFindGroupsRequest(size, page, sort, tenantId, principalId, groupId);
       await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
       switch (message.Response.Status)
       {
@@ -145,6 +158,7 @@ namespace KuFlow.Rest
     /// </param>
     /// <param name="tenantId"> Filter by tenantId. </param>
     /// <param name="principalId"> Filter by principalId. </param>
+    /// <param name="groupId"> Filter by group ids. </param>
     /// <param name="cancellationToken"> The cancellation token to use. </param>
     /// <remarks>
     /// List all the Groups that have been created and the used credentials has access.
@@ -158,10 +172,11 @@ namespace KuFlow.Rest
       IEnumerable<string> sort = null,
       IEnumerable<Guid> tenantId = null,
       Guid? principalId = null,
+      IEnumerable<Guid> groupId = null,
       CancellationToken cancellationToken = default
     )
     {
-      using var message = CreateFindGroupsRequest(size, page, sort, tenantId, principalId);
+      using var message = CreateFindGroupsRequest(size, page, sort, tenantId, principalId, groupId);
       _pipeline.Send(message, cancellationToken);
       switch (message.Response.Status)
       {

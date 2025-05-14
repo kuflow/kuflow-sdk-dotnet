@@ -71,4 +71,31 @@ public class GroupFindOptions
 
     return tenantId;
   }
+
+  /// <summary> Filter by groupd id. </summary>
+  public Guid? GroupId { get; set; } = null;
+
+  /// <summary> Filter by tenant ids. </summary>
+  public IEnumerable<Guid>? GroupIds { get; set; } = null;
+
+  internal IEnumerable<Guid>? GetGroupIds()
+  {
+    if (GroupId == null && GroupIds == null)
+    {
+      return null;
+    }
+
+    var groupId = new List<Guid>();
+
+    if (GroupId != null)
+    {
+      groupId.Add(GroupId.Value);
+    }
+    if (TenantIds != null)
+    {
+      groupId.AddRange(GroupIds);
+    }
+
+    return groupId;
+  }
 }

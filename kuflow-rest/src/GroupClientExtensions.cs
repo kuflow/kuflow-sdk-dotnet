@@ -69,8 +69,9 @@ public partial class GroupClient
     var sort = options?.Sort;
     var principalId = options?.PrincipalId;
     var tenantId = options?.GetTenantIds();
+    var groupId = options?.GetGroupIds();
 
-    return FindGroupsAsync(size, page, sort, tenantId, principalId, cancellationToken);
+    return FindGroupsAsync(size, page, sort, tenantId, principalId, groupId, cancellationToken);
   }
 
   /// <summary> Find all accessible Groups. </summary>
@@ -92,7 +93,8 @@ public partial class GroupClient
     var sort = options?.Sort;
     var principalId = options?.PrincipalId;
     var tenantId = options?.GetTenantIds();
+    var groupId = options?.GetGroupIds();
 
-    return FindGroups(size, page, sort, tenantId, principalId, cancellationToken);
+    return FindGroups(size, page, sort, tenantId, principalId, groupId, cancellationToken);
   }
 }
