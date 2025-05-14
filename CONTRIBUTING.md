@@ -52,6 +52,13 @@ dotnet publish --configuration Release --self-contained
 
 ### Create a Nuget Package
 
+## Tag version
+- kuflow-rest/KuFlow.Rest.csproj
+- kuflow-samples/KuFlow.Samples.csproj
+
+## Build
+dotnet build
+
 ## Debug
 dotnet pack --configuration Debug
 
